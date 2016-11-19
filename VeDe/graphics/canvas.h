@@ -11,7 +11,7 @@ class Canvas
 {
 public:
     Canvas();
-    Canvas(std::unique_ptr<GObject> root);
+    Canvas(std::unique_ptr<GObject>& root);
 
     /**
      * @brief Gets the root object of the canvas

@@ -5,7 +5,7 @@ gx::Canvas::Canvas()
 
 }
 
-gx::Canvas::Canvas(std::unique_ptr<gx::GObject> root)
+gx::Canvas::Canvas(std::unique_ptr<GObject> &root)
 {
     _root = std::move(root);
 }

@@ -29,6 +29,11 @@ void gx::Line::setStart(const Vertex &start)
     m_start = start;
 }
 
+void gx::Line::paintSelf(gx::CustomPainter &painter) const
+{
+    painter.drawLine(m_start, m_end);
+}
+
 //void gx::Line::drawSelf(QPaintEvent *event, QPaintDevice *device)
 //{
 //    QPainter p(device);
