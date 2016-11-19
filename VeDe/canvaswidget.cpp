@@ -1,5 +1,4 @@
 #include "canvaswidget.h"
-#include "graphics/line.h"
 
 CanvasWidget::CanvasWidget(QWidget *parent) : QWidget(parent)
 {

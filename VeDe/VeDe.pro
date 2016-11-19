@@ -4,6 +4,8 @@
 #
 #-------------------------------------------------
 
+#include(../VeDe-Graphics/VeDe-Graphics.pro)
+
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -15,26 +17,23 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     canvaswidget.cpp \
-    graphics/gobject.cpp \
-    graphics/property.cpp \
-    graphics/colorproperty.cpp \
-    graphics/vertex.cpp \
-    graphics/line.cpp \
-    graphics/color.cpp \
-    graphics/canvas.cpp \
     qtcustompainter.cpp \
-    graphics/custompainter.cpp
 
 HEADERS  += mainwindow.h \
     canvaswidget.h \
-    graphics/gobject.h \
-    graphics/property.h \
-    graphics/colorproperty.h \
-    graphics/vertex.h \
-    graphics/line.h \
-    graphics/color.h \
-    graphics/canvas.h \
     qtcustompainter.h \
-    graphics/custompainter.h
 
 FORMS    += mainwindow.ui
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/ -lVeDe-Graphics
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/ -lVeDe-Graphics
+else:unix: LIBS += -L$$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/ -lVeDe-Graphics
+
+INCLUDEPATH += $$PWD/../VeDe-Graphics
+DEPENDPATH += $$PWD/../VeDe-Graphics
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/libVeDe-Graphics.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/libVeDe-Graphics.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/VeDe-Graphics.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/VeDe-Graphics.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/libVeDe-Graphics.a

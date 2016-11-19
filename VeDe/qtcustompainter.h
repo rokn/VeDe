@@ -1,7 +1,7 @@
 #ifndef QTCUSTOMPAINTER_H
 #define QTCUSTOMPAINTER_H
 
-#include "graphics/custompainter.h"
+#include "custompainter.h"
 #include <QPaintDevice>
 #include <QPainter>
 

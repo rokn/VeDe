@@ -1,13 +1,13 @@
 #ifndef COLORPROPERTY_H
 #define COLORPROPERTY_H
 
-#include <QColor>
-#include "graphics/property.h"
+#include "property.h"
+#include "color.h"
 
 class ColorProperty : public Property
 {
 public:
-    ColorProperty(QColor color);
+    ColorProperty(Color color);
     const QColor& getColor() const;
     void setColor(const QColor &color);
     void resetToDefault();

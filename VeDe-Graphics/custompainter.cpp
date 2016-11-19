@@ -1,4 +1,4 @@
-#include "graphics/custompainter.h"
+#include "custompainter.h"
 
 void gx::CustomPainter::drawLine(gx::Vertex start, gx::Vertex end)
 {

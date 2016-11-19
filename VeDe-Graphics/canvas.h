@@ -1,7 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "graphics/gobject.h"
+#include "gobject.h"
 #include <memory>
 
 namespace gx

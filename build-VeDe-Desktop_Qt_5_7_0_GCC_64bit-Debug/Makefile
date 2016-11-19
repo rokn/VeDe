@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../VeDe -I. -I../../../../Qt/5.7/gcc_64/include -I../../../../Qt/5.7/gcc_64/include/QtWidgets -I../../../../Qt/5.7/gcc_64/include/QtGui -I../../../../Qt/5.7/gcc_64/include/QtCore -I. -I. -I../../../../Qt/5.7/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../VeDe -I. -I../VeDe-Graphics -I../../../../Qt/5.7/gcc_64/include -I../../../../Qt/5.7/gcc_64/include/QtWidgets -I../../../../Qt/5.7/gcc_64/include/QtGui -I../../../../Qt/5.7/gcc_64/include/QtCore -I. -I. -I../../../../Qt/5.7/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/rokner/Qt/5.7/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = VeDe1.0.0
 DISTDIR = /home/rokner/Programming/TuesThesis/tues-thesis/build-VeDe-Desktop_Qt_5_7_0_GCC_64bit-Debug/.tmp/VeDe1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/rokner/Qt/5.7/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/rokner/Qt/5.7/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/rokner/Programming/TuesThesis/tues-thesis/VeDe/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/ -lVeDe-Graphics -L/home/rokner/Qt/5.7/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -51,28 +51,12 @@ OBJECTS_DIR   = ./
 SOURCES       = ../VeDe/main.cpp \
 		../VeDe/mainwindow.cpp \
 		../VeDe/canvaswidget.cpp \
-		../VeDe/graphics/gobject.cpp \
-		../VeDe/graphics/property.cpp \
-		../VeDe/graphics/colorproperty.cpp \
-		../VeDe/graphics/vertex.cpp \
-		../VeDe/graphics/line.cpp \
-		../VeDe/graphics/color.cpp \
-		../VeDe/graphics/canvas.cpp \
-		../VeDe/qtcustompainter.cpp \
-		../VeDe/graphics/custompainter.cpp moc_mainwindow.cpp \
+		../VeDe/qtcustompainter.cpp moc_mainwindow.cpp \
 		moc_canvaswidget.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		canvaswidget.o \
-		gobject.o \
-		property.o \
-		colorproperty.o \
-		vertex.o \
-		line.o \
-		color.o \
-		canvas.o \
 		qtcustompainter.o \
-		custompainter.o \
 		moc_mainwindow.o \
 		moc_canvaswidget.o
 DIST          = ../../../../Qt/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -226,26 +210,10 @@ DIST          = ../../../../Qt/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.7/gcc_64/mkspecs/features/lex.prf \
 		../VeDe/VeDe.pro ../VeDe/mainwindow.h \
 		../VeDe/canvaswidget.h \
-		../VeDe/graphics/gobject.h \
-		../VeDe/graphics/property.h \
-		../VeDe/graphics/colorproperty.h \
-		../VeDe/graphics/vertex.h \
-		../VeDe/graphics/line.h \
-		../VeDe/graphics/color.h \
-		../VeDe/graphics/canvas.h \
-		../VeDe/qtcustompainter.h \
-		../VeDe/graphics/custompainter.h ../VeDe/main.cpp \
+		../VeDe/qtcustompainter.h ../VeDe/main.cpp \
 		../VeDe/mainwindow.cpp \
 		../VeDe/canvaswidget.cpp \
-		../VeDe/graphics/gobject.cpp \
-		../VeDe/graphics/property.cpp \
-		../VeDe/graphics/colorproperty.cpp \
-		../VeDe/graphics/vertex.cpp \
-		../VeDe/graphics/line.cpp \
-		../VeDe/graphics/color.cpp \
-		../VeDe/graphics/canvas.cpp \
-		../VeDe/qtcustompainter.cpp \
-		../VeDe/graphics/custompainter.cpp
+		../VeDe/qtcustompainter.cpp
 QMAKE_TARGET  = VeDe
 DESTDIR       = 
 TARGET        = VeDe
@@ -254,7 +222,7 @@ TARGET        = VeDe
 first: all
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): /home/rokner/Programming/TuesThesis/tues-thesis/VeDe/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/libVeDe-Graphics.a ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../VeDe/VeDe.pro ../../../../Qt/5.7/gcc_64/mkspecs/linux-g++/qmake.conf ../../../../Qt/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -578,8 +546,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../VeDe/mainwindow.h ../VeDe/canvaswidget.h ../VeDe/graphics/gobject.h ../VeDe/graphics/property.h ../VeDe/graphics/colorproperty.h ../VeDe/graphics/vertex.h ../VeDe/graphics/line.h ../VeDe/graphics/color.h ../VeDe/graphics/canvas.h ../VeDe/qtcustompainter.h ../VeDe/graphics/custompainter.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../VeDe/main.cpp ../VeDe/mainwindow.cpp ../VeDe/canvaswidget.cpp ../VeDe/graphics/gobject.cpp ../VeDe/graphics/property.cpp ../VeDe/graphics/colorproperty.cpp ../VeDe/graphics/vertex.cpp ../VeDe/graphics/line.cpp ../VeDe/graphics/color.cpp ../VeDe/graphics/canvas.cpp ../VeDe/qtcustompainter.cpp ../VeDe/graphics/custompainter.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../VeDe/mainwindow.h ../VeDe/canvaswidget.h ../VeDe/qtcustompainter.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../VeDe/main.cpp ../VeDe/mainwindow.cpp ../VeDe/canvaswidget.cpp ../VeDe/qtcustompainter.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../VeDe/mainwindow.ui $(DISTDIR)/
 
 
@@ -711,20 +679,21 @@ moc_mainwindow.cpp: ../../../../Qt/5.7/gcc_64/include/QtWidgets/QMainWindow \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qicon.h \
 		../VeDe/canvaswidget.h \
 		../../../../Qt/5.7/gcc_64/include/QtWidgets/QWidget \
-		../VeDe/graphics/canvas.h \
-		../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
+		../VeDe-Graphics/canvas.h \
+		../VeDe-Graphics/gobject.h \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
+		../VeDe-Graphics/custompainter.h \
+		../VeDe-Graphics/vertex.h \
+		../VeDe/qtcustompainter.h \
+		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintDevice \
 		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h \
 		../VeDe/mainwindow.h \
 		../../../../Qt/5.7/gcc_64/bin/moc
-	/home/rokner/Qt/5.7/gcc_64/bin/moc $(DEFINES) -I/home/rokner/Qt/5.7/gcc_64/mkspecs/linux-g++ -I/home/rokner/Programming/TuesThesis/tues-thesis/VeDe -I/home/rokner/Qt/5.7/gcc_64/include -I/home/rokner/Qt/5.7/gcc_64/include/QtWidgets -I/home/rokner/Qt/5.7/gcc_64/include/QtGui -I/home/rokner/Qt/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../VeDe/mainwindow.h -o moc_mainwindow.cpp
+	/home/rokner/Qt/5.7/gcc_64/bin/moc $(DEFINES) -I/home/rokner/Qt/5.7/gcc_64/mkspecs/linux-g++ -I/home/rokner/Programming/TuesThesis/tues-thesis/VeDe -I/home/rokner/Programming/TuesThesis/tues-thesis/VeDe-Graphics -I/home/rokner/Qt/5.7/gcc_64/include -I/home/rokner/Qt/5.7/gcc_64/include/QtWidgets -I/home/rokner/Qt/5.7/gcc_64/include/QtGui -I/home/rokner/Qt/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../VeDe/mainwindow.h -o moc_mainwindow.cpp
 
 moc_canvaswidget.cpp: ../../../../Qt/5.7/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt/5.7/gcc_64/include/QtWidgets/qwidget.h \
@@ -823,20 +792,21 @@ moc_canvaswidget.cpp: ../../../../Qt/5.7/gcc_64/include/QtWidgets/QWidget \
 		../../../../Qt/5.7/gcc_64/include/QtCore/qfiledevice.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qtouchdevice.h \
-		../VeDe/graphics/canvas.h \
-		../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
+		../VeDe-Graphics/canvas.h \
+		../VeDe-Graphics/gobject.h \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
+		../VeDe-Graphics/custompainter.h \
+		../VeDe-Graphics/vertex.h \
+		../VeDe/qtcustompainter.h \
+		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintDevice \
 		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h \
 		../VeDe/canvaswidget.h \
 		../../../../Qt/5.7/gcc_64/bin/moc
-	/home/rokner/Qt/5.7/gcc_64/bin/moc $(DEFINES) -I/home/rokner/Qt/5.7/gcc_64/mkspecs/linux-g++ -I/home/rokner/Programming/TuesThesis/tues-thesis/VeDe -I/home/rokner/Qt/5.7/gcc_64/include -I/home/rokner/Qt/5.7/gcc_64/include/QtWidgets -I/home/rokner/Qt/5.7/gcc_64/include/QtGui -I/home/rokner/Qt/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../VeDe/canvaswidget.h -o moc_canvaswidget.cpp
+	/home/rokner/Qt/5.7/gcc_64/bin/moc $(DEFINES) -I/home/rokner/Qt/5.7/gcc_64/mkspecs/linux-g++ -I/home/rokner/Programming/TuesThesis/tues-thesis/VeDe -I/home/rokner/Programming/TuesThesis/tues-thesis/VeDe-Graphics -I/home/rokner/Qt/5.7/gcc_64/include -I/home/rokner/Qt/5.7/gcc_64/include/QtWidgets -I/home/rokner/Qt/5.7/gcc_64/include/QtGui -I/home/rokner/Qt/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../VeDe/canvaswidget.h -o moc_canvaswidget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -960,17 +930,18 @@ main.o: ../VeDe/main.cpp ../VeDe/mainwindow.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qicon.h \
 		../VeDe/canvaswidget.h \
 		../../../../Qt/5.7/gcc_64/include/QtWidgets/QWidget \
-		../VeDe/graphics/canvas.h \
-		../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
+		../VeDe-Graphics/canvas.h \
+		../VeDe-Graphics/gobject.h \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
+		../VeDe-Graphics/custompainter.h \
+		../VeDe-Graphics/vertex.h \
+		../VeDe/qtcustompainter.h \
+		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintDevice \
 		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h \
 		../../../../Qt/5.7/gcc_64/include/QtWidgets/QApplication \
 		../../../../Qt/5.7/gcc_64/include/QtWidgets/qapplication.h \
 		../../../../Qt/5.7/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1083,17 +1054,18 @@ mainwindow.o: ../VeDe/mainwindow.cpp ../VeDe/mainwindow.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qicon.h \
 		../VeDe/canvaswidget.h \
 		../../../../Qt/5.7/gcc_64/include/QtWidgets/QWidget \
-		../VeDe/graphics/canvas.h \
-		../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
+		../VeDe-Graphics/canvas.h \
+		../VeDe-Graphics/gobject.h \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
+		../VeDe-Graphics/custompainter.h \
+		../VeDe-Graphics/vertex.h \
+		../VeDe/qtcustompainter.h \
+		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintDevice \
 		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h \
 		ui_mainwindow.h \
 		../../../../Qt/5.7/gcc_64/include/QtCore/QVariant \
 		../../../../Qt/5.7/gcc_64/include/QtWidgets/QAction \
@@ -1238,392 +1210,22 @@ canvaswidget.o: ../VeDe/canvaswidget.cpp ../VeDe/canvaswidget.h \
 		../../../../Qt/5.7/gcc_64/include/QtCore/qfiledevice.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qtouchdevice.h \
-		../VeDe/graphics/canvas.h \
-		../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
+		../VeDe-Graphics/canvas.h \
+		../VeDe-Graphics/gobject.h \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
+		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
+		../VeDe-Graphics/custompainter.h \
+		../VeDe-Graphics/vertex.h \
+		../VeDe/qtcustompainter.h \
+		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintDevice \
 		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h \
-		../VeDe/graphics/line.h
+		../VeDe-Graphics/line.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canvaswidget.o ../VeDe/canvaswidget.cpp
 
-gobject.o: ../VeDe/graphics/gobject.cpp ../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qevent.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qwindowdefs.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qflags.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qregion.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qrect.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmargins.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsize.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qpoint.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qdatastream.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qiodevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstring.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qchar.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qalgorithms.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qiterator.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qpair.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qregexp.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcoreevent.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmetatype.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobject_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qkeysequence.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvariant.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmap.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qdebug.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qhash.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtextstream.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlocale.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qshareddata.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvector.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qset.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qurl.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qurlquery.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfile.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfiledevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qvector2d.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtouchdevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpixmap.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpaintdevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qcolor.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgb.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgba64.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qimage.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpixelformat.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtransform.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qmatrix.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpolygon.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qline.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpainterpath.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qbrush.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfontinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfont.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfontmetrics.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gobject.o ../VeDe/graphics/gobject.cpp
-
-property.o: ../VeDe/graphics/property.cpp ../VeDe/graphics/property.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o property.o ../VeDe/graphics/property.cpp
-
-colorproperty.o: ../VeDe/graphics/colorproperty.cpp ../VeDe/graphics/colorproperty.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QColor \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qcolor.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgb.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qflags.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qalgorithms.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qiterator.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qchar.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qpair.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstring.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qregexp.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgba64.h \
-		../VeDe/graphics/property.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o colorproperty.o ../VeDe/graphics/colorproperty.cpp
-
-vertex.o: ../VeDe/graphics/vertex.cpp ../VeDe/graphics/vertex.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o vertex.o ../VeDe/graphics/vertex.cpp
-
-line.o: ../VeDe/graphics/line.cpp ../VeDe/graphics/line.h \
-		../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qevent.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qwindowdefs.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qflags.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qregion.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qrect.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmargins.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsize.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qpoint.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qdatastream.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qiodevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstring.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qchar.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qalgorithms.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qiterator.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qpair.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qregexp.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcoreevent.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmetatype.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobject_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qkeysequence.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvariant.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmap.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qdebug.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qhash.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtextstream.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlocale.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qshareddata.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvector.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qset.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qurl.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qurlquery.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfile.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfiledevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qvector2d.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtouchdevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpixmap.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpaintdevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qcolor.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgb.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgba64.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qimage.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpixelformat.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtransform.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qmatrix.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpolygon.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qline.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpainterpath.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qbrush.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfontinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfont.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfontmetrics.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o line.o ../VeDe/graphics/line.cpp
-
-color.o: ../VeDe/graphics/color.cpp ../VeDe/graphics/color.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o color.o ../VeDe/graphics/color.cpp
-
-canvas.o: ../VeDe/graphics/canvas.cpp ../VeDe/graphics/canvas.h \
-		../VeDe/graphics/gobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintEvent \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qevent.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qwindowdefs.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qflags.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qregion.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qrect.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmargins.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsize.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qpoint.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qdatastream.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qiodevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobject.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstring.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qchar.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qalgorithms.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qiterator.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qpair.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringlist.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qregexp.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcoreevent.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmetatype.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qobject_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qkeysequence.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvariant.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qmap.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qdebug.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qhash.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qtextstream.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qlocale.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qshareddata.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qvector.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qset.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qurl.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qurlquery.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfile.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qfiledevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qvector2d.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtouchdevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/QPainter \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpainter.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpixmap.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpaintdevice.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qcolor.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgb.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qrgba64.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qimage.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpixelformat.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtransform.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qmatrix.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpolygon.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/qline.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpainterpath.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qtextoption.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qpen.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qbrush.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfontinfo.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfont.h \
-		../../../../Qt/5.7/gcc_64/include/QtGui/qfontmetrics.h \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QMap \
-		../../../../Qt/5.7/gcc_64/include/QtCore/QString \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canvas.o ../VeDe/graphics/canvas.cpp
-
 qtcustompainter.o: ../VeDe/qtcustompainter.cpp ../VeDe/qtcustompainter.h \
-		../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/QPaintDevice \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qpaintdevice.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qwindowdefs.h \
@@ -1707,10 +1309,6 @@ qtcustompainter.o: ../VeDe/qtcustompainter.cpp ../VeDe/qtcustompainter.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qfont.h \
 		../../../../Qt/5.7/gcc_64/include/QtGui/qfontmetrics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qtcustompainter.o ../VeDe/qtcustompainter.cpp
-
-custompainter.o: ../VeDe/graphics/custompainter.cpp ../VeDe/graphics/custompainter.h \
-		../VeDe/graphics/vertex.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o custompainter.o ../VeDe/graphics/custompainter.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

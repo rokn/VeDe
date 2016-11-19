@@ -1,6 +1,6 @@
 #include "colorproperty.h"
 
-ColorProperty::ColorProperty(QColor color)
+ColorProperty::ColorProperty(Color color)
     :_color(color)
 {
 

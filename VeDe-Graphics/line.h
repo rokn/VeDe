@@ -1,8 +1,8 @@
 #ifndef LINE_H
 #define LINE_H
 
-#include "graphics/gobject.h"
-#include "graphics/vertex.h"
+#include "gobject.h"
+#include "vertex.h"
 
 namespace gx
 {

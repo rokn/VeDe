@@ -1,7 +1,7 @@
 #ifndef IPAINTER_H
 #define IPAINTER_H
 
-#include "graphics/vertex.h"
+#include "vertex.h"
 
 namespace gx
 {

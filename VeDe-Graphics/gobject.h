@@ -1,11 +1,9 @@
 #ifndef GOBJECT_H
 #define GOBJECT_H
 
-#include <QPaintEvent>
-#include <QPainter>
 #include <QMap>
 #include <QString>
-#include "graphics/custompainter.h"
+#include "custompainter.h"
 #include <memory>
 
 namespace gx

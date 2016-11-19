@@ -2,7 +2,7 @@
 #define CANVASWIDGET_H
 
 #include <QWidget>
-#include "graphics/canvas.h"
+#include "canvas.h"
 #include "qtcustompainter.h"
 
 class CanvasWidget : public QWidget, public gx::Canvas
