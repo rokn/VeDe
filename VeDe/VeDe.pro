@@ -15,10 +15,22 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     canvaswidget.cpp \
-    gobject.cpp
+    graphics/gobject.cpp \
+    graphics/property.cpp \
+    graphics/colorproperty.cpp \
+    graphics/vertex.cpp \
+    graphics/line.cpp \
+    qgraphics/qgoline.cpp \
+    qgraphics/qgobject.cpp
 
 HEADERS  += mainwindow.h \
     canvaswidget.h \
-    gobject.h
+    graphics/gobject.h \
+    graphics/property.h \
+    graphics/colorproperty.h \
+    graphics/vertex.h \
+    graphics/line.h \
+    qgraphics/qgoline.h \
+    qgraphics/qgobject.h
 
 FORMS    += mainwindow.ui

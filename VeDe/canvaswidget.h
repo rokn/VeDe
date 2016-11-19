@@ -2,7 +2,7 @@
 #define CANVASWIDGET_H
 
 #include <QWidget>
-#include "gobject.h"
+#include "graphics/gobject.h"
 
 class CanvasWidget : public QWidget
 {
@@ -16,7 +16,7 @@ signals:
 public slots:
 
 private:
-    GObject _root;
+    GObject* _root;
 };
 
 #endif // CANVASWIDGET_H
