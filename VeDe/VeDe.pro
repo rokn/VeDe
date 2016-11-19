@@ -20,8 +20,10 @@ SOURCES += main.cpp\
     graphics/colorproperty.cpp \
     graphics/vertex.cpp \
     graphics/line.cpp \
-    qgraphics/qgoline.cpp \
-    qgraphics/qgobject.cpp
+    graphics/color.cpp \
+    graphics/canvas.cpp \
+    qtcustompainter.cpp \
+    graphics/custompainter.cpp
 
 HEADERS  += mainwindow.h \
     canvaswidget.h \
@@ -30,7 +32,9 @@ HEADERS  += mainwindow.h \
     graphics/colorproperty.h \
     graphics/vertex.h \
     graphics/line.h \
-    qgraphics/qgoline.h \
-    qgraphics/qgobject.h
+    graphics/color.h \
+    graphics/canvas.h \
+    qtcustompainter.h \
+    graphics/custompainter.h
 
 FORMS    += mainwindow.ui

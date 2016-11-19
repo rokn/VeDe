@@ -1,20 +1,40 @@
 #include "line.h"
 
-Line::Line()
+gx::Line::Line()
 {
 }
 
-Line::Line(Vertex start, Vertex end)
-    :_start(start), _end(end)
+gx::Line::Line(Vertex start, Vertex end)
+    :m_start(start), m_end(end)
 {
 }
 
-void Line::drawSelf(QPaintEvent *event, QPaintDevice *device)
+gx::Vertex gx::Line::end() const
 {
-    QPainter p(device);
-    p.setPen(*getProp<ColorProperty>("stroke-color"));
-    p.drawLine(_start, _end);
+    return m_end;
 }
+
+void gx::Line::setEnd(const Vertex &end)
+{
+    m_end = end;
+}
+
+gx::Vertex gx::Line::start() const
+{
+    return m_start;
+}
+
+void gx::Line::setStart(const Vertex &start)
+{
+    m_start = start;
+}
+
+//void gx::Line::drawSelf(QPaintEvent *event, QPaintDevice *device)
+//{
+//    QPainter p(device);
+//    p.setPen(*getProp<ColorProperty>("stroke-color"));
+//    p.drawLine(_start, _end);
+//}
 
 //p = gobject.getProperty("dd").getType().
 

@@ -5,38 +5,42 @@
 #include <QPainter>
 #include <QMap>
 #include <QString>
-#include <typeinfo>
-#include "graphics/colorproperty.h"
+#include "graphics/custompainter.h"
+#include <memory>
 
+namespace gx
+{
 class GObject
 {
 public:
-    explicit GObject();
-//    void paintEvent(QPaintEvent *event, QPaintDevice *device);
+    GObject();
     void addChildren(std::shared_ptr<GObject> child);
+    void paintAll(CustomPainter& painter) const;
 
 protected:
-    virtual void drawSelf(QPaintEvent *event, QPaintDevice *device) = 0;
+    virtual void paintSelf(CustomPainter& painter) const = 0;
 
 private:
-    QMap<QString, Property*> _properties;
-    QList<std::shared_ptr<GObject>> _children;
+//    QMap<QString, Property*> m_properties;
+    QList<std::shared_ptr<GObject>> m_children;
+    int m_zOrder;
 
 
 //Template Functions
 public:
-    template <typename T>
-    T* getProp(QString propName)
-    {
-        auto res = _properties.find(propName);
-
-        if(res != _properties.end())
-        {
-            return dynamic_cast<T*>(*res);
-        }
-
-        return Q_NULLPTR;
-    }
+//    template <typename T>
+//    T* getProp(QString propName)
+//    {
+//        auto res = m_properties.find(propName);
+//
+//        if(res != m_properties.end())
+//        {
+//            return dynamic_cast<T*>(*res);
+//        }
+//
+//        return Q_NULLPTR;
+//    }
 };
+}
 
 #endif // GOBJECT_H

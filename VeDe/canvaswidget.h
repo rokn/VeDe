@@ -2,21 +2,21 @@
 #define CANVASWIDGET_H
 
 #include <QWidget>
-#include "graphics/gobject.h"
+#include "graphics/canvas.h"
+#include "qtcustompainter.h"
 
-class CanvasWidget : public QWidget
+class CanvasWidget : public QWidget, public gx::Canvas
 {
     Q_OBJECT
 public:
     explicit CanvasWidget(QWidget *parent = 0);
     void paintEvent(QPaintEvent* event);
 
+    gx::Vertex getCursor() const;
 signals:
 
 public slots:
 
-private:
-    GObject* _root;
 };
 
 #endif // CANVASWIDGET_H

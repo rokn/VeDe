@@ -1,35 +1,36 @@
 #include "vertex.h"
 
-Vertex::Vertex()
+gx::Vertex::Vertex()
+    :m_x(0.0f), m_y(0.0f)
 {
 }
 
-Vertex::Vertex(float x, float y)
-    :_x(x), _y(y)
+gx::Vertex::Vertex(const Vertex &other)
+    :m_x(other.x()), m_y(other.y())
 {
 }
 
-float Vertex::x() const
+gx::Vertex::Vertex(float x, float y)
+    :m_x(x), m_y(y)
 {
-    return _x;
 }
 
-void Vertex::setX(float x)
+float gx::Vertex::x() const
 {
-    _x = x;
+    return m_x;
 }
 
-float Vertex::y() const
+void gx::Vertex::setX(float x)
 {
-    return _y;
+    m_x = x;
 }
 
-void Vertex::setY(float y)
+float gx::Vertex::y() const
 {
-    _y = y;
+    return m_y;
 }
 
-Vertex::operator QPoint() const
+void gx::Vertex::setY(float y)
 {
-    return QPoint(_x, _y);
+    m_y = y;
 }

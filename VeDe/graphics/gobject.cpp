@@ -1,21 +1,34 @@
 #include "gobject.h"
+#include <QStack>
 
-GObject::GObject()
+gx::GObject::GObject()
 {
-    _properties.insert("stroke-color", new ColorProperty(QColor::fromRgb(0, 0, 0)));
 }
 
-//void GObject::paintEvent(QPaintEvent *event, QPaintDevice *device)
-//{
-//    drawSelf(event, device);
-
-//    for(auto& child : _children)
-//    {
-//        child->paintEvent(event, device);
-//    }
-//}
-
-void GObject::addChildren(std::shared_ptr<GObject> child)
+void gx::GObject::addChildren(std::shared_ptr<GObject> child)
 {
-    _children.append(child);
+    m_children.append(child);
+}
+
+void gx::GObject::paintAll(gx::CustomPainter& painter) const
+{
+    QStack<const GObject*> paintStack;
+    const GObject* curr;
+    paintStack.push_back(this);
+
+    while(!paintStack.isEmpty())
+    {
+        curr = paintStack.back();
+        paintStack.pop_back();
+
+        curr->paintSelf(painter);
+
+        auto it = m_children.constEnd();
+
+        while(it != m_children.constBegin())
+        {
+            it--;
+            paintStack.push_back((*it).get());
+        }
+    }
 }

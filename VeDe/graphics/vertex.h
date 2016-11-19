@@ -1,25 +1,25 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
-#include <QPoint>
-
+namespace gx
+{
 class Vertex
 {
 public:
     Vertex();
+    Vertex(const Vertex& other);
     Vertex(float x, float y);
 
-    float getX() const;
+    float x() const;
     void setX(float x);
 
-    float getY() const;
+    float y() const;
     void setY(float y);
 
-    operator QPoint() const;
-
 private:
-    float _x;
-    float _y;
+    float m_x;
+    float m_y;
 };
+}
 
 #endif // VERTEX_H
