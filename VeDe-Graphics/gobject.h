@@ -21,7 +21,7 @@ protected:
 private:
 //    QMap<QString, Property*> m_properties;
     QList<std::shared_ptr<GObject>> m_children;
-    int m_zOrder;
+    int m_zorder;
 
 
 //Template Functions
