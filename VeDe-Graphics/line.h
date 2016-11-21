@@ -18,7 +18,6 @@ public:
     Vertex end() const;
     void setEnd(const Vertex &end);
 
-protected:
     void paintSelf(CustomPainter& painter) const;
 
 private:

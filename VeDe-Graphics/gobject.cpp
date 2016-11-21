@@ -5,9 +5,24 @@ gx::GObject::GObject()
 {
 }
 
+gx::GObject::~GObject()
+{
+}
+
+void gx::GObject::addChildren(gx::GObject *child)
+{
+    std::shared_ptr<gx::GObject> ch(child);
+    this->m_children.append(ch);
+}
+
+QList<std::shared_ptr<gx::GObject>>& gx::GObject::getChildren()
+{
+    return m_children;
+}
+
 void gx::GObject::addChildren(std::shared_ptr<GObject> child)
 {
-    m_children.append(child);
+    this->m_children.append(child);
 }
 
 void gx::GObject::paintAll(gx::CustomPainter& painter) const
@@ -23,9 +38,9 @@ void gx::GObject::paintAll(gx::CustomPainter& painter) const
 
         curr->paintSelf(painter);
 
-        auto it = m_children.constEnd();
+        auto it = curr->m_children.constEnd();
 
-        while(it != m_children.constBegin())
+        while(it != curr->m_children.constBegin())
         {
             it--;
             paintStack.push_back((*it).get());

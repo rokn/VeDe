@@ -15,7 +15,8 @@ TEMPLATE = app
 
 SOURCES += gobjecttest.cpp \
     main.cpp
-HEADERS += catch.hpp
+HEADERS += catch.hpp \
+    fakeit.hpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/ -lVeDe-Graphics

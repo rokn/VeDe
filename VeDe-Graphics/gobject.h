@@ -12,8 +12,13 @@ class GObject
 {
 public:
     GObject();
+    virtual ~GObject();
+//    GObject(const GObject& other);
+//    void addChildren(const GObject& child);
+    QList<std::shared_ptr<GObject> > &getChildren();
+    void addChildren(GObject *child);
     void addChildren(std::shared_ptr<GObject> child);
-    void paintAll(CustomPainter& painter) const;
+    void paintAll(CustomPainter &painter) const;
 
 protected:
     virtual void paintSelf(CustomPainter& painter) const = 0;
@@ -37,7 +42,7 @@ public:
 //        }
 //
 //        return Q_NULLPTR;
-//    }
+    //    }
 };
 }
 
