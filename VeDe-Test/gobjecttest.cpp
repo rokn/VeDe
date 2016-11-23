@@ -24,6 +24,7 @@ TEST_CASE("Gobject adds children correctly", "[gobject]") {
             auto children = root.getChildren();
 
             THEN("they must be 2") {
+
                 REQUIRE(children.size() == 2);
             }
         }

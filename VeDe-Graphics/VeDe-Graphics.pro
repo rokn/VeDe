@@ -18,7 +18,9 @@ SOURCES += \
     custompainter.cpp \
     gobject.cpp \
     line.cpp \
-    property.cpp
+    property.cpp \
+    tool.cpp \
+    linetool.cpp
 
 HEADERS += \
     vertex.h \
@@ -28,7 +30,9 @@ HEADERS += \
     custompainter.h \
     gobject.h \
     line.h \
-    property.h
+    property.h \
+    tool.h \
+    linetool.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

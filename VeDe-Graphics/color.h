@@ -11,6 +11,10 @@ public:
     Color();
     Color(int r, int g, int b, int a = 255);
 
+    int r() const;
+    int g() const;
+    int b() const;
+    int a() const;
 
 private:
     int m_r;
