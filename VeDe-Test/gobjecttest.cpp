@@ -43,13 +43,13 @@ TEST_CASE("Gobject paints all children", "[gobject]") {
             root.paintAll(painterMock.get());
 
             THEN("there must be 2 paintSelf invocations(root,child)") {
-                REQUIRE(
-                    Verify(
+                bool ranTwice = Verify(
                         OverloadedMethod(
                                 painterMock,
                                 drawLine,
                                 void(int,int,int,int)))
-                        .Exactly(2) == true);
+                        .Exactly(2);
+                REQUIRE(ranTwice);
             }
         }
     }
@@ -62,12 +62,12 @@ TEST_CASE("Gobject paints all children", "[gobject]") {
             root.paintAll(painterMock.get());
 
             THEN("it's paintSelf must be invoked") {
-                REQUIRE(
-                    Verify(
+                bool hasInvoked = Verify(
                         OverloadedMethod(
                                 painterMock,
                                 drawLine,
-                                void(int,int,int,int))) == true);
+                                void(int,int,int,int)));
+                REQUIRE(hasInvoked);
             }
         }
     }

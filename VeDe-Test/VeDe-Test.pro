@@ -9,25 +9,28 @@ QT       -= gui
 TARGET = vede-test
 CONFIG   += console
 CONFIG   -= app_bundle
+QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
 
 TEMPLATE = app
 
 
 SOURCES += gobjecttest.cpp \
-    main.cpp
+    main.cpp \
+    tooltest.cpp \
+    linetooltest.cpp
 HEADERS += catch.hpp \
     fakeit.hpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/ -lVeDe-Graphics
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/ -lVeDe-Graphics
-else:unix: LIBS += -L$$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/ -lVeDe-Graphics
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../tt/build-vede-graphics-debug/release/ -lVeDe-Graphics
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../tt/build-vede-graphics-debug/debug/ -lVeDe-Graphics
+else:unix: LIBS += -L$$PWD/../../../../tt/build-vede-graphics-debug/ -lVeDe-Graphics
 
-INCLUDEPATH += $$PWD/../VeDe-Graphics
-DEPENDPATH += $$PWD/../VeDe-Graphics
+INCLUDEPATH += $$PWD/../../../../tt/VeDe-Graphics
+DEPENDPATH += $$PWD/../../../../tt/VeDe-Graphics
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/libVeDe-Graphics.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/libVeDe-Graphics.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/VeDe-Graphics.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/VeDe-Graphics.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../build-VeDe-Graphics-Desktop_Qt_5_7_0_GCC_64bit-Debug/libVeDe-Graphics.a
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../tt/build-vede-graphics-debug/release/libVeDe-Graphics.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../tt/build-vede-graphics-debug/debug/libVeDe-Graphics.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../tt/build-vede-graphics-debug/release/VeDe-Graphics.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../tt/build-vede-graphics-debug/debug/VeDe-Graphics.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../../../../tt/build-vede-graphics-debug/libVeDe-Graphics.a

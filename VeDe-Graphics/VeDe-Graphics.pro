@@ -9,6 +9,7 @@ QT       -= gui
 TARGET = VeDe-Graphics
 TEMPLATE = lib
 CONFIG += staticlib
+QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
 
 SOURCES += \
     vertex.cpp \
@@ -20,7 +21,10 @@ SOURCES += \
     line.cpp \
     property.cpp \
     tool.cpp \
-    linetool.cpp
+    linetool.cpp \
+    layer.cpp \
+    commands/canvascommand.cpp \
+    commands/addlinecommand.cpp
 
 HEADERS += \
     vertex.h \
@@ -32,7 +36,11 @@ HEADERS += \
     line.h \
     property.h \
     tool.h \
-    linetool.h
+    linetool.h \
+    layer.h \
+    commands/command.h \
+    commands/canvascommand.h \
+    commands/addlinecommand.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
