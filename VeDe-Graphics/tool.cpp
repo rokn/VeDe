@@ -6,7 +6,7 @@ gx::Tool::Tool(gx::Canvas *canvas)
     m_currState = 0;
 }
 
-void gx::Tool::handleEvent(QEvent &event)
+void gx::Tool::handleEvent(QEvent const&event)
 {
     auto transitions = m_transitions.value(m_currState);
 
@@ -29,7 +29,7 @@ gx::Canvas *gx::Tool::getCanvas()
 
 const QString &gx::Tool::getCurrStateName() const
 {
-    return m_states.value(m_currState).name;
+    return m_states.at(m_currState).name;
 }
 
 QVector<QString> gx::Tool::getAllStateNames() const

@@ -13,6 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = VeDe
 TEMPLATE = app
 
+QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
 
 SOURCES += main.cpp\
         mainwindow.cpp \

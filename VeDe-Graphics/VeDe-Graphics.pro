@@ -24,7 +24,7 @@ SOURCES += \
     linetool.cpp \
     layer.cpp \
     commands/canvascommand.cpp \
-    commands/addlinecommand.cpp
+    commands/addgobjectcommand.cpp
 
 HEADERS += \
     vertex.h \
@@ -40,7 +40,7 @@ HEADERS += \
     layer.h \
     commands/command.h \
     commands/canvascommand.h \
-    commands/addlinecommand.h
+    commands/addgobjectcommand.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

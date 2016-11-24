@@ -6,11 +6,11 @@
 
 namespace gx
 {
-class AddLineCommand : public CanvasCommand
+class AddGObjectCommand : public CanvasCommand
 {
 public:
-    AddLineCommand(std::shared_ptr<Line> line);
-    AddLineCommand(std::shared_ptr<Line> line, Canvas* canvas);
+    AddGObjectCommand(std::shared_ptr<Line> line);
+    AddGObjectCommand(std::shared_ptr<Line> line, Canvas* canvas);
 
     int execute();
     int undo();

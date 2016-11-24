@@ -6,6 +6,7 @@ namespace gx
 class Command
 {
 public:
+    virtual ~Command(){}
     virtual int execute() = 0;
     virtual int undo() = 0;
 };

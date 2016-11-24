@@ -13,7 +13,7 @@ namespace gx
 class Tool
 {
 protected:
-    typedef std::function<int(QEvent&)> ToolStateCallBack;
+    typedef std::function<int(QEvent const&)> ToolStateCallBack;
     typedef unsigned int uint;
 
     //Struct/class declarations
@@ -26,7 +26,7 @@ private:
 
 public:
     Tool(Canvas* canvas);
-    void handleEvent(QEvent& event);
+    void handleEvent(const QEvent &event);
     Canvas* getCanvas();
     const QString& getCurrStateName() const;
     QVector<QString> getAllStateNames() const;
