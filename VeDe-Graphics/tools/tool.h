@@ -12,6 +12,9 @@ namespace gx
 {
 class Tool
 {
+   #define EMPTY_STATE [](QEvent const&)->int{return -1;}
+
+
 protected:
     typedef std::function<int(QEvent const&)> ToolStateCallBack;
     typedef unsigned int uint;

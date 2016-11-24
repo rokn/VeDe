@@ -1,11 +1,16 @@
 #include "qtcustompainter.h"
 
 QtCustomPainter::QtCustomPainter(QPaintDevice* canvas)
-    :_painter(canvas)
+    :m_painter(canvas)
 {
 }
 
-void QtCustomPainter::drawLine(int x1, int y1, int x2, int y2)
+void QtCustomPainter::drawLine(float x1, float y1, float x2, float y2)
 {
-    _painter.drawLine(x1, y1, x2, y2);
+    m_painter.drawLine(x1, y1, x2, y2);
+}
+
+void QtCustomPainter::drawEllipse(float cX, float cY, float rX, float rY)
+{
+    m_painter.drawEllipse(QPointF(cX, cY), rX, rY);
 }

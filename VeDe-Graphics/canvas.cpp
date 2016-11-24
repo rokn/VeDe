@@ -1,5 +1,5 @@
 #include "canvas.h"
-#include "linetool.h"
+#include "tools/ellipsetool.h"
 
 gx::Canvas::Canvas()
     :m_root(new Layer)
@@ -18,7 +18,7 @@ gx::Canvas::Canvas(std::unique_ptr<GObject> *root)
 void gx::Canvas::initCommon()
 {
     m_currCommand = 0;
-    m_currTool = new LineTool(this);
+    m_currTool = new EllipseTool(this);
 }
 
 gx::Canvas::~Canvas()

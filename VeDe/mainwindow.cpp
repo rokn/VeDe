@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // PLACEHOLDER CODE
     CanvasWidget *canvas = CanvasWidget::createCanvasWidget(ui->mainFrame);
     ui->mainFrame->layout()->addWidget(canvas);
+    ui->mainFrame->layout()->setMargin(0);
     canvas->move(20,20);
     canvas->show();
 }

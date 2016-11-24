@@ -4,9 +4,7 @@
 gx::LineTool::LineTool(gx::Canvas *canvas)
     :Tool(canvas)
 {
-    uint start = addState("Place a point", [](QEvent const& e)->int{
-        return -1;
-    });
+    uint start = addState("Place a point", EMPTY_STATE);
 
     uint startLine = addState("Start line", [this](QEvent const& e)->int{
         m_line = std::make_shared<Line>();
@@ -18,9 +16,7 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         return 2;
     });
 
-    uint wait = addState("Place end point", [](QEvent const& e)->int{
-        return -1;
-    });
+    uint wait = addState("Place end point", EMPTY_STATE);
 
     uint moveEnd = addState("Move end", [this](QEvent const& e)->int{
         if(m_line != nullptr) {
@@ -32,7 +28,6 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
     });
 
     uint finished = addState("Finished", [this](QEvent const& e)->int{
-//        m_line.reset();
         return 0;
     });
 

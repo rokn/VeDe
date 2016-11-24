@@ -1,7 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "gobject.h"
+#include "objects/gobject.h"
 #include "layer.h"
 #include "commands/command.h"
 #include <memory>

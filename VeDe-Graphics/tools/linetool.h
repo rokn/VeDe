@@ -3,7 +3,7 @@
 
 #include "tool.h"
 #include <memory>
-#include "line.h"
+#include "objects/line.h"
 
 namespace gx {
 class LineTool : public Tool

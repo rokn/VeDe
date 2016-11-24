@@ -1,18 +1,18 @@
 #include "addgobjectcommand.h"
 
-gx::AddGObjectCommand::AddGObjectCommand(std::shared_ptr<gx::Line> line)
-    :m_line(line)
+gx::AddGObjectCommand::AddGObjectCommand(std::shared_ptr<GObject> object)
+    :m_object(object)
 {
 }
 
-gx::AddGObjectCommand::AddGObjectCommand(std::shared_ptr<gx::Line> line, gx::Canvas *canvas)
-    :CanvasCommand(canvas), m_line(line)
+gx::AddGObjectCommand::AddGObjectCommand(std::shared_ptr<GObject> object, gx::Canvas *canvas)
+    :CanvasCommand(canvas), m_object(object)
 {
 }
 
 int gx::AddGObjectCommand::execute()
 {
-    m_canvas->addToCurrLayer(m_line);
+    m_canvas->addToCurrLayer(m_object);
     return 0;
 }
 

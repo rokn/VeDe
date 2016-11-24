@@ -1,4 +1,5 @@
 #include "canvaswidget.h"
+#include "objects/ellipse.h"
 
 CanvasWidget::CanvasWidget(QWidget *parent)
     :QWidget(parent), Canvas()

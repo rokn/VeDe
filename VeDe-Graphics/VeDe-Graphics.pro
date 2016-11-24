@@ -17,14 +17,16 @@ SOURCES += \
     color.cpp \
 #    colorproperty.cpp \
     custompainter.cpp \
-    gobject.cpp \
-    line.cpp \
+    objects/gobject.cpp \
+    objects/line.cpp \
     property.cpp \
-    tool.cpp \
-    linetool.cpp \
+    tools/tool.cpp \
+    tools/linetool.cpp \
     layer.cpp \
     commands/canvascommand.cpp \
-    commands/addgobjectcommand.cpp
+    commands/addgobjectcommand.cpp \
+    objects/ellipse.cpp \
+    tools/ellipsetool.cpp
 
 HEADERS += \
     vertex.h \
@@ -32,15 +34,17 @@ HEADERS += \
     color.h \
 #    colorproperty.h \
     custompainter.h \
-    gobject.h \
-    line.h \
+    objects/gobject.h \
+    objects/line.h \
     property.h \
-    tool.h \
-    linetool.h \
+    tools/tool.h \
+    tools/linetool.h \
     layer.h \
     commands/command.h \
     commands/canvascommand.h \
-    commands/addgobjectcommand.h
+    commands/addgobjectcommand.h \
+    objects/ellipse.h \
+    tools/ellipsetool.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

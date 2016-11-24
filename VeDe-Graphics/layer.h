@@ -1,7 +1,7 @@
 #ifndef LAYER_H
 #define LAYER_H
 
-#include "gobject.h"
+#include "objects/gobject.h"
 
 namespace gx
 {

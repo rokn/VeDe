@@ -31,6 +31,9 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-vede-graphics-
 else:unix: LIBS += -L$$PWD/../build-vede-graphics-debug/ -lVeDe-Graphics
 
 INCLUDEPATH += $$PWD/../VeDe-Graphics
+INCLUDEPATH += $$PWD/../VeDe-Graphics/objects
+INCLUDEPATH += $$PWD/../VeDe-Graphics/commands
+INCLUDEPATH += $$PWD/../VeDe-Graphics/tools
 DEPENDPATH += $$PWD/../VeDe-Graphics
 
 win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-vede-graphics-debug/release/libVeDe-Graphics.a

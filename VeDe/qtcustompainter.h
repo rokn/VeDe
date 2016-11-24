@@ -9,10 +9,10 @@ class QtCustomPainter : public gx::CustomPainter
 {
 public:
     QtCustomPainter(QPaintDevice* canvas);
-    void drawLine(int x1, int y1, int x2, int y2);
-
+    void drawLine(float x1, float y1, float x2, float y2);
+    void drawEllipse(float cX, float cY, float rX, float rY);
 private:
-    QPainter _painter;
+    QPainter m_painter;
 };
 
 #endif // QTCUSTOMPAINTER_H
