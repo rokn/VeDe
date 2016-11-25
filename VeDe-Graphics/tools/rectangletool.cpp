@@ -27,7 +27,9 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
             Vertex downRight = m_rect->getDownRight();
             if(cursor.x() < anchorPoint.x()) {
                 upLeft.setX(cursor.x());
+                downRight.setX(anchorPoint.x());
             } else if (cursor.x() > anchorPoint.x()) {
+                upLeft.setX(anchorPoint.x());
                 downRight.setX(cursor.x());
             } else {
                 upLeft.setX(cursor.x());
@@ -36,7 +38,9 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
 
             if(cursor.y() < anchorPoint.y()) {
                 upLeft.setY(cursor.y());
+                downRight.setY(anchorPoint.y());
             } else if (cursor.y() > anchorPoint.y()) {
+                upLeft.setY(anchorPoint.y());
                 downRight.setY(cursor.y());
             } else {
                 upLeft.setY(cursor.y());
