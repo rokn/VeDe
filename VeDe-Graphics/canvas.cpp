@@ -18,7 +18,7 @@ gx::Canvas::Canvas(std::unique_ptr<GObject> *root)
 void gx::Canvas::initCommon()
 {
     m_currCommand = 0;
-    m_currTool = new EllipseTool(this);
+    m_currTool = nullptr;
 }
 
 gx::Canvas::~Canvas()
@@ -76,4 +76,14 @@ void gx::Canvas::handleEvent(QEvent const& event)
 void gx::Canvas::addToCurrLayer(std::shared_ptr<gx::GObject> object)
 {
     m_currLayer->addChildren(object);
+}
+
+void gx::Canvas::changeCurrTool(gx::Tool *newTool)
+{
+    if(m_currTool != nullptr)
+    {
+        delete m_currTool;
+    }
+
+    m_currTool = newTool;
 }

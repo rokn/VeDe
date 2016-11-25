@@ -16,8 +16,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_actionLine_triggered();
+
+    void on_actionEllipse_triggered();
+
 private:
     Ui::MainWindow *ui;
+    CanvasWidget *m_canvas;
 };
 
 #endif // MAINWINDOW_H

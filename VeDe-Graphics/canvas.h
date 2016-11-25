@@ -37,6 +37,7 @@ public:
     void handleEvent(QEvent const &event);
     virtual void redraw() = 0;
     void addToCurrLayer(std::shared_ptr<GObject> object);
+    void changeCurrTool(Tool* newTool);
 
 private:
     void initCommon();
