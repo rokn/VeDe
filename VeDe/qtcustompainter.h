@@ -11,6 +11,8 @@ public:
     QtCustomPainter(QPaintDevice* canvas);
     void drawLine(float x1, float y1, float x2, float y2);
     void drawEllipse(float cX, float cY, float rX, float rY);
+    void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY);
+
 private:
     QPainter m_painter;
 };

@@ -14,3 +14,8 @@ void QtCustomPainter::drawEllipse(float cX, float cY, float rX, float rY)
 {
     m_painter.drawEllipse(QPointF(cX, cY), rX, rY);
 }
+
+void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY)
+{
+    m_painter.drawRect(upLeftX, upLeftY, downRightX - upLeftX, downRightY - upLeftY);
+}

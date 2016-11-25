@@ -13,6 +13,9 @@ public:
 
     virtual void drawEllipse(float cX, float cY, float rX, float rY) = 0;
     void drawEllipse(Vertex center, Vertex radius);
+
+    virtual void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY) = 0;
+    void drawRectangle(Vertex upLeft, Vertex downRight);
 };
 }
 

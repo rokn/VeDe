@@ -53,6 +53,7 @@
     </property>
     <addaction name="actionLine"/>
     <addaction name="actionEllipse"/>
+    <addaction name="actionRectangle"/>
    </widget>
    <addaction name="menuFIle"/>
    <addaction name="menuAdd"/>
@@ -66,6 +67,7 @@
    </attribute>
    <addaction name="actionLine"/>
    <addaction name="actionEllipse"/>
+   <addaction name="actionRectangle"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -121,9 +123,6 @@
    </property>
   </action>
   <action name="actionLine">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Line</string>
    </property>
@@ -135,9 +134,6 @@
    </property>
   </action>
   <action name="actionEllipse">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Ellipse</string>
    </property>
@@ -146,6 +142,17 @@
    </property>
    <property name="shortcut">
     <string>Shift+A, E</string>
+   </property>
+  </action>
+  <action name="actionRectangle">
+   <property name="text">
+    <string>Rectangle</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a rectangle</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+A, R</string>
    </property>
   </action>
  </widget>

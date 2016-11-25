@@ -26,7 +26,9 @@ SOURCES += \
     commands/canvascommand.cpp \
     commands/addgobjectcommand.cpp \
     objects/ellipse.cpp \
-    tools/ellipsetool.cpp
+    tools/ellipsetool.cpp \
+    objects/rectangle.cpp \
+    tools/rectangletool.cpp
 
 HEADERS += \
     vertex.h \
@@ -44,7 +46,9 @@ HEADERS += \
     commands/canvascommand.h \
     commands/addgobjectcommand.h \
     objects/ellipse.h \
-    tools/ellipsetool.h
+    tools/ellipsetool.h \
+    objects/rectangle.h \
+    tools/rectangletool.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

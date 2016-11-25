@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "tools/linetool.h"
 #include "tools/ellipsetool.h"
+#include "tools/rectangletool.h"
 
     // PLACEHOLDER CODE
 #include <memory>
@@ -32,4 +33,9 @@ void MainWindow::on_actionLine_triggered()
 void MainWindow::on_actionEllipse_triggered()
 {
     m_canvas->changeCurrTool(new gx::EllipseTool(m_canvas));
+}
+
+void MainWindow::on_actionRectangle_triggered()
+{
+    m_canvas->changeCurrTool(new gx::RectangleTool(m_canvas));
 }
