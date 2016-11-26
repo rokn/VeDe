@@ -3,22 +3,20 @@
 gx::Tool::Tool(gx::Canvas *canvas)
     :m_canvas(canvas)
 {
-    m_currState = 0;
 }
 
-void gx::Tool::handleEvent(QEvent const&event)
+void gx::Tool::handleEvent(const Transition& transition)
 {
-    auto transitions = m_transitions.value(m_currState);
+    auto state = m_states.find(m_currState);
+    if(state == m_states.end()) return;
 
-    if(transitions.contains(event.type()))
+    auto transitions = state->transitions;
+
+    if(transitions.contains(transition))
     {
-        m_currState = transitions.value(event.type());
-        int switchState = m_states.at(m_currState).callback(event);
-
-        if(switchState >= 0)
-        {
-            m_currState = switchState;
-        }
+        //TODO remove one of the calls this or the upper one
+        m_currState = transitions.value(transition);
+        m_states.find(m_currState)->callback(transition);
     }
 }
 
@@ -29,7 +27,12 @@ gx::Canvas *gx::Tool::getCanvas()
 
 const QString &gx::Tool::getCurrStateName() const
 {
-    return m_states.at(m_currState).name;
+    auto state = m_states.find(m_currState);
+    if(state != m_states.end())
+    {
+        return state.value().name;
+    }
+    return QString("");
 }
 
 QVector<QString> gx::Tool::getAllStateNames() const
@@ -44,27 +47,30 @@ QVector<QString> gx::Tool::getAllStateNames() const
     return stateNames;
 }
 
-uint gx::Tool::addState(QString name, ToolStateCallBack callBack)
+void gx::Tool::moveToStateSilent(const QString &stateName)
 {
-    uint id = m_states.size();
+     //TODO: See if necessary
+//    if(m_states.find(stateName) != m_states.end())
+//    {
+        m_currState = stateName;
+//    }
+}
+
+void gx::Tool::addState(const QString& name, ToolStateCallBack callBack)
+{
     ToolState state;
     state.name = name;
     state.callback = callBack;
 
-    m_states.append(state);
-
-    QMap<QEvent::Type, uint> map;
-    m_transitions.insert(id, map);
-
-    return id;
+    m_states.insert(name, state);
 }
 
-void gx::Tool::addTransition(uint transitionFrom, QEvent::Type event, uint transitionTo)
+void gx::Tool::addTransition(const QString& transitionFrom, Transition transition, const QString& transitionTo)
 {
-    auto itMap = m_transitions.find(transitionFrom);
+    auto state = m_states.find(transitionFrom);
 
-    if(itMap != m_transitions.end())
+    if(state != m_states.end())
     {
-        itMap->insert(event, transitionTo);
+        state.value().transitions.insert(transition, transitionTo);
     }
 }

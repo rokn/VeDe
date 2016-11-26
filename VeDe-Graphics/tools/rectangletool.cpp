@@ -4,9 +4,15 @@
 gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     :Tool(canvas)
 {
-    uint start = addState("Place first corner", EMPTY_STATE);
+    QString start = "Place first corner";
+    QString placeFirstCorner = "Placing a corner";
+    QString wait = "Place second corner";
+    QString moveEnd = "Move second corner";
+    QString finished = "Finished";
 
-    uint placeFirstCorner = addState("Placing corner", [this](QEvent const&e)->int{
+    addState(start, EMPTY_STATE);
+
+    addState(placeFirstCorner, STATE_DEF {
         anchorPoint = getCanvas()->getCursor();
         m_rect = std::make_shared<Rectangle>();
         m_rect->setUpLeft(anchorPoint);
@@ -14,13 +20,12 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
 
         gx::Command* command = new gx::AddGObjectCommand(m_rect, getCanvas());
         getCanvas()->executeCommand(command);
-        return 2;
+        moveToStateSilent(wait);
     });
 
-    uint wait = addState("Place second corner", EMPTY_STATE);
+    addState(wait, EMPTY_STATE);
 
-    uint moveEnd = addState("Move second corner", [this](QEvent const& e)->int{
-            //TODO: Strange behaviour when moving mouse fast
+    addState(moveEnd, STATE_DEF {
         if(m_rect != nullptr) {
             Vertex cursor = getCanvas()->getCursor();
             Vertex upLeft = m_rect->getUpLeft();
@@ -50,16 +55,19 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
             m_rect->setUpLeft(upLeft);
             m_rect->setDownRight(downRight);
             getCanvas()->redraw();
-            return 2;
+            moveToStateSilent(wait);
+        } else {
+            moveToStateSilent(start);
         }
-        return 0;
     });
 
-    uint finish = addState("Finihed", [](QEvent const&e)->int{
-        return 0;
+    addState(finished, STATE_DEF {
+        moveToStateSilent(start);
     });
 
-    addTransition(start, QEvent::MouseButtonPress, placeFirstCorner);
-    addTransition(wait, QEvent::MouseMove, moveEnd);
-    addTransition(wait, QEvent::MouseButtonPress, finish);
+    addTransition(start, Transition(QEvent::MouseButtonPress, Qt::LeftButton), placeFirstCorner);
+    addTransition(wait, Transition(QEvent::MouseMove), moveEnd);
+    addTransition(wait, Transition(QEvent::MouseButtonPress, Qt::LeftButton), finished);
+
+    moveToStateSilent(start);
 }

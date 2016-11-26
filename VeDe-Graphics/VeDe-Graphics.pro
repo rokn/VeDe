@@ -28,7 +28,8 @@ SOURCES += \
     objects/ellipse.cpp \
     tools/ellipsetool.cpp \
     objects/rectangle.cpp \
-    tools/rectangletool.cpp
+    tools/rectangletool.cpp \
+    tools/transition.cpp
 
 HEADERS += \
     vertex.h \
@@ -48,7 +49,8 @@ HEADERS += \
     objects/ellipse.h \
     tools/ellipsetool.h \
     objects/rectangle.h \
-    tools/rectangletool.h
+    tools/rectangletool.h \
+    tools/transition.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

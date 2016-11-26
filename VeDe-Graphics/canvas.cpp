@@ -1,5 +1,5 @@
 #include "canvas.h"
-#include "tools/ellipsetool.h"
+#include "tools/tool.h"
 
 gx::Canvas::Canvas()
     :m_root(new Layer)
@@ -65,11 +65,11 @@ int gx::Canvas::undoCommand()
     return result;
 }
 
-void gx::Canvas::handleEvent(QEvent const& event)
+void gx::Canvas::handleEvent(const Transition &transition)
 {
     if(m_currTool != nullptr)
     {
-        m_currTool->handleEvent(event);
+        m_currTool->handleEvent(transition);
     }
 }
 

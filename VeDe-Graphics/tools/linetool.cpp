@@ -4,35 +4,43 @@
 gx::LineTool::LineTool(gx::Canvas *canvas)
     :Tool(canvas)
 {
-    uint start = addState("Place a point", EMPTY_STATE);
+    QString start = "Place a point";
+    QString startLine = "Start line";
+    QString wait = "Place end point";
+    QString moveEnd = "Move end";
+    QString finished = "Finished";
 
-    uint startLine = addState("Start line", [this](QEvent const& e)->int{
+    addState(start, EMPTY_STATE);
+
+    addState(startLine, STATE_DEF {
         m_line = std::make_shared<Line>();
         m_line->setStart(getCanvas()->getCursor());
         m_line->setEnd(getCanvas()->getCursor());
 
         gx::Command* command = new gx::AddGObjectCommand(m_line, getCanvas());
         getCanvas()->executeCommand(command);
-        return 2;
+        moveToStateSilent(wait);
     });
 
-    uint wait = addState("Place end point", EMPTY_STATE);
+    addState(wait, EMPTY_STATE);
 
-    uint moveEnd = addState("Move end", [this](QEvent const& e)->int{
+    addState(moveEnd, STATE_DEF {
         if(m_line != nullptr) {
             m_line->setEnd(getCanvas()->getCursor());
             getCanvas()->redraw();
-            return 2;
+            moveToStateSilent(wait);
+        } else {
+            moveToStateSilent(start);
         }
-        return 0;
     });
 
-    uint finished = addState("Finished", [this](QEvent const& e)->int{
-        return 0;
+    addState(finished, STATE_DEF {
+        moveToStateSilent(start);
     });
 
-    addTransition(start, QEvent::MouseButtonPress, startLine);
-    addTransition(wait, QEvent::MouseMove, moveEnd);
-    addTransition(wait, QEvent::MouseButtonPress, finished);
+    addTransition(start, Transition(QEvent::MouseButtonPress,Qt::LeftButton), startLine);
+    addTransition(wait, Transition(QEvent::MouseMove), moveEnd);
+    addTransition(wait, Transition(QEvent::MouseButtonPress, Qt::LeftButton), finished);
+
+    moveToStateSilent(start);
 }
-

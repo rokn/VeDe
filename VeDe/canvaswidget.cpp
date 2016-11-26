@@ -1,5 +1,7 @@
 #include "canvaswidget.h"
 #include "objects/ellipse.h"
+#include "tools/transition.h"
+#include <QMouseEvent>
 
 CanvasWidget::CanvasWidget(QWidget *parent)
     :QWidget(parent), Canvas()
@@ -49,10 +51,18 @@ gx::Vertex CanvasWidget::getCursor() const
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    handleEvent(*(QEvent*)(event));
+    gx::Transition transition(event->type(), event->button());
+    handleEvent(transition);
 }
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event)
 {
-    handleEvent(*(QEvent*)(event));
+    gx::Transition transition(event->type(), event->button());
+    handleEvent(transition);
+}
+
+void CanvasWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    gx::Transition transition(event->type(), event->button());
+    handleEvent(transition);
 }

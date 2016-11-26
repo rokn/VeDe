@@ -1,6 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
+#include "tools/transition.h"
 #include "objects/gobject.h"
 #include "layer.h"
 #include "commands/command.h"
@@ -34,7 +35,7 @@ public:
 
     int executeCommand(Command* command);
     int undoCommand();
-    void handleEvent(QEvent const &event);
+    void handleEvent(const Transition &transition);
     virtual void redraw() = 0;
     void addToCurrLayer(std::shared_ptr<GObject> object);
     void changeCurrTool(Tool* newTool);

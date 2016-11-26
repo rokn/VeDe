@@ -7,17 +7,20 @@
 #include <QEvent>
 #include <functional>
 #include "canvas.h"
+#include "transition.h"
 
 namespace gx
 {
 class Tool
 {
-   #define EMPTY_STATE [](QEvent const&)->int{return -1;}
+    #define EMPTY_STATE [](const Transition&){}
+    #define STATE_DEF [=](const Transition& t)
+    #define STATE_DEF_NO_CAP (const Transition& t)
 
 
 protected:
-    typedef std::function<int(QEvent const&)> ToolStateCallBack;
-    typedef unsigned int uint;
+    typedef std::function<void(const Transition&)> ToolStateCallBack;
+//    typedef unsigned int uint;
 
     //Struct/class declarations
 private:
@@ -25,24 +28,25 @@ private:
     {
         ToolStateCallBack callback;
         QString name;
+        QMap<Transition, QString> transitions;
     }ToolState;
 
 public:
     Tool(Canvas* canvas);
-    void handleEvent(const QEvent &event);
+    void handleEvent(const Transition& transition);
     Canvas* getCanvas();
     const QString& getCurrStateName() const;
     QVector<QString> getAllStateNames() const;
+    void moveToStateSilent(const QString &stateName);
 
 protected:
 
-    uint addState(QString name, ToolStateCallBack callBack);
-    void addTransition(uint transitionFrom, QEvent::Type event, uint transitionTo);
+    void addState(const QString &name, ToolStateCallBack callBack);
+    void addTransition(const QString &transitionFrom, Transition transition, const QString &transitionTo);
 
 private:
-    QMap<uint, QMap<QEvent::Type, uint>> m_transitions;
-    QVector<ToolState> m_states;
-    uint m_currState;
+    QMap<QString, ToolState> m_states;
+    QString m_currState;
     Canvas* m_canvas;
 
 
