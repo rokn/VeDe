@@ -14,6 +14,7 @@ public:
 
 private:
     std::shared_ptr<Ellipse> m_ellipse;
+    bool m_restricted;
 };
 }
 

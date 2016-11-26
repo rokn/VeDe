@@ -26,6 +26,7 @@ CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::unique_ptr<
     }
 
     widget->setMouseTracking(true);
+    widget->setFocusPolicy(Qt::WheelFocus);
     return widget;
 }
 
@@ -64,5 +65,17 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event)
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     gx::Transition transition(event->type(), event->button());
+    handleEvent(transition);
+}
+
+void CanvasWidget::keyPressEvent(QKeyEvent *event)
+{
+    gx::Transition transition(event->type(), (Qt::Key)event->key());
+    handleEvent(transition);
+}
+
+void CanvasWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    gx::Transition transition(event->type(), (Qt::Key)event->key());
     handleEvent(transition);
 }
