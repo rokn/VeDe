@@ -26,6 +26,13 @@ public slots:
 private:
     CanvasWidget(QWidget *parent = 0);
     CanvasWidget(std::unique_ptr<gx::GObject> *root, QWidget *parent = 0);
+
+    void initModifierKeys();
+    Qt::KeyboardModifier transformToMod(Qt::Key key);
+    Qt::Key transformToKey(Qt::KeyboardModifier mod);
+
+private:
+    QMap<Qt::KeyboardModifier, bool> m_modifierKeys;
 };
 
 #endif // CANVASWIDGET_H

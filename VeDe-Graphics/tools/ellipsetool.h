@@ -13,6 +13,10 @@ public:
     EllipseTool(Canvas* canvas);
 
 private:
+    void moveRadii();
+private:
+
+
     std::shared_ptr<Ellipse> m_ellipse;
     bool m_restricted;
 };

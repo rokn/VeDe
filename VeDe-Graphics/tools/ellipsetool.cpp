@@ -8,7 +8,7 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
     QString start = "Place the center";
     QString placeCenter = "Placing center";
     QString wait = "Place second corner";
-    QString moveRadii = "Move second corner";
+    QString moveRadiiState = "Move second corner";
     QString finished = "Finished";
     QString restrictState = "Restrict";
     QString unRestrictState = "UnRestrict";
@@ -29,22 +29,13 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
 
     addState(wait, EMPTY_STATE);
 
-    addState(moveRadii, STATE_DEF {
+    addState(moveRadiiState, STATE_DEF {
         if(m_ellipse == nullptr) {
             moveToStateSilent(start);
         }
 
-        Vertex cursorPos = getCanvas()->getCursor();
-        float rx = qAbs(cursorPos.x() - m_ellipse->center().x());
-        float ry = qAbs(cursorPos.y() - m_ellipse->center().y());
+        moveRadii();
 
-        if(m_restricted) {
-            rx = qMax(rx, ry);
-            ry = rx;
-        }
-
-        m_ellipse->setRadius(Vertex(rx, ry));
-        getCanvas()->redraw();
         moveToStateSilent(wait);
     });
 
@@ -54,19 +45,36 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
 
     addState(restrictState, STATE_DEF{
         m_restricted = true;
+        moveRadii();
         moveToStateSilent(wait);
     });
 
     addState(unRestrictState, STATE_DEF{
         m_restricted = false;
+        moveRadii();
         moveToStateSilent(wait);
     });
 
     addTransition(start, Transition(QEvent::MouseButtonPress, Qt::LeftButton), placeCenter);
-    addTransition(wait, Transition(QEvent::MouseMove), moveRadii);
+    addTransition(wait, Transition(QEvent::MouseMove), moveRadiiState);
     addTransition(wait, Transition(QEvent::MouseButtonPress, Qt::LeftButton), finished);
     addTransition(wait, Transition(QEvent::KeyPress, Qt::Key_Shift), restrictState);
     addTransition(wait, Transition(QEvent::KeyRelease, Qt::Key_Shift), unRestrictState);
 
     moveToStateSilent(start);
+}
+
+void gx::EllipseTool::moveRadii()
+{
+    Vertex cursorPos = getCanvas()->getCursor();
+    float rx = qAbs(cursorPos.x() - m_ellipse->center().x());
+    float ry = qAbs(cursorPos.y() - m_ellipse->center().y());
+
+    if(m_restricted) {
+        rx = qMax(rx, ry);
+        ry = rx;
+    }
+
+    m_ellipse->setRadius(Vertex(rx, ry));
+    getCanvas()->redraw();
 }
