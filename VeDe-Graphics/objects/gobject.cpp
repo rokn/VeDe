@@ -47,3 +47,21 @@ void gx::GObject::paintAll(gx::CustomPainter& painter) const
         }
     }
 }
+
+gx::Property *gx::GObject::addProperty(const QString& name, gx::PropertyType propType)
+{
+    Property* prop = Property::createProperty(name, propType);
+    m_properties.insert(name, prop);
+    return prop;
+}
+
+gx::Property *gx::GObject::getProp(const QString &name) const // TODO add non const method
+{
+    auto itr = m_properties.find(name);
+
+    if(itr != m_properties.end())
+    {
+        return itr.value();
+    }
+    return Q_NULLPTR;
+}

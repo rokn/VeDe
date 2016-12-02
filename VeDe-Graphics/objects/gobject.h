@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QString>
 #include "custompainter.h"
+#include "properties/property.h"
 #include <memory>
 
 namespace gx
@@ -13,18 +14,18 @@ class GObject
 public:
     GObject();
     virtual ~GObject();
-//    GObject(const GObject& other);
-//    void addChildren(const GObject& child);
     QList<std::shared_ptr<GObject> > &getChildren();
     void addChildren(GObject *child);
     void addChildren(std::shared_ptr<GObject> child);
     void paintAll(CustomPainter &painter) const;
+    Property* addProperty(const QString& name, PropertyType propType);
+    Property* getProp(const QString& name) const;
 
 protected:
     virtual void paintSelf(CustomPainter& painter) const = 0;
 
 private:
-//    QMap<QString, Property*> m_properties;
+    QMap<QString, Property*> m_properties;
     QList<std::shared_ptr<GObject>> m_children;
     int m_zorder;
 

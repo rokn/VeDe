@@ -1,5 +1,53 @@
 #include "property.h"
 
+const int &gx::Property::toInt() const
+{
+    if(m_type == PROP_INT)
+    {
+        return m_value.i;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+const float &gx::Property::toFloat() const
+{
+    if(m_type == PROP_FLOAT)
+    {
+        return m_value.f;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+const QString &gx::Property::toString() const
+{
+    if(m_type == PROP_STRING)
+    {
+        return *m_value.s;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+const gx::Color &gx::Property::toColor() const
+{
+    if(m_type == PROP_COLOR)
+    {
+        return *m_value.c;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
 int &gx::Property::toInt()
 {
     if(m_type == PROP_INT)
@@ -48,7 +96,7 @@ gx::Color &gx::Property::toColor()
     }
 }
 
-gx::Property *gx::Property::createProperty(gx::PropertyType type, QString name)
+gx::Property *gx::Property::createProperty(const QString& name, gx::PropertyType type)
 {
     Property *prop = new Property(type, name);
 

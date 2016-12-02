@@ -15,9 +15,24 @@ gx::Color::Color(int r, int g, int b, int a)
 {
 }
 
-int gx::Color::a() const
+void gx::Color::setA(int a)
 {
-    return m_a;
+    m_a = a;
+}
+
+void gx::Color::setB(int b)
+{
+    m_b = b;
+}
+
+void gx::Color::setG(int g)
+{
+    m_g = g;
+}
+
+void gx::Color::setR(int r)
+{
+    m_r = r;
 }
 
 int gx::Color::b() const
@@ -33,4 +48,9 @@ int gx::Color::g() const
 int gx::Color::r() const
 {
     return m_r;
+}
+
+int gx::Color::a() const
+{
+    return m_a;
 }

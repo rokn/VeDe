@@ -24,14 +24,21 @@ void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRigh
 void QtCustomPainter::setStrokeWidth(float width)
 {
     m_pen.setWidth((int)width);
+    onChangePen();
 }
 
 void QtCustomPainter::setStrokeColor(gx::Color color)
 {
     m_pen.setColor(toQColor(color));
+    onChangePen();
 }
 
 QColor QtCustomPainter::toQColor(gx::Color c)
 {
     return QColor(c.r(), c.g(), c.b(), c.a());
+}
+
+void QtCustomPainter::onChangePen()
+{
+    m_painter.setPen(m_pen);
 }

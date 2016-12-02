@@ -20,10 +20,14 @@ enum PropertyType
 class Property
 {
 public:
-    Property* createProperty(PropertyType type, QString name);
+    static Property* createProperty(const QString &name, PropertyType type);
     ~Property();
 
     void resetToDefault();
+    const int& toInt() const;
+    const float& toFloat() const;
+    const QString& toString() const;
+    const Color& toColor() const;
     int& toInt();
     float& toFloat();
     QString& toString();

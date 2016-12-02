@@ -15,6 +15,10 @@ public:
     int g() const;
     int b() const;
     int a() const;
+    void setR(int r);
+    void setG(int g);
+    void setB(int b);
+    void setA(int a);
 
 private:
     int m_r;

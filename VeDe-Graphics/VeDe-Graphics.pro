@@ -31,7 +31,6 @@ SOURCES += \
     tools/rectangletool.cpp \
     tools/transition.cpp \
     tools/restrictabletool.cpp \
-    properties/propertyvalue.cpp \
     graphics_exceptions.cpp
 
 HEADERS += \
@@ -55,7 +54,6 @@ HEADERS += \
     tools/rectangletool.h \
     tools/transition.h \
     tools/restrictabletool.h \
-    properties/propertyvalue.h \
     graphics_exceptions.h
 unix {
     target.path = /usr/lib

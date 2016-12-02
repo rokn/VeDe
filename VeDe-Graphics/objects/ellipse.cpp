@@ -1,7 +1,13 @@
 #include "ellipse.h"
 
 gx::Ellipse::Ellipse()
-{}
+{
+    addProperty("stroke-width",PROP_FLOAT)->toFloat() = 10.0f;
+    Property *color = addProperty("stroke-color",PROP_COLOR);
+    color->toColor().setR(255);
+    color->toColor().setG(0);
+    color->toColor().setB(0);
+}
 
 gx::Ellipse::Ellipse(Vertex center, Vertex radius)
     :m_center(center), m_radius(radius)
@@ -30,5 +36,7 @@ void gx::Ellipse::setRadius(const Vertex &radius)
 
 void gx::Ellipse::paintSelf(gx::CustomPainter &painter) const
 {
+    painter.setStrokeWidth(getProp("stroke-width")->toFloat());
+    painter.setStrokeColor(getProp("stroke-color")->toColor());
     painter.drawEllipse(m_center, m_radius);
 }

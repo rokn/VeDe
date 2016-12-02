@@ -18,6 +18,7 @@ public:
 
 private:
     QColor toQColor(gx::Color c);
+    void onChangePen();
 
     QPainter m_painter;
     QPen m_pen;
