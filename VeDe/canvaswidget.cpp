@@ -1,6 +1,7 @@
 #include "canvaswidget.h"
 #include "objects/ellipse.h"
 #include "tools/transition.h"
+#include "graphics_exceptions.h"
 #include <QMouseEvent>
 #include <QGuiApplication>
 
@@ -46,12 +47,14 @@ Qt::Key CanvasWidget::transformToKey(Qt::KeyboardModifier mod)
             return Qt::Key_Control;
         case Qt::AltModifier:
             return Qt::Key_Alt;
+        default: throw new UnknownModifierKey;
     }
 }
 
 CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::unique_ptr<gx::GObject> *root)
 {
     CanvasWidget* widget = nullptr;
+
     if(root == nullptr)
     {
         widget = new CanvasWidget(parent);

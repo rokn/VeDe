@@ -1,12 +1,12 @@
 #ifndef LINE_H
 #define LINE_H
 
-#include "gobject.h"
+#include "shape.h"
 #include "vertex.h"
 
 namespace gx
 {
-class Line : public GObject
+class Line : public Shape
 {
 public:
     Line();

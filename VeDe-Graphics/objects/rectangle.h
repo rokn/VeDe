@@ -1,11 +1,11 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#include "gobject.h"
+#include "shape.h"
 
 namespace gx
 {
-class Rectangle : public GObject
+class Rectangle : public Shape
 {
 public:
     Rectangle();

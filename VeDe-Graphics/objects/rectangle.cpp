@@ -32,5 +32,6 @@ void gx::Rectangle::setDownRight(const Vertex &value)
 
 void gx::Rectangle::paintSelf(gx::CustomPainter &painter) const
 {
+    Shape::paintSelf(painter);
     painter.drawRectangle(m_upLeft, m_downRight);
 }

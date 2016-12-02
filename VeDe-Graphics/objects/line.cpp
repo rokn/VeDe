@@ -31,6 +31,7 @@ void gx::Line::setStart(const Vertex &start)
 
 void gx::Line::paintSelf(gx::CustomPainter &painter) const
 {
+    Shape::paintSelf(painter);
     painter.drawLine(m_start, m_end);
 }
 

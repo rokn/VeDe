@@ -31,7 +31,8 @@ SOURCES += \
     tools/rectangletool.cpp \
     tools/transition.cpp \
     tools/restrictabletool.cpp \
-    graphics_exceptions.cpp
+    graphics_exceptions.cpp \
+    objects/shape.cpp
 
 HEADERS += \
     vertex.h \
@@ -54,7 +55,8 @@ HEADERS += \
     tools/rectangletool.h \
     tools/transition.h \
     tools/restrictabletool.h \
-    graphics_exceptions.h
+    graphics_exceptions.h \
+    objects/shape.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

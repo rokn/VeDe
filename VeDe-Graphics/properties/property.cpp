@@ -133,7 +133,7 @@ void gx::Property::resetToDefault()
             m_value.s = new QString;
             break;
         case PROP_COLOR:
-            m_value.c = new Color(255,255,255);
+            m_value.c = new Color(0,0,0);
             break;
     }
 }

@@ -1,12 +1,12 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
-#include "gobject.h"
+#include "shape.h"
 #include "vertex.h"
 
 namespace gx
 {
-class Ellipse : public GObject
+class Ellipse : public Shape
 {
 public:
     Ellipse();

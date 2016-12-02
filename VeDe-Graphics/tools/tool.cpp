@@ -34,7 +34,7 @@ const QString &gx::Tool::getCurrStateName() const
     {
         return state.value().name;
     }
-    return QString("");
+    return QString();
 }
 
 QVector<QString> gx::Tool::getAllStateNames() const

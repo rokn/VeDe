@@ -3,7 +3,9 @@
 
 
 class IncorrectPropertyType
-{
-};
+{};
+
+class UnknownModifierKey
+{};
 
 #endif // GRAPHICS_EXCEPTIONS_H

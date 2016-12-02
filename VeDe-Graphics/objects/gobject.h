@@ -3,6 +3,7 @@
 
 #include <QMap>
 #include <QString>
+#include <QDebug>
 #include "custompainter.h"
 #include "properties/property.h"
 #include <memory>
