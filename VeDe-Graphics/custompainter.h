@@ -2,6 +2,7 @@
 #define IPAINTER_H
 
 #include "vertex.h"
+#include "color.h"
 
 namespace gx
 {
@@ -16,6 +17,9 @@ public:
 
     virtual void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY) = 0;
     void drawRectangle(Vertex upLeft, Vertex downRight);
+
+    virtual void setStrokeWidth(float width) = 0;
+    virtual void setStrokeColor(Color color) = 0;
 };
 }
 

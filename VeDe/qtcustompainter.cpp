@@ -1,4 +1,5 @@
 #include "qtcustompainter.h"
+#include <QRgb>
 
 QtCustomPainter::QtCustomPainter(QPaintDevice* canvas)
     :m_painter(canvas)
@@ -18,4 +19,19 @@ void QtCustomPainter::drawEllipse(float cX, float cY, float rX, float rY)
 void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY)
 {
     m_painter.drawRect(upLeftX, upLeftY, downRightX - upLeftX, downRightY - upLeftY);
+}
+
+void QtCustomPainter::setStrokeWidth(float width)
+{
+    m_pen.setWidth((int)width);
+}
+
+void QtCustomPainter::setStrokeColor(gx::Color color)
+{
+    m_pen.setColor(toQColor(color));
+}
+
+QColor QtCustomPainter::toQColor(gx::Color c)
+{
+    return QColor(c.r(), c.g(), c.b(), c.a());
 }

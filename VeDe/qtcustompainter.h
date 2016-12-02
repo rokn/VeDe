@@ -13,8 +13,14 @@ public:
     void drawEllipse(float cX, float cY, float rX, float rY);
     void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY);
 
+    void setStrokeWidth(float width);
+    void setStrokeColor(gx::Color color);
+
 private:
+    QColor toQColor(gx::Color c);
+
     QPainter m_painter;
+    QPen m_pen;
 };
 
 #endif // QTCUSTOMPAINTER_H

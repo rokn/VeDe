@@ -19,7 +19,7 @@ SOURCES += \
     custompainter.cpp \
     objects/gobject.cpp \
     objects/line.cpp \
-    property.cpp \
+    properties/property.cpp \
     tools/tool.cpp \
     tools/linetool.cpp \
     layer.cpp \
@@ -30,7 +30,9 @@ SOURCES += \
     objects/rectangle.cpp \
     tools/rectangletool.cpp \
     tools/transition.cpp \
-    tools/restrictabletool.cpp
+    tools/restrictabletool.cpp \
+    properties/propertyvalue.cpp \
+    graphics_exceptions.cpp
 
 HEADERS += \
     vertex.h \
@@ -40,7 +42,7 @@ HEADERS += \
     custompainter.h \
     objects/gobject.h \
     objects/line.h \
-    property.h \
+    properties/property.h \
     tools/tool.h \
     tools/linetool.h \
     layer.h \
@@ -52,7 +54,9 @@ HEADERS += \
     objects/rectangle.h \
     tools/rectangletool.h \
     tools/transition.h \
-    tools/restrictabletool.h
+    tools/restrictabletool.h \
+    properties/propertyvalue.h \
+    graphics_exceptions.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

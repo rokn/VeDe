@@ -1,0 +1,105 @@
+#include "property.h"
+
+int &gx::Property::toInt()
+{
+    if(m_type == PROP_INT)
+    {
+        return m_value.i;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+float &gx::Property::toFloat()
+{
+    if(m_type == PROP_FLOAT)
+    {
+        return m_value.f;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+QString &gx::Property::toString()
+{
+    if(m_type == PROP_STRING)
+    {
+        return *m_value.s;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+gx::Color &gx::Property::toColor()
+{
+    if(m_type == PROP_COLOR)
+    {
+        return *m_value.c;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+gx::Property *gx::Property::createProperty(gx::PropertyType type, QString name)
+{
+    Property *prop = new Property(type, name);
+
+    prop->resetToDefault();
+
+    return prop;
+}
+
+gx::Property::~Property()
+{
+    switch(m_type)
+    {
+        case PROP_STRING:
+            delete m_value.s;
+            break;
+        case PROP_COLOR:
+            delete m_value.c;
+            break;
+        default:;
+    }
+}
+
+void gx::Property::resetToDefault()
+{
+    switch(m_type)
+    {
+        case PROP_INT:
+            m_value.i = 0;
+            break;
+        case PROP_FLOAT:
+            m_value.f = 0.0f;
+            break;
+        case PROP_STRING:
+            m_value.s = new QString;
+            break;
+        case PROP_COLOR:
+            m_value.c = new Color(255,255,255);
+            break;
+    }
+}
+
+gx::Property::Property(PropertyType type, QString name)
+    :m_type(type), m_name(name)
+{}
+
+QString gx::Property::name() const
+{
+    return m_name;
+}
+
+void gx::Property::setName(const QString &name)
+{
+    m_name = name;
+}
