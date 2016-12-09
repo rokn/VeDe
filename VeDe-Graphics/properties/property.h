@@ -21,6 +21,7 @@ class Property
 {
 public:
     static Property* createProperty(const QString &name, PropertyType type);
+    Property(const Property& other);
     ~Property();
 
     void resetToDefault();

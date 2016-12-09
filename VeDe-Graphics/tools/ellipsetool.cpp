@@ -3,17 +3,15 @@
 #include <QtMath>
 
 gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
-    :Tool(canvas)
+    :RestrictableTool(canvas)
 {
+    addProperty("stroke-width", PROP_FLOAT);
+    addProperty("stroke-color", PROP_COLOR);
     QString start = "Place the center";
     QString placeCenter = "Placing center";
     QString wait = "Place second corner";
     QString moveRadiiState = "Move second corner";
     QString finished = "Finished";
-    QString restrictState = "Restrict";
-    QString unRestrictState = "UnRestrict";
-
-    m_restricted = false;
 
     addState(start, EMPTY_STATE);
 
@@ -21,6 +19,7 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
         m_ellipse = std::make_shared<Ellipse>();
         m_ellipse->setCenter(getCanvas()->getCursor());
         m_ellipse->setRadius(Vertex(0,0));
+        m_ellipse->copyPropertiesFrom(*this);
 
         gx::Command* command = new gx::AddGObjectCommand(m_ellipse, getCanvas());
         getCanvas()->executeCommand(command);
@@ -35,31 +34,22 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
         }
 
         moveRadii();
-
         moveToStateSilent(wait);
     });
 
     addState(finished, STATE_DEF {
         moveToStateSilent(start);
+        setRestricted(false);
     });
 
-    addState(restrictState, STATE_DEF{
-        m_restricted = true;
-        moveRadii();
-        moveToStateSilent(wait);
-    });
-
-    addState(unRestrictState, STATE_DEF{
-        m_restricted = false;
-        moveRadii();
-        moveToStateSilent(wait);
-    });
 
     addTransition(start, Transition(QEvent::MouseButtonPress, Qt::LeftButton), placeCenter);
     addTransition(wait, Transition(QEvent::MouseMove), moveRadiiState);
     addTransition(wait, Transition(QEvent::MouseButtonPress, Qt::LeftButton), finished);
-    addTransition(wait, Transition(QEvent::KeyPress, Qt::Key_Shift), restrictState);
-    addTransition(wait, Transition(QEvent::KeyRelease, Qt::Key_Shift), unRestrictState);
+
+    setUpRestriction(wait, STATE_DEF{
+        moveRadii();
+    });
 
     moveToStateSilent(start);
 }
@@ -70,7 +60,7 @@ void gx::EllipseTool::moveRadii()
     float rx = qAbs(cursorPos.x() - m_ellipse->center().x());
     float ry = qAbs(cursorPos.y() - m_ellipse->center().y());
 
-    if(m_restricted) {
+    if(isRestricted()) {
         rx = qMax(rx, ry);
         ry = rx;
     }

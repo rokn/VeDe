@@ -32,7 +32,8 @@ SOURCES += \
     tools/transition.cpp \
     tools/restrictabletool.cpp \
     graphics_exceptions.cpp \
-    objects/shape.cpp
+    objects/shape.cpp \
+    properties/propertyholder.cpp
 
 HEADERS += \
     vertex.h \
@@ -56,7 +57,8 @@ HEADERS += \
     tools/transition.h \
     tools/restrictabletool.h \
     graphics_exceptions.h \
-    objects/shape.h
+    objects/shape.h \
+    properties/propertyholder.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

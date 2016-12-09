@@ -105,6 +105,28 @@ gx::Property *gx::Property::createProperty(const QString& name, gx::PropertyType
     return prop;
 }
 
+gx::Property::Property(const gx::Property &other)
+{
+    this->m_type = other.m_type;
+    this->m_name = other.m_name;
+
+    switch(m_type)
+    {
+        case PROP_INT:
+            m_value.i = other.m_value.i;
+            break;
+        case PROP_FLOAT:
+            m_value.f = other.m_value.f;
+            break;
+        case PROP_STRING:
+            m_value.s = other.m_value.s;
+            break;
+        case PROP_COLOR:
+            m_value.c = other.m_value.c;
+            break;
+    }
+}
+
 gx::Property::~Property()
 {
     switch(m_type)

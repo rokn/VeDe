@@ -1,26 +1,22 @@
-//#ifndef RESTRICTABLETOOL_H
-//#define RESTRICTABLETOOL_H
+#ifndef RESTRICTABLETOOL_H
+#define RESTRICTABLETOOL_H
 
-//#include "tool.h"
+#include "tool.h"
 
-//namespace gx
-//{
-//class RestrictableTool : public Tool
-//{
-//public:
-//    RestrictableTool();
+namespace gx
+{
+class RestrictableTool : public Tool
+{
+public:
+    RestrictableTool(Canvas* canvas);
+protected:
+    bool isRestricted() const;
+    void setRestricted(bool restricted);
+    void setUpRestriction(const QString& from, Tool::ToolStateCallBack onChange);
 
-//    bool isRestricted() const;
-//    void setRestricted(bool restricted);
+private:
+    bool m_restricted;
+};
+}
 
-//    QString restrictStateName() const;
-//    QString unRestrictStateName() const;
-
-//private:
-//    bool m_restricted;
-//    QString m_restrictNameState;
-//    QString m_unRestrictNameState;
-//};
-//}
-
-//#endif // RESTRICTABLETOOL_H
+#endif // RESTRICTABLETOOL_H

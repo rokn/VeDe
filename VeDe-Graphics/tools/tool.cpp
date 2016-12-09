@@ -17,7 +17,6 @@ void gx::Tool::handleEvent(const Transition& transition)
     {
         //TODO remove one of the calls this or the upper one
         m_currState = transitions.value(transition);
-//        qDebug() << "Transiton: " << transition.eventType();
         m_states.find(m_currState)->callback(transition);
     }
 }

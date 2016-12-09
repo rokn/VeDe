@@ -1,35 +1,38 @@
 #include "restrictabletool.h"
 
-//gx::RestrictableTool::RestrictableTool()
-//{
-//    m_restrictNameState = "Restrict";
-//    m_unRestrictNameState = "UnRestrict";
+gx::RestrictableTool::RestrictableTool(gx::Canvas *canvas)
+    :Tool(canvas)
+{
+    m_restricted = false;
+}
 
-//    addState(m_restrictNameState, STATE_DEF{
-//        m_restricted = true;
-//    });
+bool gx::RestrictableTool::isRestricted() const
+{
+    return m_restricted;
+}
 
-//    addState(m_unRestrictNameState, STATE_DEF{
-//        m_restricted = true;
-//    });
-//}
+void gx::RestrictableTool::setRestricted(bool restricted)
+{
+    m_restricted = restricted;
+}
 
-//bool gx::RestrictableTool::isRestricted() const
-//{
-//    return m_restricted;
-//}
+void gx::RestrictableTool::setUpRestriction(const QString &from, gx::Tool::ToolStateCallBack onChange)
+{
+    QString restrictState = "Restrict";
+    QString unRestrictState = "UnRestrict";
 
-//void gx::RestrictableTool::setRestricted(bool restricted)
-//{
-//    m_restricted = restricted;
-//}
+    addState(restrictState, STATE_DEF{
+        m_restricted = true;
+        onChange(t);
+        moveToStateSilent(from);
+    });
 
-//QString gx::RestrictableTool::restrictStateName() const
-//{
-//    return m_restrictNameState;
-//}
+    addState(unRestrictState, STATE_DEF{
+        m_restricted = false;
+        onChange(t);
+        moveToStateSilent(from);
+    });
 
-//QString gx::RestrictableTool::unRestrictStateName() const
-//{
-//    return m_unRestrictNameState;
-//}
+    addTransition(from, Transition(QEvent::KeyPress, Qt::Key_Shift), restrictState);
+    addTransition(from, Transition(QEvent::KeyRelease, Qt::Key_Shift), unRestrictState);
+}

@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QGuiApplication>
 
+#include<QAbstractButton>
 CanvasWidget::CanvasWidget(QWidget *parent)
     :QWidget(parent), Canvas()
 {

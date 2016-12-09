@@ -8,10 +8,11 @@
 #include <functional>
 #include "canvas.h"
 #include "transition.h"
+#include "properties/propertyholder.h"
 
 namespace gx
 {
-class Tool
+class Tool : public PropertyHolder
 {
     #define EMPTY_STATE [](const Transition&){}
     #define STATE_DEF [=](const Transition& t)
@@ -40,7 +41,6 @@ public:
     void moveToStateSilent(const QString &stateName);
 
 protected:
-
     void addState(const QString &name, ToolStateCallBack callBack);
     void addTransition(const QString &transitionFrom, Transition transition, const QString &transitionTo);
 
@@ -48,8 +48,6 @@ private:
     QMap<QString, ToolState> m_states;
     QString m_currState;
     Canvas* m_canvas;
-
-
 };
 }
 

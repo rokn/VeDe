@@ -2,7 +2,7 @@
 
 gx::Shape::Shape()
 {
-    addProperty("stroke-width", PROP_FLOAT); //TODO: ask about property naming
+    addProperty("stroke-width", PROP_FLOAT);
     addProperty("stroke-color", PROP_COLOR);
     addProperty("back-color", PROP_COLOR);
 }
