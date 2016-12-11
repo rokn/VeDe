@@ -1,12 +1,13 @@
 #include "ellipsetool.h"
 #include "commands/addgobjectcommand.h"
+#include "properties/propertyfactory.h"
 #include <QtMath>
 
 gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
     :RestrictableTool(canvas)
 {
-    addProperty("stroke-width", PROP_FLOAT);
-    addProperty("stroke-color", PROP_COLOR);
+    setName("Ellipse tool");
+    PropertyFactory::addShapeProperties(this);
     QString start = "Place the center";
     QString placeCenter = "Placing center";
     QString wait = "Place second corner";

@@ -164,6 +164,11 @@ gx::Property::Property(PropertyType type, QString name)
     :m_type(type), m_name(name)
 {}
 
+gx::PropertyType gx::Property::getType() const
+{
+    return m_type;
+}
+
 QString gx::Property::name() const
 {
     return m_name;

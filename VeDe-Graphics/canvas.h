@@ -14,7 +14,7 @@ namespace gx
 //Forward decl.
 class Tool;
 
-class Canvas
+class Canvas : public PropertyHolder
 {
 public:
     Canvas();

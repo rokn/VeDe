@@ -1,14 +1,14 @@
 #include "shape.h"
+#include "properties/propertyfactory.h"
+#include "properties/propertynames.h"
 
 gx::Shape::Shape()
 {
-    addProperty("stroke-width", PROP_FLOAT);
-    addProperty("stroke-color", PROP_COLOR);
-    addProperty("back-color", PROP_COLOR);
+    PropertyFactory::addShapeProperties(this);
 }
 
 void gx::Shape::paintSelf(gx::CustomPainter &painter) const
 {
-    painter.setStrokeWidth(getProp("stroke-width")->toFloat());
-    painter.setStrokeColor(getProp("stroke-color")->toColor());
+    painter.setStrokeWidth(getProp(PROP::STROKE_WIDTH)->toFloat());
+    painter.setStrokeColor(getProp(PROP::STROKE_COLOR)->toColor());
 }

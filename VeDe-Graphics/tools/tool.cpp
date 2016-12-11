@@ -54,8 +54,9 @@ void gx::Tool::moveToStateSilent(const QString &stateName)
 //    if(m_states.find(stateName) != m_states.end())
 //    {
         m_currState = stateName;
-//    }
+        //    }
 }
+
 
 void gx::Tool::addState(const QString& name, ToolStateCallBack callBack)
 {
@@ -74,4 +75,29 @@ void gx::Tool::addTransition(const QString& transitionFrom, Transition transitio
     {
         state.value().transitions.insert(transition, transitionTo);
     }
+}
+
+QString gx::Tool::getName() const
+{
+    return m_name;
+}
+
+void gx::Tool::setName(const QString &name)
+{
+    m_name = name;
+}
+
+bool gx::Tool::isActive() const
+{
+    return m_active;
+}
+
+void gx::Tool::setActive(bool active)
+{
+    m_active = active;
+}
+
+void gx::Tool::switchTo()
+{
+    m_canvas->changeCurrTool(this);
 }

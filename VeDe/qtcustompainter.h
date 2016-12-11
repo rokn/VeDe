@@ -14,10 +14,10 @@ public:
     void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY);
 
     void setStrokeWidth(float width);
-    void setStrokeColor(gx::Color color);
+    void setStrokeColor(const gx::Color &color);
 
 private:
-    QColor toQColor(gx::Color c);
+    QColor toQColor(const gx::Color &c);
     void onChangePen();
 
     QPainter m_painter;

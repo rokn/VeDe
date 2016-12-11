@@ -1,18 +1,22 @@
 #include "gobject.h"
 #include <QStack>
 
-gx::GObject::GObject()
+gx::GObject::GObject(std::shared_ptr<gx::GObject> parent)
 {
+    if(parent != nullptr)
+    {
+        parent->addChild(this);
+    }
 }
 
 gx::GObject::~GObject()
 {
 }
 
-void gx::GObject::addChildren(gx::GObject *child)
+void gx::GObject::addChild(gx::GObject *child)
 {
     std::shared_ptr<gx::GObject> ch(child);
-    this->m_children.append(ch);
+    addChild(ch);
 }
 
 QList<std::shared_ptr<gx::GObject>>& gx::GObject::getChildren()
@@ -20,8 +24,9 @@ QList<std::shared_ptr<gx::GObject>>& gx::GObject::getChildren()
     return m_children;
 }
 
-void gx::GObject::addChildren(std::shared_ptr<GObject> child)
+void gx::GObject::addChild(std::shared_ptr<GObject> child)
 {
+    child->setParent(std::shared_ptr<GObject>(this));
     this->m_children.append(child);
 }
 
@@ -46,6 +51,16 @@ void gx::GObject::paintAll(gx::CustomPainter& painter) const
             paintStack.push_back((*it).get());
         }
     }
+}
+
+std::shared_ptr<gx::GObject> gx::GObject::getParent() const
+{
+    return m_parent;
+}
+
+void gx::GObject::setParent(const std::shared_ptr<GObject> &parent)
+{
+    m_parent = parent;
 }
 
 //gx::PropertyHolder& gx::GObject::getProperties()

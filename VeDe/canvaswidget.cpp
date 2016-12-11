@@ -2,17 +2,18 @@
 #include "objects/ellipse.h"
 #include "tools/transition.h"
 #include "graphics_exceptions.h"
+#include "canvasimpl.h"
 #include <QMouseEvent>
 #include <QGuiApplication>
 
 #include<QAbstractButton>
 CanvasWidget::CanvasWidget(QWidget *parent)
-    :QWidget(parent), Canvas()
+    :QWidget(parent), m_canvas(new CanvasImpl(this))
 {
 }
 
 CanvasWidget::CanvasWidget(std::unique_ptr<gx::GObject> *root, QWidget *parent)
-    :QWidget(parent), Canvas(root)
+    :QWidget(parent), m_canvas(new CanvasImpl(this, root))
 {
 }
 
@@ -73,40 +74,29 @@ CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::unique_ptr<
 
 void CanvasWidget::paintEvent(QPaintEvent *event)
 {
-    if(root() != nullptr)
+    if(m_canvas->root() != nullptr)
     {
         QtCustomPainter painter(this);
-        this->root()->paintAll(painter);
+        m_canvas->root()->paintAll(painter);
     }
-}
-
-void CanvasWidget::redraw()
-{
-    update();
-}
-
-gx::Vertex CanvasWidget::getCursor() const
-{
-    QPoint relativePos = this->mapFromGlobal(QCursor::pos());
-    return gx::Vertex(relativePos.x(), relativePos.y());
 }
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event)
 {
     gx::Transition transition(event->type(), event->button());
-    handleEvent(transition);
+    m_canvas->handleEvent(transition);
 }
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event)
 {
     gx::Transition transition(event->type(), event->button());
-    handleEvent(transition);
+    m_canvas->handleEvent(transition);
 }
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     gx::Transition transition(event->type(), event->button());
-    handleEvent(transition);
+    m_canvas->handleEvent(transition);
 }
 
 void CanvasWidget::keyPressEvent(QKeyEvent *event)
@@ -118,7 +108,7 @@ void CanvasWidget::keyPressEvent(QKeyEvent *event)
     }
 
     gx::Transition transition(event->type(), key);
-    handleEvent(transition);
+    m_canvas->handleEvent(transition);
 }
 
 void CanvasWidget::keyReleaseEvent(QKeyEvent *event)
@@ -136,5 +126,16 @@ void CanvasWidget::keyReleaseEvent(QKeyEvent *event)
     }
 
     gx::Transition transition(event->type(), key);
-    handleEvent(transition);
+    m_canvas->handleEvent(transition);
 }
+
+gx::Canvas *CanvasWidget::getCanvas() const
+{
+    return m_canvas;
+}
+
+void CanvasWidget::setCanvas(gx::Canvas *canvas)
+{
+    m_canvas = canvas;
+}
+

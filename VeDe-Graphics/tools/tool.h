@@ -40,6 +40,13 @@ public:
     QVector<QString> getAllStateNames() const;
     void moveToStateSilent(const QString &stateName);
 
+    bool isActive() const;
+    void setActive(bool active);
+    void switchTo();
+
+    QString getName() const;
+    void setName(const QString &name);
+
 protected:
     void addState(const QString &name, ToolStateCallBack callBack);
     void addTransition(const QString &transitionFrom, Transition transition, const QString &transitionTo);
@@ -47,7 +54,9 @@ protected:
 private:
     QMap<QString, ToolState> m_states;
     QString m_currState;
+    QString m_name;
     Canvas* m_canvas;
+    bool m_active;
 };
 }
 

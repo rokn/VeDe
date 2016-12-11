@@ -4,9 +4,9 @@
 #include <QMainWindow>
 #include "canvaswidget.h"
 
-namespace Ui {
-class MainWindow;
-}
+QT_BEGIN_NAMESPACE
+class QToolBar;
+QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -16,16 +16,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void on_actionLine_triggered();
-
-    void on_actionEllipse_triggered();
-
-    void on_actionRectangle_triggered();
+private:
+    void setup();
+    void setupCanvas();
+    void setupTools();
 
 private:
-    Ui::MainWindow *ui;
     CanvasWidget *m_canvas;
+    QToolBar* m_toolsBar;
 };
 
 #endif // MAINWINDOW_H

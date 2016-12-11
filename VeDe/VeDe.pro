@@ -18,13 +18,23 @@ QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
 SOURCES += main.cpp\
         mainwindow.cpp \
     canvaswidget.cpp \
-    qtcustompainter.cpp
+    qtcustompainter.cpp \
+    toolaction.cpp \
+    workspace.cpp \
+    properywidgetfactory.cpp \
+    propertyconverter.cpp \
+    canvasimpl.cpp
 
 HEADERS  += mainwindow.h \
     canvaswidget.h \
-    qtcustompainter.h
+    qtcustompainter.h \
+    toolaction.h \
+    workspace.h \
+    properywidgetfactory.h \
+    propertyconverter.h \
+    canvasimpl.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-vede-graphics-debug/release/ -lVeDe-Graphics
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-vede-graphics-debug/debug/ -lVeDe-Graphics
@@ -41,3 +51,6 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-ve
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-vede-graphics-debug/release/VeDe-Graphics.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-vede-graphics-debug/debug/VeDe-Graphics.lib
 else:unix: PRE_TARGETDEPS += $$PWD/../build-vede-graphics-debug/libVeDe-Graphics.a
+
+RESOURCES += \
+    images.qrc

@@ -1,9 +1,12 @@
 #include "rectangletool.h"
+#include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h"
 
 gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     :Tool(canvas)
 {
+    setName("Rectangle tool");
+    PropertyFactory::addShapeProperties(this);
     QString start = "Place first corner";
     QString placeFirstCorner = "Placing a corner";
     QString wait = "Place second corner";

@@ -31,3 +31,8 @@ void gx::PropertyHolder::copyPropertiesFrom(const gx::PropertyHolder &other)
         this->m_properties.insert(key, new Property(*other.m_properties.value(key)));
     }
 }
+
+QList<gx::Property *> gx::PropertyHolder::getAllProperties()
+{
+    return m_properties.values();
+}

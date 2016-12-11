@@ -5,7 +5,7 @@ gx::Canvas::Canvas()
     :m_root(new Layer)
 {
     m_currLayer = new Layer();
-    m_root->addChildren(m_currLayer);
+    m_root->addChild(m_currLayer);
     initCommon();
 }
 
@@ -75,15 +75,16 @@ void gx::Canvas::handleEvent(const Transition &transition)
 
 void gx::Canvas::addToCurrLayer(std::shared_ptr<gx::GObject> object)
 {
-    m_currLayer->addChildren(object);
+    m_currLayer->addChild(object);
 }
 
 void gx::Canvas::changeCurrTool(gx::Tool *newTool)
 {
     if(m_currTool != nullptr)
     {
-        delete m_currTool;
+        m_currTool->setActive(false);
     }
 
     m_currTool = newTool;
+    m_currTool->setActive(true);
 }

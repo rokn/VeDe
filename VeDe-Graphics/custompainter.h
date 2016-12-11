@@ -19,7 +19,7 @@ public:
     void drawRectangle(Vertex upLeft, Vertex downRight);
 
     virtual void setStrokeWidth(float width) = 0;
-    virtual void setStrokeColor(Color color) = 0;
+    virtual void setStrokeColor(const Color& color) = 0;
 };
 }
 

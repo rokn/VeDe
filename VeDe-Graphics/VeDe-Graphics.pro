@@ -33,7 +33,8 @@ SOURCES += \
     tools/restrictabletool.cpp \
     graphics_exceptions.cpp \
     objects/shape.cpp \
-    properties/propertyholder.cpp
+    properties/propertyholder.cpp \
+    properties/propertyfactory.cpp
 
 HEADERS += \
     vertex.h \
@@ -58,7 +59,9 @@ HEADERS += \
     tools/restrictabletool.h \
     graphics_exceptions.h \
     objects/shape.h \
-    properties/propertyholder.h
+    properties/propertyholder.h \
+    properties/propertyfactory.h \
+    properties/propertynames.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

@@ -38,6 +38,8 @@ public:
     QString name() const;
     void setName(const QString &name);
 
+    PropertyType getType() const;
+
 private:
     Property(PropertyType type, QString name);
 

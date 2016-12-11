@@ -27,13 +27,13 @@ void QtCustomPainter::setStrokeWidth(float width)
     onChangePen();
 }
 
-void QtCustomPainter::setStrokeColor(gx::Color color)
+void QtCustomPainter::setStrokeColor(const gx::Color &color)
 {
     m_pen.setColor(toQColor(color));
     onChangePen();
 }
 
-QColor QtCustomPainter::toQColor(gx::Color c)
+QColor QtCustomPainter::toQColor(const gx::Color &c)
 {
     return QColor(c.r(), c.g(), c.b(), c.a());
 }

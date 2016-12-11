@@ -1,9 +1,12 @@
 #include "linetool.h"
+#include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h" // TODO: remove
 
 gx::LineTool::LineTool(gx::Canvas *canvas)
     :Tool(canvas)
 {
+    setName("Line tool");
+    PropertyFactory::addShapeProperties(this);
     QString start = "Place a point";
     QString startLine = "Start line";
     QString wait = "Place end point";
