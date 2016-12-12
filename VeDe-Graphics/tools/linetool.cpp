@@ -17,6 +17,7 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
     addState(startLine, STATE_DEF {
         m_line = std::make_shared<Line>();
+        m_line->copyPropertiesFrom(*this);
         m_line->setStart(getCanvas()->getCursor());
         m_line->setEnd(getCanvas()->getCursor());
 

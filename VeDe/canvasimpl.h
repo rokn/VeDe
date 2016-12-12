@@ -7,6 +7,7 @@ class CanvasWidget;
 
 class CanvasImpl : public gx::Canvas
 {
+    Q_OBJECT
 public:
     CanvasImpl(CanvasWidget* parent);
     CanvasImpl(CanvasWidget* parent, std::unique_ptr<gx::GObject> *root);

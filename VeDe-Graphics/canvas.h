@@ -16,9 +16,10 @@ class Tool;
 
 class Canvas : public PropertyHolder
 {
+    Q_OBJECT
 public:
-    Canvas();
-    Canvas(std::unique_ptr<GObject> *root);
+    Canvas(QObject* parent = 0);
+    Canvas(std::unique_ptr<GObject> *root, QObject* parent = 0);
     virtual ~Canvas();
 
     /**
@@ -39,6 +40,9 @@ public:
     virtual void redraw() = 0;
     void addToCurrLayer(std::shared_ptr<GObject> object);
     void changeCurrTool(Tool* newTool);
+
+signals:
+    void activeToolChanged(gx::Tool* newTool);
 
 private:
     void initCommon();

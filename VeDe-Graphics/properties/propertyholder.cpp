@@ -1,5 +1,11 @@
 #include "propertyholder.h"
 
+gx::PropertyHolder::PropertyHolder(QObject *parent)
+    :QObject(parent)
+{
+
+}
+
 gx::PropertyHolder::~PropertyHolder()
 {
     foreach (auto& key, m_properties.keys()) {

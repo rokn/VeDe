@@ -9,7 +9,9 @@ namespace gx
 {
 class PropertyHolder : public QObject
 {
+    Q_OBJECT
 public:
+    PropertyHolder(QObject* parent = 0);
     virtual ~PropertyHolder();
     Property* addProperty(const QString& name, PropertyType propType);
     Property* getProp(const QString& name) const;

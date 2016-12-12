@@ -1,12 +1,15 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+
 #include "tools/linetool.h"
 #include "tools/ellipsetool.h"
 #include "tools/rectangletool.h"
 #include "toolaction.h"
+
 #include <QActionGroup>
 #include <QGraphicsView>
 #include <QLabel>
+
+#include "currtooltoolbar.h"
 #include "workspace.h"
 #include "properywidgetfactory.h"
 
@@ -16,12 +19,6 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    // PLACEHOLDER CODE
-//    m_canvas = CanvasWidget::createCanvasWidget(ui->canvasFrame);
-//    ui->canvasFrame->layout()->addWidget(m_canvas);
-//    ui->canvasFrame->layout()->setMargin(0);
-//    m_canvas->move(20,20);
-//    m_canvas->show();
     setup();
 }
 
@@ -50,23 +47,22 @@ void MainWindow::setupTools()
     QActionGroup *group = new QActionGroup(this);
     QList<ToolAction*> actions;
     gx::Tool* ellipse = new gx::EllipseTool(m_canvas->getCanvas());
+    ToolAction* ellipseAction = new ToolAction(ellipse, group);
     actions.append(new ToolAction(new gx::LineTool(m_canvas->getCanvas()), group));
-    actions.append(new ToolAction(ellipse, group));
+    actions.append(ellipseAction);
     actions.append(new ToolAction(new gx::RectangleTool(m_canvas->getCanvas()), group));
 
-    QToolBar* currToolToolBar = new QToolBar(this);
+    QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas->getCanvas(), this);
 
-    foreach(auto prop, ellipse->getAllProperties())
-    {
-        currToolToolBar->addWidget(new QLabel(prop->name(), currToolToolBar));
-        currToolToolBar->addWidget(ProperyWidgetFactory::createWidget(prop, currToolToolBar));
-    }
 
     foreach(ToolAction* action, actions)
     {
         action->setCheckable(true);
         m_toolsBar->addAction(action);
     }
+
+    ellipseAction->setChecked(true);
+    ellipseAction->trigger();
 
     this->addToolBar(m_toolsBar);
     this->addToolBar(currToolToolBar);

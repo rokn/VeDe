@@ -18,6 +18,7 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     addState(placeFirstCorner, STATE_DEF {
         anchorPoint = getCanvas()->getCursor();
         m_rect = std::make_shared<Rectangle>();
+        m_rect->copyPropertiesFrom(*this);
         m_rect->setUpLeft(anchorPoint);
         m_rect->setDownRight(anchorPoint);
 

@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     workspace.cpp \
     properywidgetfactory.cpp \
     propertyconverter.cpp \
-    canvasimpl.cpp
+    canvasimpl.cpp \
+    currtooltoolbar.cpp
 
 HEADERS  += mainwindow.h \
     canvaswidget.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     workspace.h \
     properywidgetfactory.h \
     propertyconverter.h \
-    canvasimpl.h
+    canvasimpl.h \
+    currtooltoolbar.h
 
 FORMS    +=
 

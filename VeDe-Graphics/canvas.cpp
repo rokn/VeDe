@@ -1,15 +1,16 @@
 #include "canvas.h"
 #include "tools/tool.h"
 
-gx::Canvas::Canvas()
-    :m_root(new Layer)
+gx::Canvas::Canvas(QObject *parent)
+    :PropertyHolder(parent), m_root(new Layer)
 {
     m_currLayer = new Layer();
     m_root->addChild(m_currLayer);
     initCommon();
 }
 
-gx::Canvas::Canvas(std::unique_ptr<GObject> *root)
+gx::Canvas::Canvas(std::unique_ptr<GObject> *root, QObject *parent)
+    :PropertyHolder(parent)
 {
     m_root = std::move(*root);
     initCommon();
@@ -87,4 +88,5 @@ void gx::Canvas::changeCurrTool(gx::Tool *newTool)
 
     m_currTool = newTool;
     m_currTool->setActive(true);
+    emit activeToolChanged(m_currTool);
 }
