@@ -119,10 +119,10 @@ gx::Property::Property(const gx::Property &other)
             m_value.f = other.m_value.f;
             break;
         case PROP_STRING:
-            m_value.s = other.m_value.s;
+            m_value.s = new QString(*other.m_value.s);
             break;
         case PROP_COLOR:
-            m_value.c = other.m_value.c;
+            m_value.c = new Color(*other.m_value.c);
             break;
     }
 }

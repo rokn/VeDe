@@ -7,6 +7,7 @@
 #include "custompainter.h"
 #include "properties/propertyholder.h"
 #include <memory>
+#include <functional>
 
 namespace gx
 {
@@ -16,12 +17,23 @@ public:
     GObject(std::shared_ptr<GObject> parent = nullptr);
     virtual ~GObject();
     QList<std::shared_ptr<GObject> > &getChildren();
-    void addChild(GObject *child);
-    void addChild(std::shared_ptr<GObject> child);
-    void paintAll(CustomPainter &painter) const;
+    void addChild(GObject *child, const std::shared_ptr<GObject> &parent);
+    void addChild(std::shared_ptr<GObject> child, const std::shared_ptr<GObject> &parent);
+    void paintAll(CustomPainter &painter);
 
     std::shared_ptr<GObject> getParent() const;
-    void setParent(const std::shared_ptr<GObject> &parent);
+    void setParent(std::shared_ptr<GObject> parent);
+
+    GObject *findInChildren(unsigned int id);
+
+    unsigned int getId() const;
+    void setId(unsigned int id);
+
+    void forAllChildren(std::function<bool(GObject *)> action);
+
+    void remove();
+    void removeChild(unsigned int id);
+    void removeAllChildren();
 
 protected:
     virtual void paintSelf(CustomPainter& painter) const = 0;
@@ -30,6 +42,7 @@ private:
     QList<std::shared_ptr<GObject>> m_children;
     std::shared_ptr<GObject> m_parent;
     int m_zorder;
+    unsigned int m_id;
 };
 }
 

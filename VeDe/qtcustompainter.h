@@ -15,13 +15,16 @@ public:
 
     void setStrokeWidth(float width);
     void setStrokeColor(const gx::Color &color);
+    void setBackColor(const gx::Color& color);
 
 private:
     QColor toQColor(const gx::Color &c);
     void onChangePen();
+    void onChangeBrush();
 
     QPainter m_painter;
     QPen m_pen;
+    QBrush m_brush;
 };
 
 #endif // QTCUSTOMPAINTER_H

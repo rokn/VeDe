@@ -10,7 +10,7 @@ class CanvasWidget : public QWidget
 
     Q_OBJECT
 public:
-    static CanvasWidget* createCanvasWidget(QWidget *parent = 0, std::unique_ptr<gx::GObject> *root = 0);
+    static CanvasWidget* createCanvasWidget(QWidget *parent = 0, std::shared_ptr<gx::GObject> *root = 0);
     void paintEvent(QPaintEvent* event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -23,7 +23,7 @@ public:
 
 private:
     CanvasWidget(QWidget *parent = 0);
-    CanvasWidget(std::unique_ptr<gx::GObject> *root, QWidget *parent = 0);
+    CanvasWidget(std::shared_ptr<gx::GObject> *root, QWidget *parent = 0);
 
     void initModifierKeys();
     Qt::KeyboardModifier transformToMod(Qt::Key key);

@@ -12,7 +12,7 @@ CanvasWidget::CanvasWidget(QWidget *parent)
 {
 }
 
-CanvasWidget::CanvasWidget(std::unique_ptr<gx::GObject> *root, QWidget *parent)
+CanvasWidget::CanvasWidget(std::shared_ptr<gx::GObject> *root, QWidget *parent)
     :QWidget(parent), m_canvas(new CanvasImpl(this, root))
 {
 }
@@ -53,7 +53,7 @@ Qt::Key CanvasWidget::transformToKey(Qt::KeyboardModifier mod)
     }
 }
 
-CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::unique_ptr<gx::GObject> *root)
+CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::shared_ptr<gx::GObject> *root)
 {
     CanvasWidget* widget = nullptr;
 
@@ -84,19 +84,19 @@ void CanvasWidget::paintEvent(QPaintEvent *event)
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event)
 {
     gx::Transition transition(event->type(), event->button());
-    m_canvas->handleEvent(transition);
+    m_canvas->handleTransition(transition);
 }
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event)
 {
     gx::Transition transition(event->type(), event->button());
-    m_canvas->handleEvent(transition);
+    m_canvas->handleTransition(transition);
 }
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     gx::Transition transition(event->type(), event->button());
-    m_canvas->handleEvent(transition);
+    m_canvas->handleTransition(transition);
 }
 
 void CanvasWidget::keyPressEvent(QKeyEvent *event)
@@ -108,7 +108,7 @@ void CanvasWidget::keyPressEvent(QKeyEvent *event)
     }
 
     gx::Transition transition(event->type(), key);
-    m_canvas->handleEvent(transition);
+    m_canvas->handleTransition(transition);
 }
 
 void CanvasWidget::keyReleaseEvent(QKeyEvent *event)
@@ -126,7 +126,7 @@ void CanvasWidget::keyReleaseEvent(QKeyEvent *event)
     }
 
     gx::Transition transition(event->type(), key);
-    m_canvas->handleEvent(transition);
+    m_canvas->handleTransition(transition);
 }
 
 gx::Canvas *CanvasWidget::getCanvas() const

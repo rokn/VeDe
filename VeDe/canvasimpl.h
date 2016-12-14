@@ -10,7 +10,7 @@ class CanvasImpl : public gx::Canvas
     Q_OBJECT
 public:
     CanvasImpl(CanvasWidget* parent);
-    CanvasImpl(CanvasWidget* parent, std::unique_ptr<gx::GObject> *root);
+    CanvasImpl(CanvasWidget* parent, std::shared_ptr<gx::GObject> *root);
     void redraw();
     gx::Vertex getCursor() const;
 

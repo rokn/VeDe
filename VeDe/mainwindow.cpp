@@ -26,6 +26,16 @@ MainWindow::~MainWindow()
 {
 }
 
+void MainWindow::onUndo(bool checked)
+{
+    m_canvas->getCanvas()->undoCommand();
+}
+
+void MainWindow::onRedo(bool checked)
+{
+    m_canvas->getCanvas()->redoCommand();
+}
+
 void MainWindow::setup()
 {
     setupCanvas();
@@ -53,6 +63,16 @@ void MainWindow::setupTools()
     actions.append(new ToolAction(new gx::RectangleTool(m_canvas->getCanvas()), group));
 
     QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas->getCanvas(), this);
+
+    QAction *undoAction = new QAction("Undo", this);
+    undoAction->setShortcut(QKeySequence(QKeySequence::Undo));
+    connect(undoAction, SIGNAL(triggered(bool)), this, SLOT(onUndo(bool)));
+    this->addAction(undoAction);
+
+    QAction *redoAction = new QAction("Redo", this);
+    redoAction->setShortcut(QKeySequence(QKeySequence::Redo));
+    connect(redoAction, SIGNAL(triggered(bool)), this, SLOT(onRedo(bool)));
+    this->addAction(redoAction);
 
 
     foreach(ToolAction* action, actions)

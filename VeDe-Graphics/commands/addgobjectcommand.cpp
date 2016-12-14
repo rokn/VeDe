@@ -18,6 +18,8 @@ int gx::AddGObjectCommand::execute()
 
 int gx::AddGObjectCommand::undo()
 {
-    //TODO: Implement
-    return -1;
+    qDebug() << m_object.use_count();
+    m_object->remove();
+    qDebug() << m_object.use_count();
+    return 0;
 }

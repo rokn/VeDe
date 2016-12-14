@@ -66,6 +66,7 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     });
 
     addState(finished, STATE_DEF {
+        m_rect.reset();
         moveToStateSilent(start);
     });
 

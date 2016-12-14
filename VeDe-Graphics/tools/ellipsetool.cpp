@@ -39,8 +39,9 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
     });
 
     addState(finished, STATE_DEF {
-        moveToStateSilent(start);
+        m_ellipse.reset();
         setRestricted(false);
+        moveToStateSilent(start);
     });
 
 

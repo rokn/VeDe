@@ -19,14 +19,14 @@ class Canvas : public PropertyHolder
     Q_OBJECT
 public:
     Canvas(QObject* parent = 0);
-    Canvas(std::unique_ptr<GObject> *root, QObject* parent = 0);
+    Canvas(std::shared_ptr<GObject> *root, QObject* parent = 0);
     virtual ~Canvas();
 
-    /**
+     /**
      * @brief Gets the root object of the canvas
      * @return The root GObject
      */
-    std::unique_ptr<GObject> const& root();
+    std::shared_ptr<GObject> root();
 
     /**
      * @brief Get the mouse cursor positon relative to the canvas
@@ -34,12 +34,44 @@ public:
      */
     virtual Vertex getCursor() const = 0;
 
+    /**
+     * @brief Executes a command and stores it in the command list
+     * @param The command to execute
+     * @return Status code for result of the execution
+     */
     int executeCommand(Command* command);
+
+    /**
+     * @brief Tries to undo the previous command from the stack
+     * @return Status code for result of the undoing
+     */
     int undoCommand();
-    void handleEvent(const Transition &transition);
+
+    int redoCommand();
+
+    /**
+     * @brief Gives the current tool a transition to handle
+     * @param The transition to handle
+     */
+    void handleTransition(const Transition &transition);
+
+    /**
+     * @brief Simply redraws the whole canvas
+     */
     virtual void redraw() = 0;
+
+    /**
+     * @brief Adds an object to the current active layer
+     * @param The object to add
+     */
     void addToCurrLayer(std::shared_ptr<GObject> object);
+
+    /**
+     * @brief Switches the current tool deactivating the previous
+     * @param The new tool to activate
+     */
     void changeCurrTool(Tool* newTool);
+
 
 signals:
     void activeToolChanged(gx::Tool* newTool);
@@ -48,11 +80,12 @@ private:
     void initCommon();
 
 private:
-    std::unique_ptr<GObject> m_root;
+    std::shared_ptr<GObject> m_root;
     QVector<Command*> m_commandHistory;
     unsigned int m_currCommand;
     Tool* m_currTool;
-    Layer* m_currLayer;
+    std::shared_ptr<Layer> m_currLayer;
+    unsigned int m_idCount;
 };
 }
 

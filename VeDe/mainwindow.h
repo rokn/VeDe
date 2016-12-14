@@ -16,6 +16,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void onUndo(bool checked = false);
+    void onRedo(bool checked = false);
+
 private:
     void setup();
     void setupCanvas();
