@@ -16,6 +16,7 @@ public:
     void setStrokeWidth(float width);
     void setStrokeColor(const gx::Color &color);
     void setBackColor(const gx::Color& color);
+    void setZoomFactor(float zoomFactor);
 
 private:
     void onChangePen();

@@ -15,7 +15,8 @@ private:
     std::shared_ptr<Rectangle> m_rect;
     Vertex anchorPoint;
 
-    void restrictPoints(Vertex& upLeft, Vertex& downRight);
+    void restrictPoints(const Vertex &cursor, Vertex& upLeft, Vertex& downRight);
+    void moveEndPoint();
 };
 }
 

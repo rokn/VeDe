@@ -45,6 +45,11 @@ void QtCustomPainter::setBackColor(const gx::Color &color)
     onChangeBrush();
 }
 
+void QtCustomPainter::setZoomFactor(float zoomFactor)
+{
+    m_painter.scale(zoomFactor, zoomFactor);
+}
+
 void QtCustomPainter::onChangePen()
 {
     m_painter.setPen(m_pen);

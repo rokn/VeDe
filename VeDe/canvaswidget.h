@@ -17,6 +17,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event);
 
     gx::Canvas *getCanvas() const;
     void setCanvas(gx::Canvas *canvas);
@@ -31,6 +32,8 @@ private:
 
 private:
     QMap<Qt::KeyboardModifier, bool> m_modifierKeys;
+    int m_defaultWidth;
+    int m_defaultHeight;
 
     gx::Canvas* m_canvas;
 };

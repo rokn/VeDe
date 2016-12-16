@@ -73,6 +73,8 @@ CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::shared_ptr<
     widget->setMouseTracking(true);
     widget->setFocusPolicy(Qt::WheelFocus);
     widget->initModifierKeys();
+    widget->m_defaultWidth = widget->width();
+    widget->m_defaultHeight = widget->height();
     return widget;
 }
 
@@ -81,6 +83,7 @@ void CanvasWidget::paintEvent(QPaintEvent *event)
     if(m_canvas->root() != nullptr)
     {
         QtCustomPainter painter(this);
+//        painter.setZoomFactor(m_canvas->getZoomFactor());
         m_canvas->root()->paintAll(painter);
     }
 }
@@ -131,6 +134,19 @@ void CanvasWidget::keyReleaseEvent(QKeyEvent *event)
 
     gx::Transition transition(event->type(), key);
     m_canvas->handleTransition(transition);
+}
+
+void CanvasWidget::wheelEvent(QWheelEvent *event)
+{
+    if(m_modifierKeys[Qt::ControlModifier])
+    {
+        float zoomFactor = m_canvas->getZoomFactor();
+        zoomFactor += event->angleDelta().y() / 300.0f;
+        m_canvas->setZoomFactor(zoomFactor);
+        update();
+    }
+//    setFixedWidth(m_defaultWidth * zoomFactor);
+//    setFixedHeight(m_defaultHeight * zoomFactor);
 }
 
 gx::Canvas *CanvasWidget::getCanvas() const

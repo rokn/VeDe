@@ -31,14 +31,7 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
 
     addState(moveEnd, STATE_DEF {
         if(m_rect != nullptr) {
-            Vertex cursor = getCanvas()->getCursor();
-            Vertex upLeft(qMin(cursor.x(), anchorPoint.x()), qMin(cursor.y(), anchorPoint.y()));
-            Vertex downRight(qMax(cursor.x(), anchorPoint.x()), qMax(cursor.y(), anchorPoint.y()));
-
-            m_rect->setUpLeft(upLeft);
-            m_rect->setDownRight(downRight);
-
-            getCanvas()->redraw();
+            moveEndPoint();
 
             moveToStateSilent(wait);
         } else {
@@ -47,6 +40,8 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     });
 
     addState(finished, STATE_DEF {
+        setRestricted(false);
+        m_rect.reset();
         moveToStateSilent(start);
     });
 
@@ -54,10 +49,42 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     addTransition(wait, Transition(QEvent::MouseMove), moveEnd);
     addTransition(wait, Transition(QEvent::MouseButtonPress, Qt::LeftButton), finished);
 
+    setUpRestriction(wait, STATE_DEF{
+        moveEndPoint();
+    });
+
     moveToStateSilent(start);
 }
 
-void gx::RectangleTool::restrictPoints(gx::Vertex &upLeft, gx::Vertex &downRight)
+void gx::RectangleTool::restrictPoints(const gx::Vertex& cursor, gx::Vertex &upLeft, gx::Vertex &downRight)
 {
+    float maxDist = qMax(qAbs(upLeft.x() - downRight.x()), qAbs(upLeft.y() - downRight.y()));
+
+    if(cursor.x() < anchorPoint.x()) {
+        upLeft.setX(anchorPoint.x() - maxDist);
+    } else {
+        downRight.setX(anchorPoint.x() + maxDist);
+    }
+    if(cursor.y() < anchorPoint.y()) {
+        upLeft.setY(anchorPoint.y() - maxDist);
+    } else {
+        downRight.setY(anchorPoint.y() + maxDist);
+    }
+}
+
+void gx::RectangleTool::moveEndPoint()
+{
+    Vertex cursor = getCanvas()->getCursor();
+    Vertex upLeft(qMin(cursor.x(), anchorPoint.x()), qMin(cursor.y(), anchorPoint.y()));
+    Vertex downRight(qMax(cursor.x(), anchorPoint.x()), qMax(cursor.y(), anchorPoint.y()));
+
+    if(isRestricted()) {
+        restrictPoints(cursor, upLeft, downRight);
+    }
+
+    m_rect->setUpLeft(upLeft);
+    m_rect->setDownRight(downRight);
+
+    getCanvas()->redraw();
 }
 

@@ -38,6 +38,7 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
     });
 
     addState(finished, STATE_DEF {
+        setRestricted(false);
         m_line.reset();
         moveToStateSilent(start);
     });

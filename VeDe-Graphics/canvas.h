@@ -78,6 +78,9 @@ public:
 
     std::shared_ptr<Layer> getCurrLayer() const;
 
+    float getZoomFactor() const;
+    void setZoomFactor(float zoomFactor);
+
 signals:
     void activeToolChanged(gx::Tool* newTool);
 
@@ -91,6 +94,7 @@ private:
     Tool* m_currTool;
     std::shared_ptr<Layer> m_currLayer;
     unsigned int m_idCount;
+    float m_zoomFactor;
 };
 }
 

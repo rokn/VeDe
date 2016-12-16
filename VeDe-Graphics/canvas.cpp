@@ -1,6 +1,7 @@
 #include "canvas.h"
 #include "properties/propertyfactory.h"
 #include "tools/tool.h"
+#include <QtMath>
 
 gx::Canvas::Canvas(QObject *parent)
     :PropertyHolder(parent), m_root(new Layer), m_currLayer(new Layer)
@@ -22,8 +23,20 @@ void gx::Canvas::initCommon()
     m_currCommand = 0;
     m_currTool = nullptr;
     m_idCount = 0;
+    m_zoomFactor = 1.0f;
     PropertyFactory::addCanvasProperties(this);
     getProp("Stroke Color")->toColor().setR(255);
+}
+
+float gx::Canvas::getZoomFactor() const
+{
+    return m_zoomFactor;
+}
+
+void gx::Canvas::setZoomFactor(float zoomFactor)
+{
+    m_zoomFactor = zoomFactor;
+    m_zoomFactor = qMax(0.02f, m_zoomFactor);
 }
 
 std::shared_ptr<gx::Layer> gx::Canvas::getCurrLayer() const

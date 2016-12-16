@@ -21,6 +21,7 @@ public:
     virtual void setStrokeWidth(float width) = 0;
     virtual void setStrokeColor(const Color& color) = 0;
     virtual void setBackColor(const Color& color) = 0;
+    virtual void setZoomFactor(float zoomFactor) = 0;
 };
 }
 
