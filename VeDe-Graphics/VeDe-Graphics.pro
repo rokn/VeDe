@@ -34,7 +34,8 @@ SOURCES += \
     graphics_exceptions.cpp \
     objects/shape.cpp \
     properties/propertyholder.cpp \
-    properties/propertyfactory.cpp
+    properties/propertyfactory.cpp \
+    tools/shapetool.cpp
 
 HEADERS += \
     vertex.h \
@@ -61,7 +62,8 @@ HEADERS += \
     objects/shape.h \
     properties/propertyholder.h \
     properties/propertyfactory.h \
-    properties/propertynames.h
+    properties/propertynames.h \
+    tools/shapetool.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

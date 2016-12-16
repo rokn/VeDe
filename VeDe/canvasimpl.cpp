@@ -7,7 +7,7 @@ CanvasImpl::CanvasImpl(CanvasWidget *parent)
 }
 
 //TODO: Rework
-CanvasImpl::CanvasImpl(CanvasWidget *parent, std::shared_ptr<gx::GObject> *root)
+CanvasImpl::CanvasImpl(CanvasWidget *parent, std::shared_ptr<gx::GObject> root)
     :gx::Canvas(root, parent), m_parent(parent)
 {
 }

@@ -1,10 +1,15 @@
 #include "qtcustompainter.h"
+#include "converters.h"
 #include <QRgb>
+#include <QDebug>
 
 QtCustomPainter::QtCustomPainter(QPaintDevice* canvas)
     :m_painter(canvas)
 {
     m_pen.setJoinStyle(Qt::MiterJoin);
+    m_brush.setStyle(Qt::SolidPattern);
+    m_painter.setRenderHint(QPainter::Antialiasing);
+    m_painter.setBackgroundMode(Qt::OpaqueMode);
 }
 
 void QtCustomPainter::drawLine(float x1, float y1, float x2, float y2)
@@ -30,19 +35,14 @@ void QtCustomPainter::setStrokeWidth(float width)
 
 void QtCustomPainter::setStrokeColor(const gx::Color &color)
 {
-    m_pen.setColor(toQColor(color));
+    m_pen.setColor(Converters::toQColor(color));
     onChangePen();
 }
 
 void QtCustomPainter::setBackColor(const gx::Color &color)
 {
-    m_brush.setColor(toQColor(color));
+    m_brush.setColor(Converters::toQColor(color));
     onChangeBrush();
-}
-
-QColor QtCustomPainter::toQColor(const gx::Color &c)
-{
-    return QColor(c.r(), c.g(), c.b(), c.a());
 }
 
 void QtCustomPainter::onChangePen()

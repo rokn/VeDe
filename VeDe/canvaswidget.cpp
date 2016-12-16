@@ -5,14 +5,18 @@
 #include "canvasimpl.h"
 #include <QMouseEvent>
 #include <QGuiApplication>
+#include <QPalette>
 
 #include<QAbstractButton>
 CanvasWidget::CanvasWidget(QWidget *parent)
     :QWidget(parent), m_canvas(new CanvasImpl(this))
 {
+    QPalette pal = this->palette();
+    pal.setColor(backgroundRole(), Qt::white);
+    setPalette(pal);
 }
 
-CanvasWidget::CanvasWidget(std::shared_ptr<gx::GObject> *root, QWidget *parent)
+CanvasWidget::CanvasWidget(std::shared_ptr<gx::GObject> root, QWidget *parent)
     :QWidget(parent), m_canvas(new CanvasImpl(this, root))
 {
 }
@@ -53,7 +57,7 @@ Qt::Key CanvasWidget::transformToKey(Qt::KeyboardModifier mod)
     }
 }
 
-CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::shared_ptr<gx::GObject> *root)
+CanvasWidget* CanvasWidget::createCanvasWidget(QWidget *parent, std::shared_ptr<gx::GObject> root)
 {
     CanvasWidget* widget = nullptr;
 

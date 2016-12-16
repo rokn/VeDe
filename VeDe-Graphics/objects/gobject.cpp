@@ -13,7 +13,6 @@ gx::GObject::GObject(std::shared_ptr<gx::GObject> parent)
 
 gx::GObject::~GObject()
 {
-    qDebug() << "Destroyed";
 }
 
 void gx::GObject::addChild(gx::GObject *child, const std::shared_ptr<GObject>& parent)

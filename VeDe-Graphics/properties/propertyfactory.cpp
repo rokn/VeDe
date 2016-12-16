@@ -8,3 +8,9 @@ void gx::PropertyFactory::addShapeProperties(gx::PropertyHolder *propHolder)
     propHolder->addProperty(PROP::BACK_COLOR, PROP_COLOR);
 }
 
+
+void gx::PropertyFactory::addCanvasProperties(gx::PropertyHolder *propHolder)
+{
+    propHolder->addProperty(PROP::STROKE_COLOR, PROP_COLOR);
+    propHolder->addProperty(PROP::BACK_COLOR, PROP_COLOR);
+}

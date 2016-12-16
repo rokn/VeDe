@@ -6,7 +6,7 @@
 #include "properties/property.h"
 #include "properties/propertyholder.h"
 
-class ProperyWidgetFactory
+class PropertyWidgetFactory
 {
 public:
     static QWidget* createWidget(gx::Property* prop, QWidget *parent = 0);

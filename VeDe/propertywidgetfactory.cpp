@@ -1,12 +1,15 @@
-#include "properywidgetfactory.h"
+#include "propertywidgetfactory.h"
 #include "propertyconverter.h"
+#include "converters.h"
+#include "colorchangebutton.h"
 #include <QLineEdit>
 #include <QIntValidator>
 #include <QDoubleValidator>
 
-QWidget *ProperyWidgetFactory::createWidget(gx::Property *prop, QWidget *parent)
+QWidget *PropertyWidgetFactory::createWidget(gx::Property *prop, QWidget *parent)
 {
     QLineEdit* editor;
+    ColorChangeButton* colorButton;
     PropertyConverter* converter;
     switch(prop->getType())
     {
@@ -30,11 +33,14 @@ QWidget *ProperyWidgetFactory::createWidget(gx::Property *prop, QWidget *parent)
         case gx::PROP_COLOR:
         //TODO: Implement
 //            QLineEdit* editor = new QLineEdit(QString(prop->toInt()), parent);
-            return new QLineEdit(parent);
+            colorButton = new ColorChangeButton(Converters::toQColor(prop->toColor()), parent);
+            converter = new PropertyConverter(prop, colorButton);
+            QObject::connect(colorButton, SIGNAL(colorChanged(QColor)), converter, SLOT(onColorChange(QColor)));
+            return colorButton;
     }
 }
 
-QList<QWidget *> ProperyWidgetFactory::createWidgetsForAll(gx::PropertyHolder *propHolder, QWidget *parent)
+QList<QWidget *> PropertyWidgetFactory::createWidgetsForAll(gx::PropertyHolder *propHolder, QWidget *parent)
 {
     QList<QWidget*> widgets;
 

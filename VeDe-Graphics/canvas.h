@@ -19,7 +19,7 @@ class Canvas : public PropertyHolder
     Q_OBJECT
 public:
     Canvas(QObject* parent = 0);
-    Canvas(std::shared_ptr<GObject> *root, QObject* parent = 0);
+    Canvas(std::shared_ptr<GObject> root, QObject* parent = 0);
     virtual ~Canvas();
 
      /**
@@ -47,6 +47,10 @@ public:
      */
     int undoCommand();
 
+    /**
+     * @brief Tries to redo the next command from the stack
+     * @return Status code for result of the redoing
+     */
     int redoCommand();
 
     /**
@@ -72,6 +76,7 @@ public:
      */
     void changeCurrTool(Tool* newTool);
 
+    std::shared_ptr<Layer> getCurrLayer() const;
 
 signals:
     void activeToolChanged(gx::Tool* newTool);

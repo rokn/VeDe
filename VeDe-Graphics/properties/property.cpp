@@ -96,6 +96,55 @@ gx::Color &gx::Property::toColor()
     }
 }
 
+void gx::Property::setInt(int value)
+{
+    if(m_type == PROP_INT)
+    {
+        m_value.i = value;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+void gx::Property::setFloat(float value)
+{
+    if(m_type == PROP_FLOAT)
+    {
+        m_value.f = value;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+void gx::Property::setString(const QString &value)
+{
+    if(m_type == PROP_STRING)
+    {
+        delete m_value.s; //TODO : check
+        m_value.s = new QString(value);
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
+void gx::Property::setColor(const gx::Color &value)
+{
+    if(m_type == PROP_COLOR)
+    {
+        *m_value.c = value;
+    }
+    else
+    {
+        throw new IncorrectPropertyType;
+    }
+}
+
 gx::Property *gx::Property::createProperty(const QString& name, gx::PropertyType type)
 {
     Property *prop = new Property(type, name);

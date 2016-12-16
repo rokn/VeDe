@@ -18,7 +18,6 @@ public:
     void setBackColor(const gx::Color& color);
 
 private:
-    QColor toQColor(const gx::Color &c);
     void onChangePen();
     void onChangeBrush();
 

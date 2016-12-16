@@ -1,4 +1,5 @@
 #include "canvas.h"
+#include "properties/propertyfactory.h"
 #include "tools/tool.h"
 
 gx::Canvas::Canvas(QObject *parent)
@@ -10,11 +11,10 @@ gx::Canvas::Canvas(QObject *parent)
     m_currLayer->setId(m_idCount++);
 }
 
-gx::Canvas::Canvas(std::shared_ptr<GObject> *root, QObject *parent)
-    :PropertyHolder(parent)
+gx::Canvas::Canvas(std::shared_ptr<GObject> root, QObject *parent)
+    :PropertyHolder(parent), m_root(root)
 {
     initCommon();
-    m_root = std::move(*root);
 }
 
 void gx::Canvas::initCommon()
@@ -22,6 +22,13 @@ void gx::Canvas::initCommon()
     m_currCommand = 0;
     m_currTool = nullptr;
     m_idCount = 0;
+    PropertyFactory::addCanvasProperties(this);
+    getProp("Stroke Color")->toColor().setR(255);
+}
+
+std::shared_ptr<gx::Layer> gx::Canvas::getCurrLayer() const
+{
+    return m_currLayer;
 }
 
 gx::Canvas::~Canvas()

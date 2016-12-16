@@ -21,20 +21,24 @@ SOURCES += main.cpp\
     qtcustompainter.cpp \
     toolaction.cpp \
     workspace.cpp \
-    properywidgetfactory.cpp \
     propertyconverter.cpp \
     canvasimpl.cpp \
-    currtooltoolbar.cpp
+    currtooltoolbar.cpp \
+    colorchangebutton.cpp \
+    propertywidgetfactory.cpp \
+    converters.cpp
 
 HEADERS  += mainwindow.h \
     canvaswidget.h \
     qtcustompainter.h \
     toolaction.h \
     workspace.h \
-    properywidgetfactory.h \
     propertyconverter.h \
     canvasimpl.h \
-    currtooltoolbar.h
+    currtooltoolbar.h \
+    colorchangebutton.h \
+    propertywidgetfactory.h \
+    converters.h
 
 FORMS    +=
 

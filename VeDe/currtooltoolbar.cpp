@@ -1,5 +1,5 @@
 #include "currtooltoolbar.h"
-#include "properywidgetfactory.h"
+#include "propertywidgetfactory.h"
 
 CurrToolToolbar::CurrToolToolbar(gx::Canvas *canvas, QWidget *parent)
     :QToolBar(parent)
@@ -8,6 +8,13 @@ CurrToolToolbar::CurrToolToolbar(gx::Canvas *canvas, QWidget *parent)
     m_nameLabel = new QLabel(this);
     setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     setFloatable(false);
+
+    auto widgetList = PropertyWidgetFactory::createWidgetsForAll(canvas, this);
+
+    foreach(auto widget, widgetList)
+    {
+        addWidget(widget);
+    }
 }
 
 void CurrToolToolbar::canvasToolChanged(gx::Tool *newTool)
@@ -22,7 +29,7 @@ void CurrToolToolbar::canvasToolChanged(gx::Tool *newTool)
     foreach(auto prop, newTool->getAllProperties())
     {
         QWidget* label = new QLabel(prop->name(), this);
-        QWidget* editor = ProperyWidgetFactory::createWidget(prop, this);
+        QWidget* editor = PropertyWidgetFactory::createWidget(prop, this);
         addWidget(label);
         addWidget(editor);
         m_propertyWidgets.append(label);

@@ -11,7 +11,7 @@
 
 #include "currtooltoolbar.h"
 #include "workspace.h"
-#include "properywidgetfactory.h"
+#include "propertywidgetfactory.h"
 
     // PLACEHOLDER CODE
 #include "properties/propertynames.h"

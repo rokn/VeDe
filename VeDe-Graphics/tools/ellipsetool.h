@@ -1,13 +1,13 @@
 #ifndef ELLIPSETOOL_H
 #define ELLIPSETOOL_H
 
-#include "restrictabletool.h"
+#include "shapetool.h"
 #include "objects/ellipse.h"
 #include <memory>
 
 namespace gx
 {
-class EllipseTool : public RestrictableTool
+class EllipseTool : public ShapeTool
 {
 public:
     EllipseTool(Canvas* canvas);

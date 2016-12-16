@@ -33,6 +33,10 @@ public:
     float& toFloat();
     QString& toString();
     Color& toColor();
+    void setInt(int value);
+    void setFloat(float value);
+    void setString(const QString &value);
+    void setColor(const Color& value);
 //    void get s
 
     QString name() const;

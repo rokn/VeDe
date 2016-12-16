@@ -1,12 +1,11 @@
 #include "linetool.h"
-#include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h" // TODO: remove
+#include <QtMath>
 
 gx::LineTool::LineTool(gx::Canvas *canvas)
-    :Tool(canvas)
+    :ShapeTool(canvas)
 {
     setName("Line tool");
-    PropertyFactory::addShapeProperties(this);
     QString start = "Place a point";
     QString startLine = "Start line";
     QString wait = "Place end point";
@@ -18,10 +17,11 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
     addState(startLine, STATE_DEF {
         m_line = std::make_shared<Line>();
         m_line->copyPropertiesFrom(*this);
+        m_line->copyPropertiesFrom(*getCanvas());
         m_line->setStart(getCanvas()->getCursor());
         m_line->setEnd(getCanvas()->getCursor());
 
-        gx::Command* command = new gx::AddGObjectCommand(m_line, getCanvas());
+        Command* command = new AddGObjectCommand(m_line, getCanvas());
         getCanvas()->executeCommand(command);
         moveToStateSilent(wait);
     });
@@ -30,8 +30,7 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
     addState(moveEnd, STATE_DEF {
         if(m_line != nullptr) {
-            m_line->setEnd(getCanvas()->getCursor());
-            getCanvas()->redraw();
+            moveEndPoint();
             moveToStateSilent(wait);
         } else {
             moveToStateSilent(start);
@@ -47,5 +46,61 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
     addTransition(wait, Transition(QEvent::MouseMove), moveEnd);
     addTransition(wait, Transition(QEvent::MouseButtonPress, Qt::LeftButton), finished);
 
+    setUpRestriction(wait, STATE_DEF{
+        moveEndPoint();
+    });
+
     moveToStateSilent(start);
+}
+
+void gx::LineTool::restrictPos(const gx::Vertex& p1, gx::Vertex &p2)
+{
+    unsigned int x_diff = qAbs(p2.x() - p1.x());
+    unsigned int y_diff = qAbs(p2.y() - p1.y());
+    unsigned int max_diff = qMax(x_diff, y_diff);
+    int diff = x_diff - y_diff;
+
+    if(qAbs(diff) > max_diff / 2)
+    {
+        if(diff > 0)
+        {
+            p2.setY(p1.y());
+        }
+        else
+        {
+            p2.setX(p1.x());
+        }
+    }
+    else
+    {
+        if(p2.x() < p1.x() && p2.y() < p1.y()) {
+            p2.setX(p1.x() - max_diff);
+            p2.setY(p1.y() - max_diff);
+        }
+        else if(p2.x() > p1.x() && p2.y() < p1.y()) {
+            p2.setX(p1.x() + max_diff);
+            p2.setY(p1.y() - max_diff);
+        }
+        else if(p2.x() < p1.x() && p2.y() > p1.y()) {
+            p2.setX(p1.x() - max_diff);
+            p2.setY(p1.y() + max_diff);
+        }
+        else if(p2.x() > p1.x() && p2.y() > p1.y()) {
+            p2.setX(p1.x() + max_diff);
+            p2.setY(p1.y() + max_diff);
+        }
+    }
+}
+
+void gx::LineTool::moveEndPoint()
+{
+    Vertex pos = getCanvas()->getCursor();
+
+    if(isRestricted())
+    {
+        restrictPos(m_line->start(), pos);
+    }
+
+    m_line->setEnd(pos);
+    getCanvas()->redraw();
 }

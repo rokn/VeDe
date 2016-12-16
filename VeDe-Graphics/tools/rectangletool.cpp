@@ -1,12 +1,10 @@
 #include "rectangletool.h"
-#include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h"
 
 gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
-    :Tool(canvas)
+    :ShapeTool(canvas)
 {
     setName("Rectangle tool");
-    PropertyFactory::addShapeProperties(this);
     QString start = "Place first corner";
     QString placeFirstCorner = "Placing a corner";
     QString wait = "Place second corner";
@@ -19,6 +17,7 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
         anchorPoint = getCanvas()->getCursor();
         m_rect = std::make_shared<Rectangle>();
         m_rect->copyPropertiesFrom(*this);
+        m_rect->copyPropertiesFrom(*getCanvas());
         m_rect->setUpLeft(anchorPoint);
         m_rect->setDownRight(anchorPoint);
 
@@ -66,7 +65,6 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     });
 
     addState(finished, STATE_DEF {
-        m_rect.reset();
         moveToStateSilent(start);
     });
 
@@ -76,3 +74,8 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
 
     moveToStateSilent(start);
 }
+
+void gx::RectangleTool::restrictPoints(gx::Vertex &upLeft, gx::Vertex &downRight)
+{
+}
+
