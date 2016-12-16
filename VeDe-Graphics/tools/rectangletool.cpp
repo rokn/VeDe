@@ -1,5 +1,6 @@
 #include "rectangletool.h"
 #include "commands/addgobjectcommand.h"
+#include <QtMath>
 
 gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     :ShapeTool(canvas)
@@ -31,33 +32,14 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     addState(moveEnd, STATE_DEF {
         if(m_rect != nullptr) {
             Vertex cursor = getCanvas()->getCursor();
-            Vertex upLeft = m_rect->getUpLeft();
-            Vertex downRight = m_rect->getDownRight();
-            if(cursor.x() < anchorPoint.x()) {
-                upLeft.setX(cursor.x());
-                downRight.setX(anchorPoint.x());
-            } else if (cursor.x() > anchorPoint.x()) {
-                upLeft.setX(anchorPoint.x());
-                downRight.setX(cursor.x());
-            } else {
-                upLeft.setX(cursor.x());
-                downRight.setX(cursor.x());
-            }
-
-            if(cursor.y() < anchorPoint.y()) {
-                upLeft.setY(cursor.y());
-                downRight.setY(anchorPoint.y());
-            } else if (cursor.y() > anchorPoint.y()) {
-                upLeft.setY(anchorPoint.y());
-                downRight.setY(cursor.y());
-            } else {
-                upLeft.setY(cursor.y());
-                downRight.setY(cursor.y());
-            }
+            Vertex upLeft(qMin(cursor.x(), anchorPoint.x()), qMin(cursor.y(), anchorPoint.y()));
+            Vertex downRight(qMax(cursor.x(), anchorPoint.x()), qMax(cursor.y(), anchorPoint.y()));
 
             m_rect->setUpLeft(upLeft);
             m_rect->setDownRight(downRight);
+
             getCanvas()->redraw();
+
             moveToStateSilent(wait);
         } else {
             moveToStateSilent(start);
