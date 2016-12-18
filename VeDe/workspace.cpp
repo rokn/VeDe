@@ -50,37 +50,46 @@ void Workspace::keyReleaseEvent(QKeyEvent *event)
 void Workspace::wheelEvent(QWheelEvent *event)
 {
     m_canvas->wheelEvent(event);
-    QTransform matrix;
-    matrix.scale(m_canvas->getCanvas()->getZoomFactor(), m_canvas->getCanvas()->getZoomFactor());
-    setTransform(matrix);
-//    scale(m_canvas->getCanvas()->getZoomFactor(), m_canvas->getCanvas()->getZoomFactor());
 
-//    int numDegrees = event->angleDelta().y() / 8;
-//    int numSteps = numDegrees / 15; // see QWheelEvent documentation
-//    m_numScheduledScalings += numSteps;
-//    if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
-//    m_numScheduledScalings = numSteps;
-
-//    QTimeLine *anim = new QTimeLine(350, this);
-//    anim->setUpdateInterval(20);
-
-//    connect(anim, SIGNAL (valueChanged(qreal)), SLOT (scalingTime(qreal)));
-//    connect(anim, SIGNAL (finished()), SLOT (animFinished()));
-//    anim->start();
+    if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)
+    {
+        handleZooming(event);
+        event->accept();
+    }
 }
 
-void Workspace::scalingTime(qreal x)
+void Workspace::handleZooming(QWheelEvent *event)
 {
-    qreal factor = qreal(m_numScheduledScalings) / 500.0;
-    scale(factor,factor);
-}
+    QPoint  pos  = event->pos();
+    QPointF posf = this->mapToScene(pos);
 
-void Workspace::animFinished()
-{
-    if (m_numScheduledScalings > 0)
-        m_numScheduledScalings--;
-    else
-        m_numScheduledScalings++;
+    double by;
+    double angle = event->angleDelta().y();
 
-    sender()->~QObject();
+    if      (angle > 0) { by = 1 + ( angle / 180 * 0.1); }
+    else if (angle < 0) { by = 1 - (-angle / 180 * 0.1); }
+    else                { by = 1; }
+
+    this->scale(by, by);
+
+    double w = this->viewport()->width();
+    double h = this->viewport()->height();
+
+    double wf = this->mapToScene(QPoint(w-1, 0)).x()
+                    - this->mapToScene(QPoint(0,0)).x();
+    double hf = this->mapToScene(QPoint(0, h-1)).y()
+                    - this->mapToScene(QPoint(0,0)).y();
+
+    double lf = posf.x() - pos.x() * wf / w;
+    double tf = posf.y() - pos.y() * hf / h;
+
+    /* try to set viewport properly */
+    this->ensureVisible(lf, tf, wf, hf, 0, 0);
+
+    QPointF newPos = this->mapToScene(pos);
+
+    /* readjust according to the still remaining offset/drift
+     * I don't know how to do this any other way */
+    this->ensureVisible(QRectF(QPointF(lf, tf) - newPos + posf,
+                    QSizeF(wf, hf)), 0, 0);
 }

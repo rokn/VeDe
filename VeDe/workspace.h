@@ -18,13 +18,11 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     void wheelEvent(QWheelEvent *event);
 
-public slots:
-    void scalingTime(qreal x);
-    void animFinished();
-
 private:
     CanvasWidget* m_canvas;
     int m_numScheduledScalings;
+
+    void handleZooming(QWheelEvent *event);
 };
 
 #endif // WORKSPACE_H

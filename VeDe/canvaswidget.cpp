@@ -138,13 +138,6 @@ void CanvasWidget::keyReleaseEvent(QKeyEvent *event)
 
 void CanvasWidget::wheelEvent(QWheelEvent *event)
 {
-    if(m_modifierKeys[Qt::ControlModifier])
-    {
-        float zoomFactor = m_canvas->getZoomFactor();
-        zoomFactor += event->angleDelta().y() / 300.0f;
-        m_canvas->setZoomFactor(zoomFactor);
-        update();
-    }
 //    setFixedWidth(m_defaultWidth * zoomFactor);
 //    setFixedHeight(m_defaultHeight * zoomFactor);
 }
