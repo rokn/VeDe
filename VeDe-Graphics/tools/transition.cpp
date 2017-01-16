@@ -1,16 +1,16 @@
 #include "transition.h"
 
-gx::Transition::Transition(QEvent::Type eventType)
+gx::Transition::Transition(TransitionType eventType)
     :m_eventType(eventType), m_key(Qt::Key_Escape), m_mouseButton(Qt::NoButton)
 {
 }
 
-gx::Transition::Transition(QEvent::Type eventType, Qt::Key key)
+gx::Transition::Transition(TransitionType eventType, Qt::Key key)
     :m_eventType(eventType), m_key(key), m_mouseButton(Qt::NoButton)
 {
 }
 
-gx::Transition::Transition(QEvent::Type eventType, Qt::MouseButton button)
+gx::Transition::Transition(TransitionType eventType, Qt::MouseButton button)
     :m_eventType(eventType), m_key(Qt::Key_Escape), m_mouseButton(button)
 {
 }
@@ -60,7 +60,7 @@ bool gx::Transition::operator <(const gx::Transition &other) const
     return false;
 }
 
-QEvent::Type gx::Transition::eventType() const
+gx::TransitionType gx::Transition::eventType() const
 {
     return m_eventType;
 }

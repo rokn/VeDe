@@ -8,7 +8,7 @@
 class QtCustomPainter : public gx::CustomPainter
 {
 public:
-    QtCustomPainter(QPaintDevice* canvas);
+    QtCustomPainter(QPainter* painter);
     void drawLine(float x1, float y1, float x2, float y2);
     void drawEllipse(float cX, float cY, float rX, float rY);
     void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY);
@@ -22,7 +22,7 @@ private:
     void onChangePen();
     void onChangeBrush();
 
-    QPainter m_painter;
+    QPainter* m_painter;
     QPen m_pen;
     QBrush m_brush;
 };

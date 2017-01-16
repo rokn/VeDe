@@ -3,28 +3,28 @@
 #include <QRgb>
 #include <QDebug>
 
-QtCustomPainter::QtCustomPainter(QPaintDevice* canvas)
-    :m_painter(canvas)
+QtCustomPainter::QtCustomPainter(QPainter *painter)
+    :m_painter(painter)
 {
     m_pen.setJoinStyle(Qt::MiterJoin);
     m_brush.setStyle(Qt::SolidPattern);
-    m_painter.setRenderHint(QPainter::Antialiasing);
-    m_painter.setBackgroundMode(Qt::OpaqueMode);
+    m_painter->setRenderHint(QPainter::Antialiasing);
+    m_painter->setBackgroundMode(Qt::OpaqueMode);
 }
 
 void QtCustomPainter::drawLine(float x1, float y1, float x2, float y2)
 {
-    m_painter.drawLine(x1, y1, x2, y2);
+    m_painter->drawLine(x1, y1, x2, y2);
 }
 
 void QtCustomPainter::drawEllipse(float cX, float cY, float rX, float rY)
 {
-    m_painter.drawEllipse(QPointF(cX, cY), rX, rY);
+    m_painter->drawEllipse(QPointF(cX, cY), rX, rY);
 }
 
 void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY)
 {
-    m_painter.drawRect((int)upLeftX, (int)upLeftY, (int)downRightX - (int)upLeftX, (int)downRightY - (int)upLeftY); //Doesn't work for some reason
+    m_painter->drawRect((int)upLeftX, (int)upLeftY, (int)downRightX - (int)upLeftX, (int)downRightY - (int)upLeftY); //Doesn't work for some reason
 }
 
 void QtCustomPainter::setStrokeWidth(float width)
@@ -47,15 +47,15 @@ void QtCustomPainter::setBackColor(const gx::Color &color)
 
 void QtCustomPainter::setZoomFactor(float zoomFactor)
 {
-    m_painter.scale(zoomFactor, zoomFactor);
+    m_painter->scale(zoomFactor, zoomFactor);
 }
 
 void QtCustomPainter::onChangePen()
 {
-    m_painter.setPen(m_pen);
+    m_painter->setPen(m_pen);
 }
 
 void QtCustomPainter::onChangeBrush()
 {
-    m_painter.setBrush(m_brush);
+    m_painter->setBrush(m_brush);
 }

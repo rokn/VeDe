@@ -28,12 +28,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::onUndo(bool checked)
 {
-    m_canvas->getCanvas()->undoCommand();
+    m_canvas->undoCommand();
 }
 
 void MainWindow::onRedo(bool checked)
 {
-    m_canvas->getCanvas()->redoCommand();
+    m_canvas->redoCommand();
 }
 
 void MainWindow::setup()
@@ -44,7 +44,7 @@ void MainWindow::setup()
 
 void MainWindow::setupCanvas()
 {
-    m_canvas = CanvasWidget::createCanvasWidget();
+    m_canvas = new CanvasImpl();
     //TODO: Placeholder
     Workspace* workspace = new Workspace(m_canvas, this);
     setCentralWidget(workspace);
@@ -56,13 +56,13 @@ void MainWindow::setupTools()
     m_toolsBar->setFloatable(false);
     QActionGroup *group = new QActionGroup(this);
     QList<ToolAction*> actions;
-    gx::Tool* ellipse = new gx::EllipseTool(m_canvas->getCanvas());
+    gx::Tool* ellipse = new gx::EllipseTool(m_canvas);
     ToolAction* ellipseAction = new ToolAction(ellipse, group);
-    actions.append(new ToolAction(new gx::LineTool(m_canvas->getCanvas()), group));
+    actions.append(new ToolAction(new gx::LineTool(m_canvas), group));
     actions.append(ellipseAction);
-    actions.append(new ToolAction(new gx::RectangleTool(m_canvas->getCanvas()), group));
+    actions.append(new ToolAction(new gx::RectangleTool(m_canvas), group));
 
-    QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas->getCanvas(), this);
+    QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas, this);
 
     QAction *undoAction = new QAction("Undo", this);
     undoAction->setShortcut(QKeySequence(QKeySequence::Undo));

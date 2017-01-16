@@ -2,18 +2,18 @@
 #define TRANSITION_H
 
 #include <Qt>
-#include <QEvent>
+#include "transitiontype.h"
 
 namespace gx
 {
 class Transition
 {
 public:
-    Transition(QEvent::Type eventType);
-    Transition(QEvent::Type eventType, Qt::Key key);
-    Transition(QEvent::Type eventType, Qt::MouseButton button);
+    Transition(TransitionType eventType);
+    Transition(TransitionType eventType, Qt::Key key);
+    Transition(TransitionType eventType, Qt::MouseButton button);
 
-    QEvent::Type eventType() const;
+    TransitionType eventType() const;
     Qt::Key key() const;
     Qt::MouseButton mouseButton() const;
 
@@ -23,7 +23,7 @@ public:
 
 
 private:
-    QEvent::Type m_eventType;
+    TransitionType m_eventType;
     Qt::Key m_key;
     Qt::MouseButton m_mouseButton;
 

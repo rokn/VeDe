@@ -63,7 +63,8 @@ HEADERS += \
     properties/propertyholder.h \
     properties/propertyfactory.h \
     properties/propertynames.h \
-    tools/shapetool.h
+    tools/shapetool.h \
+    tools/transitiontype.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

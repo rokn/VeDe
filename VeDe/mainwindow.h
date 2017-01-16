@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "canvaswidget.h"
+#include "canvasimpl.h"
 
 QT_BEGIN_NAMESPACE
 class QToolBar;
@@ -26,7 +26,7 @@ private:
     void setupTools();
 
 private:
-    CanvasWidget *m_canvas;
+    CanvasImpl *m_canvas;
     QToolBar* m_toolsBar;
 };
 

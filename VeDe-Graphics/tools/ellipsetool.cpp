@@ -44,9 +44,9 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
     });
 
 
-    addTransition(start, Transition(QEvent::MouseButtonPress, Qt::LeftButton), placeCenter);
-    addTransition(wait, Transition(QEvent::MouseMove), moveRadiiState);
-    addTransition(wait, Transition(QEvent::MouseButtonPress, Qt::LeftButton), finished);
+    addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), placeCenter);
+    addTransition(wait, Transition(MOUSE_MOVE), moveRadiiState);
+    addTransition(wait, Transition(MOUSE_PRESS, Qt::LeftButton), finished);
 
     setUpRestriction(wait, STATE_DEF{
         moveRadii();

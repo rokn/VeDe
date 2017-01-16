@@ -4,52 +4,43 @@
 #include <QPixmap>
 #include <QWheelEvent>
 #include <QTimeLine>
+#include <QApplication>
 
-Workspace::Workspace(CanvasWidget *canvas, QWidget *parent)
+Workspace::Workspace(CanvasImpl *canvas, QWidget *parent)
     :QGraphicsView(parent), m_canvas(canvas)
 {
-    QGraphicsScene* scene = new QGraphicsScene(this);
+    QGraphicsScene* scene = new WorkspaceScene(canvas, this);
+    scene->installEventFilter(scene);
     scene->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
-    scene->addWidget(canvas);
-    setDragMode(QGraphicsView::ScrollHandDrag);
+    scene->addItem(canvas);
+    canvas->setFlag(QGraphicsItem::ItemIsFocusable);
+    canvas->setFlag(QGraphicsItem::ItemIsSelectable);
+//    scene->setFocusItem(canvas);
     setFocusPolicy(Qt::WheelFocus);
+    setFocus();
     setScene(scene);
     setMouseTracking(true);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    qApp->installEventFilter(this);
 }
 
 Workspace::~Workspace()
 {
 }
 
-void Workspace::mouseMoveEvent(QMouseEvent *event)
+bool Workspace::eventFilter(QObject* o,QEvent* e)
 {
-    m_canvas->mouseMoveEvent(event);
-}
+    if(e->type()==QEvent::KeyPress)
+    {
+//        qWarning()<<"The bad guy which steals the keyevent is"<<o;
+    }
 
-void Workspace::mousePressEvent(QMouseEvent *event)
-{
-    m_canvas->mousePressEvent(event);
-}
-
-void Workspace::mouseReleaseEvent(QMouseEvent *event)
-{
-    m_canvas->mouseReleaseEvent(event);
-}
-
-void Workspace::keyPressEvent(QKeyEvent *event)
-{
-    m_canvas->keyPressEvent(event);
-}
-
-void Workspace::keyReleaseEvent(QKeyEvent *event)
-{
-    m_canvas->keyReleaseEvent(event);
+    return false;
 }
 
 void Workspace::wheelEvent(QWheelEvent *event)
 {
-    m_canvas->wheelEvent(event);
+//    m_canvas->wheelEvent(event);
 
     if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)
     {
