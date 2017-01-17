@@ -14,7 +14,7 @@ QtCustomPainter::QtCustomPainter(QPainter *painter)
 
 void QtCustomPainter::drawLine(float x1, float y1, float x2, float y2)
 {
-    m_painter->drawLine(x1, y1, x2, y2);
+    m_painter->drawLine(QPointF(x1, y1), QPointF(x2, y2));
 }
 
 void QtCustomPainter::drawEllipse(float cX, float cY, float rX, float rY)
@@ -24,7 +24,9 @@ void QtCustomPainter::drawEllipse(float cX, float cY, float rX, float rY)
 
 void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY)
 {
-    m_painter->drawRect((int)upLeftX, (int)upLeftY, (int)downRightX - (int)upLeftX, (int)downRightY - (int)upLeftY); //Doesn't work for some reason
+    QRectF rect(QPointF(upLeftX, upLeftY), QPointF(downRightX, downRightY));
+    m_painter->drawRect(rect);
+    //Doesn't work for some reason
 }
 
 void QtCustomPainter::setStrokeWidth(float width)

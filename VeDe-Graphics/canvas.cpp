@@ -2,24 +2,21 @@
 #include "properties/propertyfactory.h"
 #include "tools/tool.h"
 #include <QtMath>
-
-gx::Canvas::Canvas(QObject *parent)
-    :PropertyHolder(parent), m_root(new Layer), m_currLayer(new Layer)
-{
-    initCommon();
-    m_root->addChild(m_currLayer, m_root);
-    m_root->setId(m_idCount++);
-    m_currLayer->setId(m_idCount++);
-}
+#include <memory>
 
 gx::Canvas::Canvas(std::shared_ptr<GObject> root, QObject *parent)
     :PropertyHolder(parent), m_root(root)
 {
-    initCommon();
-}
+    if(m_root == nullptr) {
+        m_root = std::shared_ptr<GObject>(new Layer);
+        m_currLayer = std::shared_ptr<Layer>(new Layer);
+        m_root->addChild(m_currLayer, m_root);
+        m_root->setId(m_idCount++);
+        m_currLayer->setId(m_idCount++);
+    } else {
+        //Find layer from root
+    }
 
-void gx::Canvas::initCommon()
-{
     m_currCommand = 0;
     m_currTool = nullptr;
     m_idCount = 0;

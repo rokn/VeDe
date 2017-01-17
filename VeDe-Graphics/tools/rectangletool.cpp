@@ -82,6 +82,14 @@ void gx::RectangleTool::moveEndPoint()
         restrictPoints(cursor, upLeft, downRight);
     }
 
+    //Disable buggy division by zero
+    if (qAbs(downRight.x() - upLeft.x()) < 0.0001) {
+        downRight.setX(downRight.x() + 0.0001);
+    }
+    if (qAbs(downRight.y() - upLeft.y()) < 0.0001) {
+        downRight.setY(downRight.y() + 0.0001);
+    }
+
     m_rect->setUpLeft(upLeft);
     m_rect->setDownRight(downRight);
 

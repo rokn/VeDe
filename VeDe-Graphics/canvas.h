@@ -18,8 +18,7 @@ class Canvas : public PropertyHolder
 {
     Q_OBJECT
 public:
-    Canvas(QObject* parent = 0);
-    Canvas(std::shared_ptr<GObject> root, QObject* parent = 0);
+    Canvas(std::shared_ptr<GObject> root = nullptr, QObject* parent = 0);
     virtual ~Canvas();
 
      /**
@@ -83,9 +82,6 @@ public:
 
 signals:
     void activeToolChanged(gx::Tool* newTool);
-
-private:
-    void initCommon();
 
 private:
     std::shared_ptr<GObject> m_root;

@@ -18,8 +18,10 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         m_line = std::make_shared<Line>();
         m_line->copyPropertiesFrom(*this);
         m_line->copyPropertiesFrom(*getCanvas());
-        m_line->setStart(getCanvas()->getCursor());
-        m_line->setEnd(getCanvas()->getCursor());
+        Vertex startPos = getCanvas()->getCursor();
+        m_line->setStart(startPos);
+        startPos.setX(startPos.x()+0.0001f);//Disable buggy division by zero
+        m_line->setEnd(startPos);
 
         Command* command = new AddGObjectCommand(m_line, getCanvas());
         getCanvas()->executeCommand(command);

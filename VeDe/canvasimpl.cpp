@@ -11,12 +11,6 @@
 
 #include "objects/line.h"
 
-CanvasImpl::CanvasImpl()
-    :Canvas(nullptr)
-{
-}
-
-//TODO: Rework
 CanvasImpl::CanvasImpl(std::shared_ptr<gx::GObject> root)
     :gx::Canvas(root, nullptr)
 {
@@ -87,21 +81,13 @@ Qt::Key CanvasImpl::transformToKey(Qt::KeyboardModifier mod)
 
 CanvasImpl *CanvasImpl::createCanvas(std::shared_ptr<gx::GObject> root)
 {
-    CanvasImpl* canvas = nullptr;
-
-    if(root == nullptr)
-    {
-        canvas = new CanvasImpl();
-    }
-    else
-    {
-        canvas = new CanvasImpl(root);
-    }
+    CanvasImpl* canvas = new CanvasImpl(root);
 
     canvas->initModifierKeys();
     canvas->setFlag(QGraphicsItem::ItemIsFocusable);
     canvas->setFlag(QGraphicsItem::ItemIsSelectable);
     canvas->setFocus(Qt::OtherFocusReason);
+
     return canvas;
 }
 
@@ -127,7 +113,6 @@ void CanvasImpl::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void CanvasImpl::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-//    QGraphicsItem::mouseReleaseEvent(event);
     m_mousePos.setX(event->pos().x());
     m_mousePos.setY(event->pos().y());
     gx::Transition transition(gx::MOUSE_RELEASE, event->button());

@@ -66,6 +66,14 @@ void gx::EllipseTool::moveRadii()
         ry = rx;
     }
 
+    //Disable buggy division by zero
+    if(rx < 0.00001){
+        rx+=0.00001;
+    }
+    if(ry < 0.00001) {
+        ry += 0.00001;
+    }
+
     m_ellipse->setRadius(Vertex(rx, ry));
     getCanvas()->redraw();
 }
