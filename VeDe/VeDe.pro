@@ -17,7 +17,6 @@ QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    canvaswidget.cpp \
     qtcustompainter.cpp \
     toolaction.cpp \
     workspace.cpp \
@@ -29,7 +28,6 @@ SOURCES += main.cpp\
     converters.cpp
 
 HEADERS  += mainwindow.h \
-    canvaswidget.h \
     qtcustompainter.h \
     toolaction.h \
     workspace.h \

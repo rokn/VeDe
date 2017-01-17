@@ -44,7 +44,7 @@ void MainWindow::setup()
 
 void MainWindow::setupCanvas()
 {
-    m_canvas = new CanvasImpl();
+    m_canvas = CanvasImpl::createCanvas();
     //TODO: Placeholder
     Workspace* workspace = new Workspace(m_canvas, this);
     setCentralWidget(workspace);

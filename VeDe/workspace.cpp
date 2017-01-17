@@ -9,39 +9,22 @@
 Workspace::Workspace(CanvasImpl *canvas, QWidget *parent)
     :QGraphicsView(parent), m_canvas(canvas)
 {
-    QGraphicsScene* scene = new WorkspaceScene(canvas, this);
-    scene->installEventFilter(scene);
+    QGraphicsScene* scene = new QGraphicsScene(this);
     scene->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
     scene->addItem(canvas);
-    canvas->setFlag(QGraphicsItem::ItemIsFocusable);
-    canvas->setFlag(QGraphicsItem::ItemIsSelectable);
-//    scene->setFocusItem(canvas);
+    canvas->grabMouse();
     setFocusPolicy(Qt::WheelFocus);
-    setFocus();
     setScene(scene);
     setMouseTracking(true);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-    qApp->installEventFilter(this);
 }
 
 Workspace::~Workspace()
 {
 }
 
-bool Workspace::eventFilter(QObject* o,QEvent* e)
-{
-    if(e->type()==QEvent::KeyPress)
-    {
-//        qWarning()<<"The bad guy which steals the keyevent is"<<o;
-    }
-
-    return false;
-}
-
 void Workspace::wheelEvent(QWheelEvent *event)
 {
-//    m_canvas->wheelEvent(event);
-
     if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)
     {
         handleZooming(event);

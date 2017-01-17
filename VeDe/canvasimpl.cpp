@@ -1,5 +1,5 @@
 #include "canvasimpl.h"
-#include "canvaswidget.h"
+//#include "canvaswidget.h"
 #include "qtcustompainter.h"
 #include "tools/transitiontype.h"
 #include <QGraphicsScene>
@@ -29,8 +29,6 @@ void CanvasImpl::redraw()
 
 gx::Vertex CanvasImpl::getCursor() const
 {
-//    QPoint relativePos = m_parent->mapFromGlobal(QCursor::pos());
-    //    return gx::Vertex(relativePos.x(), relativePos.y());
     return m_mousePos;
 }
 
@@ -100,16 +98,10 @@ CanvasImpl *CanvasImpl::createCanvas(std::shared_ptr<gx::GObject> root)
         canvas = new CanvasImpl(root);
     }
 
-//    canvas->setMouseTracking(true);
-//    canvas->setFocusPolicy(Qt::WheelFocus);
     canvas->initModifierKeys();
-//    canvas->setAcceptDrops(true);
-//    canvas->setAcceptHoverEvents(true);
-//    canvas->grabMouse();
     canvas->setFlag(QGraphicsItem::ItemIsFocusable);
     canvas->setFlag(QGraphicsItem::ItemIsSelectable);
-//    canvas->setFocus(Qt::OtherFocusReason);
-//    canvas->grabKeyboard();
+    canvas->setFocus(Qt::OtherFocusReason);
     return canvas;
 }
 
@@ -125,15 +117,7 @@ void CanvasImpl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void CanvasImpl::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-//    grabMouse();
     setFocus(Qt::OtherFocusReason);
-    qInfo() << this->isEnabled();
-    qInfo() << ((this->flags() & QGraphicsItem::ItemIsFocusable) == QGraphicsItem::ItemIsFocusable);
-    qInfo() << ((this->flags() & QGraphicsItem::ItemIsSelectable) == QGraphicsItem::ItemIsSelectable);
-    qInfo() << this->scene();
-    qInfo() << this->isActive();
-    qInfo() << this->hasFocus();
-    qInfo() << this->isVisible();
     m_mousePos.setX(event->pos().x());
     m_mousePos.setY(event->pos().y());
     gx::Transition transition(gx::MOUSE_PRESS, event->button());
@@ -144,7 +128,6 @@ void CanvasImpl::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void CanvasImpl::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
 //    QGraphicsItem::mouseReleaseEvent(event);
-    grabMouse();
     m_mousePos.setX(event->pos().x());
     m_mousePos.setY(event->pos().y());
     gx::Transition transition(gx::MOUSE_RELEASE, event->button());
@@ -153,7 +136,6 @@ void CanvasImpl::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void CanvasImpl::keyPressEvent(QKeyEvent *event)
 {
-    qInfo() << "Got it";
     Qt::Key key = (Qt::Key)event->key();
 
     if(m_modifierKeys.contains(transformToMod(key))) {
