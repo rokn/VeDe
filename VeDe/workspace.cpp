@@ -45,6 +45,7 @@ void Workspace::handleZooming(QWheelEvent *event)
     else                { by = 1; }
 
     this->scale(by, by);
+    this->m_canvas->setZoomFactor(m_canvas->getZoomFactor() * by);
 
     double w = this->viewport()->width();
     double h = this->viewport()->height();

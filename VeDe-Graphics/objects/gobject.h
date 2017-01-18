@@ -11,6 +11,9 @@
 
 namespace gx
 {
+class Canvas; //Forw. decl.
+
+
 class GObject : public PropertyHolder
 {
 public:
@@ -35,12 +38,16 @@ public:
     void removeChild(unsigned int id);
     void removeAllChildren();
 
+    Canvas *getCanvas() const;
+    void setCanvas(Canvas *value);
+
 protected:
     virtual void paintSelf(CustomPainter& painter) const = 0;
 
 private:
     QList<std::shared_ptr<GObject>> m_children;
     std::shared_ptr<GObject> m_parent;
+    Canvas* m_canvas;
     int m_zorder;
     unsigned int m_id;
 };

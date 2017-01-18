@@ -10,8 +10,14 @@ class Shape : public GObject
 public:
     Shape();
 
+    bool isGuiElement() const;
+    void setGuiElement(bool guiElement);
+
 protected:
     void paintSelf(CustomPainter& painter) const;
+
+private:
+    bool m_guiElement;
 };
 }
 

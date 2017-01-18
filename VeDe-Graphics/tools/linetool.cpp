@@ -16,8 +16,10 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
     addState(startLine, STATE_DEF {
         m_line = std::make_shared<Line>();
-        m_line->copyPropertiesFrom(*this);
-        m_line->copyPropertiesFrom(*getCanvas());
+        m_line->setCanvas(getCanvas());
+        m_line->setGuiElement(true);
+//        m_line->copyPropertiesFrom(*this);
+//        m_line->copyPropertiesFrom(*getCanvas());
         Vertex startPos = getCanvas()->getCursor();
         m_line->setStart(startPos);
         startPos.setX(startPos.x()+0.0001f);//Disable buggy division by zero
@@ -41,6 +43,10 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
     addState(finished, STATE_DEF {
         setRestricted(false);
+        m_line->setGuiElement(false);
+        m_line->copyPropertiesFrom(*this);
+        m_line->copyPropertiesFrom(*getCanvas());
+        getCanvas()->redraw();
         m_line.reset();
         moveToStateSilent(start);
     });

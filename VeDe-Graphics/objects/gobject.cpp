@@ -1,4 +1,5 @@
 #include "gobject.h"
+#include "canvas.h"
 #include "graphics_exceptions.h"
 #include <QStack>
 #include <QDebug>
@@ -9,6 +10,7 @@ gx::GObject::GObject(std::shared_ptr<gx::GObject> parent)
     {
         parent->addChild(this, parent);
     }
+    m_canvas = nullptr;
 }
 
 gx::GObject::~GObject()
@@ -111,6 +113,16 @@ void gx::GObject::removeChild(unsigned int id)
 void gx::GObject::removeAllChildren()
 {
     m_children.erase(m_children.begin(), m_children.end());
+}
+
+gx::Canvas *gx::GObject::getCanvas() const
+{
+    return m_canvas;
+}
+
+void gx::GObject::setCanvas(Canvas *value)
+{
+    m_canvas = value;
 }
 
 unsigned int gx::GObject::getId() const
