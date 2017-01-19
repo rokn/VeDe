@@ -2,6 +2,7 @@
 #include "converters.h"
 #include <QRgb>
 #include <QDebug>
+#include <QPainterPath>
 
 QtCustomPainter::QtCustomPainter(QPainter *painter)
     :m_painter(painter)
@@ -27,6 +28,46 @@ void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRigh
     QRectF rect(QPointF(upLeftX, upLeftY), QPointF(downRightX, downRightY));
     m_painter->drawRect(rect);
     //Doesn't work for some reason
+}
+
+void QtCustomPainter::drawPath(QList<gx::Vertex> vertices, QList<int> moves)
+{
+    QPainterPath path;
+    QPointF end, control, control2;
+    path.moveTo(vertices[0].x(), vertices[0].y());
+    int vIndex = 1;
+
+    foreach (int move, moves) {
+        switch(move){
+            case -1:
+                path.closeSubpath();
+                break;
+            case 0:
+                path.lineTo(vertices[vIndex].x(), vertices[vIndex].y());
+                vIndex++;
+                break;
+            case 1:
+            //Remove logic
+                end = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
+                vIndex++;
+                control = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
+                vIndex++;
+                control = end + (end - control);
+                path.cubicTo(control, control, end);
+                break;
+            case 2:
+                control = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
+                vIndex++;
+                end = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
+                vIndex++;
+                control2 = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
+                vIndex++;
+                path.cubicTo(control, control2, end);
+                break;
+        }
+    }
+
+    m_painter->drawPath(path);
 }
 
 void QtCustomPainter::setStrokeWidth(float width)

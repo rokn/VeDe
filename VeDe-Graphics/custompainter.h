@@ -3,6 +3,7 @@
 
 #include "vertex.h"
 #include "color.h"
+#include <QList>
 
 namespace gx
 {
@@ -17,6 +18,8 @@ public:
 
     virtual void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY) = 0;
     void drawRectangle(Vertex upLeft, Vertex downRight);
+
+    virtual void drawPath(QList<Vertex> vertices, QList<int> moves) = 0;
 
     virtual void setStrokeWidth(float width) = 0;
     virtual void setStrokeColor(const Color& color) = 0;

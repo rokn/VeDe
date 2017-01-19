@@ -35,7 +35,9 @@ SOURCES += \
     objects/shape.cpp \
     properties/propertyholder.cpp \
     properties/propertyfactory.cpp \
-    tools/shapetool.cpp
+    tools/shapetool.cpp \
+    objects/path.cpp \
+    tools/pathtool.cpp
 
 HEADERS += \
     vertex.h \
@@ -64,7 +66,9 @@ HEADERS += \
     properties/propertyfactory.h \
     properties/propertynames.h \
     tools/shapetool.h \
-    tools/transitiontype.h
+    tools/transitiontype.h \
+    objects/path.h \
+    tools/pathtool.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

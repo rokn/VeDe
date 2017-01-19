@@ -48,6 +48,11 @@ QVector<QString> gx::Tool::getAllStateNames() const
     return stateNames;
 }
 
+void gx::Tool::moveToState(const QString &stateName, Transition transition) {
+    m_currState = stateName;
+    m_states.find(m_currState)->callback(transition);
+}
+
 void gx::Tool::moveToStateSilent(const QString &stateName)
 {
      //TODO: See if necessary

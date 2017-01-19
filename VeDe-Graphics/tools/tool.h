@@ -38,6 +38,7 @@ public:
     Canvas* getCanvas();
     const QString& getCurrStateName() const;
     QVector<QString> getAllStateNames() const;
+    void moveToState(const QString &stateName, Transition transition);
     void moveToStateSilent(const QString &stateName);
 
     bool isActive() const;
