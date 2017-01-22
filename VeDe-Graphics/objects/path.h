@@ -15,6 +15,10 @@ public:
 
     void addPoint(Vertex vertex);
     void addMove(int move);
+    void changeLastMove(int move);
+    void removeLastMove();
+    void changeLastPoint(Vertex vertex);
+    void removeLastPoint();
 
     void paintSelf(CustomPainter& painter) const;
 

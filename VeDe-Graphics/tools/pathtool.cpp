@@ -1,6 +1,7 @@
 #include "pathtool.h"
 #include "commands/addgobjectcommand.h" // TODO: remove
 #include <QtMath>
+#include <QDebug>
 
 gx::PathTool::PathTool(gx::Canvas *canvas)
     :ShapeTool(canvas)
@@ -9,15 +10,17 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     QString start = "Place a point";
     QString startLine = "Start line";
     QString wait = "Place another point";
-    QString curveWait = "Place curve point";
+    QString startCurve = "Start curve";
+    QString curveMove = "Place curve point";
     QString addPoint = "Add point";
     QString makeLine = "Make Line";
-    QString makeCurve = "Make Curve";
+    QString finishCurve = "Make Curve";
     QString finished = "Finished";
 
     addState(start, EMPTY_STATE);
 
     addState(startLine, STATE_DEF {
+        qInfo() << "Started a line";
         m_path = std::make_shared<Path>();
         m_path->setCanvas(getCanvas());
         m_path->setGuiElement(true);
@@ -36,10 +39,15 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
         if(m_path != nullptr) {
             Vertex point = getCanvas()->getCursor();
             if(qAbs(point.x() - m_startPoint.x()) < 3 && qAbs(point.y() - m_startPoint.y()) < 3 ) {
+                qInfo() << "Closed path";
                 m_path->addMove(-1);
                 moveToState(finished, t);
             } else {
+                qInfo() << "Added a point";
                 m_path->addPoint(point);
+                m_path->addMove(0);
+                getCanvas()->redraw();
+//                moveToState(makeLine, t);
             }
         } else {
             moveToStateSilent(start);
@@ -48,7 +56,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(makeLine, STATE_DEF {
         if(m_path != nullptr) {
-            m_path->addMove(0);
+            qInfo() << "Made line";
             getCanvas()->redraw();
             moveToStateSilent(wait);
         } else {
@@ -56,13 +64,33 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
         }
     });
 
-    addState(curveWait, EMPTY_STATE);
-
-    addState(makeCurve, STATE_DEF {
+    addState(startCurve, STATE_DEF{
         if(m_path != nullptr) {
-            m_path->addMove(1);
+            qInfo() << "started curve";
             Vertex point = getCanvas()->getCursor();
             m_path->addPoint(point);
+            m_path->changeLastMove(1);
+            getCanvas()->redraw();
+            moveToState(curveMove, t);
+        } else {
+            moveToStateSilent(start);
+        }
+    });
+
+    addState(curveMove, STATE_DEF{
+        if(m_path != nullptr) {
+            qInfo() << "Moved curve control";
+            Vertex point = getCanvas()->getCursor();
+            m_path->changeLastPoint(point);
+            getCanvas()->redraw();
+        } else {
+            moveToStateSilent(start);
+        }
+    });
+
+    addState(finishCurve, STATE_DEF {
+        if(m_path != nullptr) {
+            qInfo() << "FinishedCurve";
             getCanvas()->redraw();
             moveToStateSilent(wait);
         } else {
@@ -71,6 +99,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     });
 
     addState(finished, STATE_DEF {
+        qInfo() << "Finished Path";
         setRestricted(false);
         m_path->setGuiElement(false);
         m_path->copyPropertiesFrom(*this);
@@ -84,9 +113,10 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     addTransition(startLine, Transition(MOUSE_RELEASE, Qt::LeftButton), wait);
 //    addTransition(wait, Transition(MOUSE_MOVE), moveEnd);
     addTransition(wait, Transition(MOUSE_PRESS, Qt::LeftButton), addPoint);
-    addTransition(addPoint, Transition(MOUSE_MOVE), curveWait);
-    addTransition(curveWait, Transition(MOUSE_RELEASE, Qt::LeftButton), makeCurve);
     addTransition(addPoint, Transition(MOUSE_RELEASE, Qt::LeftButton), makeLine);
+    addTransition(addPoint, Transition(MOUSE_MOVE), startCurve);
+    addTransition(curveMove, Transition(MOUSE_MOVE), curveMove);
+    addTransition(curveMove, Transition(MOUSE_RELEASE, Qt::LeftButton), finishCurve);
     addTransition(wait, Transition(MOUSE_PRESS, Qt::RightButton), finished);
 
     setUpRestriction(wait, STATE_DEF{
