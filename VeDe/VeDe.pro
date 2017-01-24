@@ -14,6 +14,7 @@ TARGET = VeDe
 TEMPLATE = app
 
 QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
+QMAKE_CXXFLAGS_WARN_ON += -Wno-sign-compare
 
 SOURCES += main.cpp\
         mainwindow.cpp \

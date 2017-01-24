@@ -13,12 +13,15 @@ public:
     void drawLine(float x1, float y1, float x2, float y2);
     void drawEllipse(float cX, float cY, float rX, float rY);
     void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY);
-    void drawPath(QList<gx::Vertex> vertices, QList<int> moves);
+    void drawPath(QList<gx::Vertex> vertices, QList<bool> controls);
+    void drawPath(QPainterPath& path);
 
     void setStrokeWidth(float width);
     void setStrokeColor(const gx::Color &color);
     void setBackColor(const gx::Color& color);
     void setZoomFactor(float zoomFactor);
+
+    void setPainter(QPainter *painter);
 
 private:
     void onChangePen();

@@ -29,7 +29,7 @@ void gx::Line::setStart(const Vertex &start)
     m_start = start;
 }
 
-void gx::Line::paintSelf(gx::CustomPainter &painter) const
+void gx::Line::paintSelf(gx::CustomPainter &painter)
 {
     Shape::paintSelf(painter);
     painter.drawLine(m_start, m_end);

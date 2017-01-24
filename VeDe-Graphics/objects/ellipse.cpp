@@ -29,7 +29,7 @@ void gx::Ellipse::setRadius(const Vertex &radius)
     m_radius = radius;
 }
 
-void gx::Ellipse::paintSelf(gx::CustomPainter &painter) const
+void gx::Ellipse::paintSelf(gx::CustomPainter &painter)
 {
     Shape::paintSelf(painter);
     painter.drawEllipse(m_center, m_radius);

@@ -17,7 +17,7 @@ public:
     Vertex getDownRight() const;
     void setDownRight(const Vertex &value);
 
-    void paintSelf(CustomPainter &painter) const;
+    void paintSelf(CustomPainter &painter);
 
 private:
     Vertex m_upLeft;

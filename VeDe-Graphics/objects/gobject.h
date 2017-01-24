@@ -41,8 +41,11 @@ public:
     Canvas *getCanvas() const;
     void setCanvas(Canvas *value);
 
+    bool changedSinceDraw() const;
+
 protected:
-    virtual void paintSelf(CustomPainter& painter) const = 0;
+    virtual void paintSelf(CustomPainter& painter) = 0;
+    void changed();
 
 private:
     QList<std::shared_ptr<GObject>> m_children;
@@ -50,6 +53,7 @@ private:
     Canvas* m_canvas;
     int m_zorder;
     unsigned int m_id;
+    bool m_changedSinceDraw;
 };
 }
 

@@ -11,6 +11,7 @@ gx::GObject::GObject(std::shared_ptr<gx::GObject> parent)
         parent->addChild(this, parent);
     }
     m_canvas = nullptr;
+    m_changedSinceDraw = true;
 }
 
 gx::GObject::~GObject()
@@ -38,6 +39,7 @@ void gx::GObject::paintAll(gx::CustomPainter& painter) //TODO: find a way to mak
 {
     forAllChildren([&painter](GObject* c){
         c->paintSelf(painter);
+        c->m_changedSinceDraw = false;
         return false;
     });
 }
@@ -123,6 +125,16 @@ gx::Canvas *gx::GObject::getCanvas() const
 void gx::GObject::setCanvas(Canvas *value)
 {
     m_canvas = value;
+}
+
+bool gx::GObject::changedSinceDraw() const
+{
+    return m_changedSinceDraw;
+}
+
+void gx::GObject::changed()
+{
+    m_changedSinceDraw = true;
 }
 
 unsigned int gx::GObject::getId() const

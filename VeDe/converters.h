@@ -3,11 +3,15 @@
 
 #include "color.h"
 #include <QColor>
+#include "vertex.h"
+#include <QPointF>
 
 namespace Converters
 {
     QColor toQColor(const gx::Color &c);
     gx::Color toGxColor(const QColor &c);
+    QPointF toPoint(const gx::Vertex &v);
+    gx::Vertex toVertex(const QPointF &p);
 }
 
 #endif // CONVERTERS_H

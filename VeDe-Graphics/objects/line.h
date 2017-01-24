@@ -18,7 +18,7 @@ public:
     Vertex end() const;
     void setEnd(const Vertex &end);
 
-    void paintSelf(CustomPainter& painter) const;
+    void paintSelf(CustomPainter& painter) ;
 
 private:
     Vertex m_start;

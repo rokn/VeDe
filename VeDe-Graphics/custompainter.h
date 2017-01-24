@@ -4,6 +4,7 @@
 #include "vertex.h"
 #include "color.h"
 #include <QList>
+#include <QPainterPath>
 
 namespace gx
 {
@@ -19,7 +20,8 @@ public:
     virtual void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY) = 0;
     void drawRectangle(Vertex upLeft, Vertex downRight);
 
-    virtual void drawPath(QList<Vertex> vertices, QList<int> moves) = 0;
+    virtual void drawPath(QList<Vertex> vertices, QList<bool> moves) = 0;
+    virtual void drawPath(QPainterPath& path) = 0;
 
     virtual void setStrokeWidth(float width) = 0;
     virtual void setStrokeColor(const Color& color) = 0;

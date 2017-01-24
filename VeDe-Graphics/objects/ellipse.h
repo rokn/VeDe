@@ -18,7 +18,7 @@ public:
     Vertex radius() const;
     void setRadius(const Vertex &radius);
 
-    void paintSelf(CustomPainter& painter) const;
+    void paintSelf(CustomPainter& painter);
 
 private:
     Vertex m_center;
