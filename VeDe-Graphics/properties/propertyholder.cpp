@@ -1,7 +1,7 @@
 #include "propertyholder.h"
 
 gx::PropertyHolder::PropertyHolder(QObject *parent)
-    :QObject(parent)
+//    :QObject(parent)
 {
 
 }

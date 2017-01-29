@@ -36,6 +36,8 @@ void gx::Canvas::setZoomFactor(float zoomFactor)
     m_zoomFactor = qMax(0.02f, m_zoomFactor);
 }
 
+void gx::Canvas::onAddObject(std::shared_ptr<gx::GObject> object){}
+
 std::shared_ptr<gx::Layer> gx::Canvas::getCurrLayer() const
 {
     return m_currLayer;
@@ -126,6 +128,7 @@ void gx::Canvas::addToCurrLayer(std::shared_ptr<gx::GObject> object)
 {
     object->setId(m_idCount++);
     m_currLayer->addChild(object, m_currLayer);
+    onAddObject(object);
 }
 
 void gx::Canvas::changeCurrTool(gx::Tool *newTool)
@@ -137,5 +140,5 @@ void gx::Canvas::changeCurrTool(gx::Tool *newTool)
 
     m_currTool = newTool;
     m_currTool->setActive(true);
-    emit activeToolChanged(m_currTool);
+//    emit activeToolChanged(m_currTool);
 }

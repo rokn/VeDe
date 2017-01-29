@@ -9,14 +9,14 @@
 Workspace::Workspace(CanvasImpl *canvas, QWidget *parent)
     :QGraphicsView(parent), m_canvas(canvas)
 {
-    QGraphicsScene* scene = new QGraphicsScene(this);
-    scene->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
-    scene->addItem(canvas);
-    canvas->grabMouse();
+    canvas->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
+//    canvas->addItem(canvas);
+//    canvas->grabMouse();
     setFocusPolicy(Qt::WheelFocus);
-    setScene(scene);
+    setScene(canvas);
     setMouseTracking(true);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 }
 
 Workspace::~Workspace()

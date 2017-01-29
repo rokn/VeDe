@@ -16,7 +16,7 @@ class Tool;
 
 class Canvas : public PropertyHolder
 {
-    Q_OBJECT
+//    Q_OBJECT
 public:
     Canvas(std::shared_ptr<GObject> root = nullptr, QObject* parent = 0);
     virtual ~Canvas();
@@ -80,8 +80,10 @@ public:
     float getZoomFactor() const;
     void setZoomFactor(float zoomFactor);
 
-signals:
-    void activeToolChanged(gx::Tool* newTool);
+    virtual void onAddObject(std::shared_ptr<GObject> object);
+
+//signals:
+//    void activeToolChanged(gx::Tool* newTool);
 
 private:
     std::shared_ptr<GObject> m_root;

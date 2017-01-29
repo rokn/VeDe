@@ -11,14 +11,16 @@
 
 #include "objects/line.h"
 
-CanvasImpl::CanvasImpl(std::shared_ptr<gx::GObject> root)
-    :gx::Canvas(root, nullptr)
+CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
+    :QGraphicsScene(parent), gx::Canvas(root, nullptr)
 {
+    QColor white = QColor(255,255,255,255);
+    addRect(0,0,800,600,QPen(white), QBrush(white));
 }
 
 void CanvasImpl::redraw()
 {
-    this->update();
+    this->update(0.0,0.0,800,600);
 }
 
 gx::Vertex CanvasImpl::getCursor() const
@@ -26,22 +28,41 @@ gx::Vertex CanvasImpl::getCursor() const
     return m_mousePos;
 }
 
-QRectF CanvasImpl::boundingRect() const
+void CanvasImpl::onAddObject(std::shared_ptr<gx::GObject> object)
 {
-    return QRectF(x(), y(), x()+800, y() + 600);
+    addEllipse(0,0,50,50);
 }
 
-void CanvasImpl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void CanvasImpl::drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], const QStyleOptionGraphicsItem options[], QWidget *widget)
 {
+//    QGraphicsScene::drawItems(painter,numItems,items,options,widget);
+//    qInfo() << "draw";
     if(root() != nullptr)
     {
         QtCustomPainter customPainter(painter);
-        customPainter.setBackColor(gx::Color::fromRgba(255,255,255));
-        customPainter.setStrokeColor(gx::Color::fromRgba(255,255,255));
-        customPainter.drawRectangle(x(),y(),800,600);
+//        customPainter.setBackColor(gx::Color::fromRgba(255,255,255));
+//        customPainter.setStrokeColor(gx::Color::fromRgba(255,255,255));
+//        customPainter.drawRectangle(-400,-300,400,300);
         root()->paintAll(customPainter);
     }
 }
+
+//QRectF CanvasImpl::boundingRect() const
+//{
+//    return QRectF(x(), y(), x()+800, y() + 600);
+//}
+
+//void CanvasImpl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+//{
+//    if(root() != nullptr)
+//    {
+//        QtCustomPainter customPainter(painter);
+//        customPainter.setBackColor(gx::Color::fromRgba(255,255,255));
+//        customPainter.setStrokeColor(gx::Color::fromRgba(255,255,255));
+//        customPainter.drawRectangle(x(),y(),800,600);
+//        root()->paintAll(customPainter);
+//    }
+//}
 
 void CanvasImpl::initModifierKeys()
 {
@@ -79,14 +100,14 @@ Qt::Key CanvasImpl::transformToKey(Qt::KeyboardModifier mod)
     }
 }
 
-CanvasImpl *CanvasImpl::createCanvas(std::shared_ptr<gx::GObject> root)
+CanvasImpl *CanvasImpl::createCanvas(QObject *parent, std::shared_ptr<gx::GObject> root)
 {
-    CanvasImpl* canvas = new CanvasImpl(root);
+    CanvasImpl* canvas = new CanvasImpl(parent, root);
 
     canvas->initModifierKeys();
-    canvas->setFlag(QGraphicsItem::ItemIsFocusable);
-    canvas->setFlag(QGraphicsItem::ItemIsSelectable);
-    canvas->setFocus(Qt::OtherFocusReason);
+//    canvas->setFlag(QGraphicsItem::ItemIsFocusable);
+//    canvas->setFlag(QGraphicsItem::ItemIsSelectable);
+//    canvas->setFocus(Qt::OtherFocusReason);
 
     return canvas;
 }
@@ -103,7 +124,7 @@ void CanvasImpl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void CanvasImpl::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    setFocus(Qt::OtherFocusReason);
+//    setFocus(Qt::OtherFocusReason);
     m_mousePos.setX(event->pos().x());
     m_mousePos.setY(event->pos().y());
     gx::Transition transition(gx::MOUSE_PRESS, event->button());

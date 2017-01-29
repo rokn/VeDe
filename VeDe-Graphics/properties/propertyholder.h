@@ -7,9 +7,9 @@
 
 namespace gx
 {
-class PropertyHolder : public QObject
+class PropertyHolder
 {
-    Q_OBJECT
+//    Q_OBJECT
 public:
     PropertyHolder(QObject* parent = 0);
     virtual ~PropertyHolder();

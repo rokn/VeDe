@@ -10,6 +10,7 @@ TARGET = VeDe-Graphics
 TEMPLATE = lib
 CONFIG += staticlib
 QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
+QMAKE_CXXFLAGS_WARN_ON += -Wno-sign-compare
 
 SOURCES += \
     vertex.cpp \
