@@ -6,32 +6,36 @@ gx::Rectangle::Rectangle()
 }
 
 gx::Rectangle::Rectangle(gx::Vertex upLeft, gx::Vertex downRight)
-    :m_upLeft(upLeft), m_downRight(downRight)
+    :m_topLeft(upLeft), m_bottomRight(downRight)
 {
 }
 
-gx::Vertex gx::Rectangle::getUpLeft() const
+gx::Vertex gx::Rectangle::getTopLeft() const
 {
-    return m_upLeft;
+    return m_topLeft;
 }
 
-void gx::Rectangle::setUpLeft(const Vertex &value)
+void gx::Rectangle::setTopLeft(const Vertex &value)
 {
-    m_upLeft = value;
+    preChange();
+    m_topLeft = value;
+    changed();
 }
 
-gx::Vertex gx::Rectangle::getDownRight() const
+gx::Vertex gx::Rectangle::getBottomRight() const
 {
-    return m_downRight;
+    return m_bottomRight;
 }
 
-void gx::Rectangle::setDownRight(const Vertex &value)
+void gx::Rectangle::setBottomRight(const Vertex &value)
 {
-    m_downRight = value;
+    preChange();
+    m_bottomRight = value;
+    changed();
 }
 
 void gx::Rectangle::paintSelf(gx::CustomPainter &painter)
 {
     Shape::paintSelf(painter);
-    painter.drawRectangle(m_upLeft, m_downRight);
+    painter.drawRectangle(m_topLeft, m_bottomRight);
 }

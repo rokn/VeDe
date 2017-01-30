@@ -7,6 +7,7 @@
 #include <QEvent>
 #include <functional>
 #include "canvas.h"
+#include "custompainter.h"
 #include "transition.h"
 #include "properties/propertyholder.h"
 
@@ -47,6 +48,7 @@ public:
 
     QString getName() const;
     void setName(const QString &name);
+    virtual void drawGui(CustomPainter* painter) const;
 
 protected:
     void addState(const QString &name, ToolStateCallBack callBack);

@@ -3,6 +3,7 @@
 
 #include "tools/transition.h"
 #include "objects/gobject.h"
+#include "objects/rectangle.h"
 #include "layer.h"
 #include "commands/command.h"
 #include <memory>
@@ -62,6 +63,8 @@ public:
      * @brief Simply redraws the whole canvas
      */
     virtual void redraw() = 0;
+    virtual void redrawGui() = 0;
+    virtual void redraw(Rectangle area) = 0;
 
     /**
      * @brief Adds an object to the current active layer
@@ -82,8 +85,7 @@ public:
 
     virtual void onAddObject(std::shared_ptr<GObject> object);
 
-//signals:
-//    void activeToolChanged(gx::Tool* newTool);
+    Tool *getCurrTool() const;
 
 private:
     std::shared_ptr<GObject> m_root;

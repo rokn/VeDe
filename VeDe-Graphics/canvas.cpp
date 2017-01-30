@@ -38,6 +38,11 @@ void gx::Canvas::setZoomFactor(float zoomFactor)
 
 void gx::Canvas::onAddObject(std::shared_ptr<gx::GObject> object){}
 
+gx::Tool *gx::Canvas::getCurrTool() const
+{
+    return m_currTool;
+}
+
 std::shared_ptr<gx::Layer> gx::Canvas::getCurrLayer() const
 {
     return m_currLayer;

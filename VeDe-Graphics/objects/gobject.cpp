@@ -11,7 +11,6 @@ gx::GObject::GObject(std::shared_ptr<gx::GObject> parent)
         parent->addChild(this, parent);
     }
     m_canvas = nullptr;
-    m_changedSinceDraw = true;
 }
 
 gx::GObject::~GObject()
@@ -39,7 +38,6 @@ void gx::GObject::paintAll(gx::CustomPainter& painter) //TODO: find a way to mak
 {
     forAllChildren([&painter](GObject* c){
         c->paintSelf(painter);
-        c->m_changedSinceDraw = false;
         return false;
     });
 }
@@ -91,6 +89,21 @@ void gx::GObject::forAllChildren(std::function<bool (gx::GObject *)> action)
     }
 }
 
+void gx::GObject::onDestroy(gx::GObject::GobjectCallback callback)
+{
+    m_onDestroyCallbacks.append(callback);
+}
+
+void gx::GObject::onPreChange(gx::GObject::GobjectCallback callback)
+{
+    m_onPreChangeCallbacks.append(callback);
+}
+
+void gx::GObject::onChange(gx::GObject::GobjectCallback callback)
+{
+    m_onChangeCallbacks.append(callback);
+}
+
 void gx::GObject::remove()
 {
     m_parent->removeChild(m_id);
@@ -103,6 +116,12 @@ void gx::GObject::removeChild(unsigned int id)
     while(childIt != m_children.end())
     {
         if((*childIt)->getId() == id) {
+            foreach(GobjectCallback callback, (*childIt)->m_onDestroyCallbacks) {
+                callback((*childIt).get());
+            }
+            (*childIt)->m_onDestroyCallbacks.clear();
+
+
             childIt->reset();
             m_children.erase(childIt);
             break;
@@ -127,14 +146,28 @@ void gx::GObject::setCanvas(Canvas *value)
     m_canvas = value;
 }
 
-bool gx::GObject::changedSinceDraw() const
+void gx::GObject::preparePropertyChange()
 {
-    return m_changedSinceDraw;
+    preChange();
+}
+
+void gx::GObject::updateProperties()
+{
+    changed();
 }
 
 void gx::GObject::changed()
 {
-    m_changedSinceDraw = true;
+    foreach(GobjectCallback callback, m_onChangeCallbacks) {
+        callback(this);
+    }
+}
+
+void gx::GObject::preChange()
+{
+    foreach(GobjectCallback callback, m_onPreChangeCallbacks) {
+        callback(this);
+    }
 }
 
 unsigned int gx::GObject::getId() const

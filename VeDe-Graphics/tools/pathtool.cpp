@@ -62,7 +62,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
             //qInfo() << moveControlPoint;
             Vertex point = getCanvas()->getCursor();
             m_path->changeLastControl(point);
-            getCanvas()->redraw();
+//            getCanvas()->redraw();
         } else {
             moveToStateSilent(start);
         }
@@ -82,7 +82,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
             //qInfo() << startNewPoint;
             Vertex point = getCanvas()->getCursor();
             m_path->addPoint(point);
-            getCanvas()->redraw();
+//            getCanvas()->redraw();
             moveToStateSilent(moveNewPoint);
         } else {
             moveToStateSilent(start);
@@ -94,7 +94,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
             //qInfo() << moveNewPoint;
             Vertex point = getCanvas()->getCursor();
             m_path->changeLastPoint(point);
-            getCanvas()->redraw();
+//            getCanvas()->redraw();
         } else {
             moveToStateSilent(start);
         }
@@ -125,7 +125,8 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
         m_path->setGuiElement(false);
         m_path->copyPropertiesFrom(*this);
         m_path->copyPropertiesFrom(*getCanvas());
-        getCanvas()->redraw();
+        m_path->updateProperties();
+//        getCanvas()->redraw();
         m_path.reset();
         moveToStateSilent(start);
     });

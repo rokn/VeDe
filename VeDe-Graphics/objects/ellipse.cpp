@@ -16,7 +16,9 @@ gx::Vertex gx::Ellipse::center() const
 
 void gx::Ellipse::setCenter(const Vertex &center)
 {
+    preChange();
     m_center = center;
+    changed();
 }
 
 gx::Vertex gx::Ellipse::radius() const
@@ -26,7 +28,9 @@ gx::Vertex gx::Ellipse::radius() const
 
 void gx::Ellipse::setRadius(const Vertex &radius)
 {
+    preChange();
     m_radius = radius;
+    changed();
 }
 
 void gx::Ellipse::paintSelf(gx::CustomPainter &painter)

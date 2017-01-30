@@ -16,7 +16,9 @@ gx::Vertex gx::Line::end() const
 
 void gx::Line::setEnd(const Vertex &end)
 {
+    preChange();
     m_end = end;
+    changed();
 }
 
 gx::Vertex gx::Line::start() const
@@ -26,7 +28,9 @@ gx::Vertex gx::Line::start() const
 
 void gx::Line::setStart(const Vertex &start)
 {
+    preChange();
     m_start = start;
+    changed();
 }
 
 void gx::Line::paintSelf(gx::CustomPainter &painter)

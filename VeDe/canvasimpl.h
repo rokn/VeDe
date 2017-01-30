@@ -22,14 +22,13 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     void redraw();
+    void redrawGui();
+    void redraw(gx::Rectangle area);
     gx::Vertex getCursor() const;
     void onAddObject(std::shared_ptr<gx::GObject> object);
 
-//    QRectF boundingRect() const;
-//    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
 protected:
-//    void drawBackground(QPainter *painter, const QRectF &rect);
-    void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], const QStyleOptionGraphicsItem options[], QWidget *widget = Q_NULLPTR);
+    void drawForeground(QPainter *painter, const QRectF &rect);
 
 private:
     gx::Vertex m_mousePos;

@@ -92,6 +92,10 @@ void gx::Tool::setName(const QString &name)
     m_name = name;
 }
 
+void gx::Tool::drawGui(gx::CustomPainter *painter) const
+{
+}
+
 bool gx::Tool::isActive() const
 {
     return m_active;

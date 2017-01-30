@@ -18,6 +18,7 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
         m_ellipse = std::make_shared<Ellipse>();
         m_ellipse->copyPropertiesFrom(*this);
         m_ellipse->copyPropertiesFrom(*getCanvas());
+        m_ellipse->updateProperties();
         m_ellipse->setCenter(getCanvas()->getCursor());
         m_ellipse->setRadius(Vertex(0,0));
 

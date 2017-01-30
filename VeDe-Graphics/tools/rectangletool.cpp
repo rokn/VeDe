@@ -19,8 +19,9 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
         m_rect = std::make_shared<Rectangle>();
         m_rect->copyPropertiesFrom(*this);
         m_rect->copyPropertiesFrom(*getCanvas());
-        m_rect->setUpLeft(anchorPoint);
-        m_rect->setDownRight(anchorPoint);
+        m_rect->updateProperties();
+        m_rect->setTopLeft(anchorPoint);
+        m_rect->setBottomRight(anchorPoint);
 
         gx::Command* command = new gx::AddGObjectCommand(m_rect, getCanvas());
         getCanvas()->executeCommand(command);
@@ -90,8 +91,8 @@ void gx::RectangleTool::moveEndPoint()
         downRight.setY(downRight.y() + 0.0001);
     }
 
-    m_rect->setUpLeft(upLeft);
-    m_rect->setDownRight(downRight);
+    m_rect->setTopLeft(upLeft);
+    m_rect->setBottomRight(downRight);
 
     getCanvas()->redraw();
 }

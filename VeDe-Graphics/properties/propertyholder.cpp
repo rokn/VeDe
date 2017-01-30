@@ -42,3 +42,12 @@ QList<gx::Property *> gx::PropertyHolder::getAllProperties()
 {
     return m_properties.values();
 }
+
+void gx::PropertyHolder::preparePropertyChange()
+{
+
+}
+
+void gx::PropertyHolder::updateProperties()
+{
+}

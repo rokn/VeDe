@@ -7,9 +7,6 @@
 #include <QList>
 
 
-#include <QPainterPath>
-
-
 namespace gx
 {
 class Path : public Shape
@@ -26,10 +23,13 @@ public:
 
     void paintSelf(CustomPainter& painter);
 
+    QList<Vertex> vertices() const;
+
+    QList<bool> controls() const;
+
 private:
     QList<Vertex> m_vertices;
     QList<bool> m_controls;
-    QPainterPath m_path;
 };
 }
 
