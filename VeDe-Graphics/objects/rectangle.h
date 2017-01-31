@@ -19,6 +19,8 @@ public:
 
     void paintSelf(CustomPainter &painter);
 
+    QRectF boundingBox() const;
+
 private:
     Vertex m_topLeft;
     Vertex m_bottomRight;

@@ -32,19 +32,19 @@ SOURCES += \
     tools/rectangletool.cpp \
     tools/transition.cpp \
     tools/restrictabletool.cpp \
-    graphics_exceptions.cpp \
     objects/shape.cpp \
     properties/propertyholder.cpp \
     properties/propertyfactory.cpp \
     tools/shapetool.cpp \
     objects/path.cpp \
-    tools/pathtool.cpp
+    tools/pathtool.cpp \
+    converters.cpp \
+    helpers.cpp
 
 HEADERS += \
     vertex.h \
     canvas.h \
     color.h \
-#    colorproperty.h \
     custompainter.h \
     objects/gobject.h \
     objects/line.h \
@@ -69,7 +69,9 @@ HEADERS += \
     tools/shapetool.h \
     tools/transitiontype.h \
     objects/path.h \
-    tools/pathtool.h
+    tools/pathtool.h \
+    converters.h \
+    helpers.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

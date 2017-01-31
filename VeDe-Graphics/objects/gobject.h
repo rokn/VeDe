@@ -8,6 +8,7 @@
 #include "properties/propertyholder.h"
 #include <memory>
 #include <functional>
+#include <QRectF>
 
 namespace gx
 {
@@ -24,7 +25,6 @@ public:
     QList<std::shared_ptr<GObject> > &getChildren();
     void addChild(GObject *child, const std::shared_ptr<GObject> &parent);
     void addChild(std::shared_ptr<GObject> child, const std::shared_ptr<GObject> &parent);
-    void paintAll(CustomPainter &painter);
 
     std::shared_ptr<GObject> getParent() const;
     void setParent(std::shared_ptr<GObject> parent);
@@ -50,8 +50,10 @@ public:
     void preparePropertyChange();
     void updateProperties();
 
+    virtual QRectF boundingBox() const;
+
+
 protected:
-    virtual void paintSelf(CustomPainter& painter) = 0;
     void changed();
     void preChange();
 

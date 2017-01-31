@@ -26,7 +26,6 @@ SOURCES += main.cpp\
     currtooltoolbar.cpp \
     colorchangebutton.cpp \
     propertywidgetfactory.cpp \
-    converters.cpp \
     objects/basegraphicsitem.cpp \
     objects/ellipsegraphicsitem.cpp \
     objects/linegraphicsitem.cpp \
@@ -42,7 +41,6 @@ HEADERS  += mainwindow.h \
     currtooltoolbar.h \
     colorchangebutton.h \
     propertywidgetfactory.h \
-    converters.h \
     objects/basegraphicsitem.h \
     objects/ellipsegraphicsitem.h \
     objects/rectgraphicsitem.h \

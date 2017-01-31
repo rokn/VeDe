@@ -37,17 +37,17 @@ void QtCustomPainter::drawPath(QList<gx::Vertex> vertices, QList<bool> controls)
     QPointF curr, prev, control1, control2;
     bool hasControl1 = controls[0], hasControl2 = false;
     int vIndex = (hasControl1) ? 2 : 1;
-    control1 = Converters::toPoint(vertices[vIndex - 1]);
+    control1 = gx::Converters::toPoint(vertices[vIndex - 1]);
 
-    prev = Converters::toPoint(vertices[0]);
+    prev = gx::Converters::toPoint(vertices[0]);
     path.moveTo(prev);
 
 
     for (auto control = controls.begin() + 1; control != controls.end(); ++control) {
-        curr = Converters::toPoint(vertices[vIndex]);
+        curr = gx::Converters::toPoint(vertices[vIndex]);
         hasControl2 = *control;
         if(hasControl2) {
-            control2 = 2 * curr - Converters::toPoint(vertices[vIndex+1]);
+            control2 = 2 * curr - gx::Converters::toPoint(vertices[vIndex+1]);
         } else {
             control2 = curr;
         }
@@ -86,13 +86,13 @@ void QtCustomPainter::setStrokeWidth(float width)
 
 void QtCustomPainter::setStrokeColor(const gx::Color &color)
 {
-    m_pen.setColor(Converters::toQColor(color));
+    m_pen.setColor(gx::Converters::toQColor(color));
     onChangePen();
 }
 
 void QtCustomPainter::setBackColor(const gx::Color &color)
 {
-    m_brush.setColor(Converters::toQColor(color));
+    m_brush.setColor(gx::Converters::toQColor(color));
     onChangeBrush();
 }
 

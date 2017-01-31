@@ -1,5 +1,4 @@
 #include "propertyconverter.h"
-#include "converters.h"
 #include <QDebug>
 
 PropertyConverter::PropertyConverter(gx::Property *prop, QObject *parent)

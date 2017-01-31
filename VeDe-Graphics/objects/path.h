@@ -5,6 +5,7 @@
 #include "vertex.h"
 #include "shape.h"
 #include <QList>
+#include <QPainterPath>
 
 
 namespace gx
@@ -27,9 +28,16 @@ public:
 
     QList<bool> controls() const;
 
+    const QPainterPath& drawnPath() const;
+
+    QRectF boundingBox() const;
+
 private:
     QList<Vertex> m_vertices;
     QList<bool> m_controls;
+    QPainterPath m_drawnPath;
+
+    void constructPath();
 };
 }
 

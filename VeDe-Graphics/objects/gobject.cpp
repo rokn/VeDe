@@ -1,4 +1,5 @@
 #include "gobject.h"
+#include "helpers.h"
 #include "canvas.h"
 #include "graphics_exceptions.h"
 #include <QStack>
@@ -32,14 +33,6 @@ void gx::GObject::addChild(std::shared_ptr<GObject> child, const std::shared_ptr
 {
     child->setParent(parent);
     this->m_children.append(child);
-}
-
-void gx::GObject::paintAll(gx::CustomPainter& painter) //TODO: find a way to make it const
-{
-    forAllChildren([&painter](GObject* c){
-        c->paintSelf(painter);
-        return false;
-    });
 }
 
 std::shared_ptr<gx::GObject> gx::GObject::getParent() const
@@ -156,6 +149,17 @@ void gx::GObject::updateProperties()
     changed();
 }
 
+QRectF gx::GObject::boundingBox() const
+{
+    QRectF box;
+    foreach(std::shared_ptr<GObject> obj, m_children)
+    {
+        box = box.united(obj->boundingBox());
+    }
+
+    return box;
+}
+
 void gx::GObject::changed()
 {
     foreach(GobjectCallback callback, m_onChangeCallbacks) {
@@ -179,13 +183,3 @@ void gx::GObject::setId(unsigned int id)
 {
     m_id = id;
 }
-
-//gx::PropertyHolder& gx::GObject::getProperties()
-//{
-//    return m_properties;
-//}
-//
-//const gx::PropertyHolder &gx::GObject::getProperties() const
-//{
-//    return m_properties;
-//}

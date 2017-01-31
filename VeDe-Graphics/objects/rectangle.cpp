@@ -1,4 +1,6 @@
 #include "rectangle.h"
+#include "converters.h"
+#include "helpers.h"
 
 gx::Rectangle::Rectangle()
 {
@@ -34,8 +36,11 @@ void gx::Rectangle::setBottomRight(const Vertex &value)
     changed();
 }
 
-void gx::Rectangle::paintSelf(gx::CustomPainter &painter)
+QRectF gx::Rectangle::boundingBox() const
 {
-    Shape::paintSelf(painter);
-    painter.drawRectangle(m_topLeft, m_bottomRight);
+    QRectF baseBox = GObject::boundingBox();
+    QPointF p1, p2;
+    p1 = Converters::toPoint(getTopLeft());
+    p2 = Converters::toPoint(getBottomRight());
+    return baseBox.united(QRectF(p1,p2));
 }

@@ -18,10 +18,15 @@ BaseGraphicsItem::BaseGraphicsItem(std::shared_ptr<gx::GObject> object)
     });
 }
 
+QRectF BaseGraphicsItem::boundingRect() const
+{
+    return m_object->boundingBox();
+}
+
 void BaseGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setBrush(QBrush(Converters::toQColor(m_object->getProp(gx::PROP::BACK_COLOR)->toColor())));
-    QPen pen(Converters::toQColor(m_object->getProp(gx::PROP::STROKE_COLOR)->toColor()));
+    painter->setBrush(QBrush(gx::Converters::toQColor(m_object->getProp(gx::PROP::BACK_COLOR)->toColor())));
+    QPen pen(gx::Converters::toQColor(m_object->getProp(gx::PROP::STROKE_COLOR)->toColor()));
     pen.setWidthF(m_object->getProp(gx::PROP::STROKE_WIDTH)->toFloat());
     painter->setPen(pen);
 }

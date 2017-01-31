@@ -9,6 +9,7 @@ class BaseGraphicsItem : public QGraphicsItem
 public:
     BaseGraphicsItem(std::shared_ptr<gx::GObject> object);
 
+    QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
 
 private:

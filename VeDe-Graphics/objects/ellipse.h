@@ -18,7 +18,7 @@ public:
     Vertex radius() const;
     void setRadius(const Vertex &radius);
 
-    void paintSelf(CustomPainter& painter);
+    QRectF boundingBox() const;
 
 private:
     Vertex m_center;

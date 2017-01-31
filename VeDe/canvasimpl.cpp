@@ -29,8 +29,8 @@ CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
 
 void CanvasImpl::redraw(gx::Rectangle area)
 {
-    QPointF tl = Converters::toPoint(area.getTopLeft());
-    QPointF br = Converters::toPoint(area.getBottomRight());
+    QPointF tl = gx::Converters::toPoint(area.getTopLeft());
+    QPointF br = gx::Converters::toPoint(area.getBottomRight());
     this->update(QRectF(tl,br));
 }
 

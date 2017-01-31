@@ -15,7 +15,6 @@ void gx::Tool::handleEvent(const Transition& transition)
 
     if(transitions.contains(transition))
     {
-        //TODO remove one of the calls this or the upper one
         m_currState = transitions.value(transition);
         m_states.find(m_currState)->callback(transition);
     }
@@ -59,7 +58,7 @@ void gx::Tool::moveToStateSilent(const QString &stateName)
 //    if(m_states.find(stateName) != m_states.end())
 //    {
         m_currState = stateName;
-        //    }
+//    }
 }
 
 

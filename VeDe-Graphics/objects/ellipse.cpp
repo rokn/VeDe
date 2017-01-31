@@ -1,4 +1,7 @@
 #include "ellipse.h"
+#include "converters.h"
+#include "helpers.h"
+#include <QPointF>
 
 gx::Ellipse::Ellipse()
 {
@@ -33,8 +36,10 @@ void gx::Ellipse::setRadius(const Vertex &radius)
     changed();
 }
 
-void gx::Ellipse::paintSelf(gx::CustomPainter &painter)
+QRectF gx::Ellipse::boundingBox() const
 {
-    Shape::paintSelf(painter);
-    painter.drawEllipse(m_center, m_radius);
+    QRectF baseBox = GObject::boundingBox();
+    QPointF center = Converters::toPoint(this->center());
+    QPointF radii = Converters::toPoint(this->radius());
+    return baseBox.united(QRectF(center - radii, center + radii));
 }
