@@ -11,17 +11,19 @@ public:
     Rectangle();
     Rectangle(Vertex upLeft, Vertex downRight);
 
-    Vertex getUpLeft() const;
-    void setUpLeft(const Vertex &value);
+    Vertex getTopLeft() const;
+    void setTopLeft(const Vertex &value);
 
-    Vertex getDownRight() const;
-    void setDownRight(const Vertex &value);
+    Vertex getBottomRight() const;
+    void setBottomRight(const Vertex &value);
 
-    void paintSelf(CustomPainter &painter) const;
+    void paintSelf(CustomPainter &painter);
+
+    QRectF boundingBox() const;
 
 private:
-    Vertex m_upLeft;
-    Vertex m_downRight;
+    Vertex m_topLeft;
+    Vertex m_bottomRight;
 };
 }
 

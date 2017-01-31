@@ -14,6 +14,7 @@ TARGET = VeDe
 TEMPLATE = app
 
 QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
+QMAKE_CXXFLAGS_WARN_ON += -Wno-sign-compare
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -25,7 +26,11 @@ SOURCES += main.cpp\
     currtooltoolbar.cpp \
     colorchangebutton.cpp \
     propertywidgetfactory.cpp \
-    converters.cpp
+    objects/basegraphicsitem.cpp \
+    objects/ellipsegraphicsitem.cpp \
+    objects/linegraphicsitem.cpp \
+    objects/rectgraphicsitem.cpp \
+    objects/pathgraphicsitem.cpp
 
 HEADERS  += mainwindow.h \
     qtcustompainter.h \
@@ -36,7 +41,11 @@ HEADERS  += mainwindow.h \
     currtooltoolbar.h \
     colorchangebutton.h \
     propertywidgetfactory.h \
-    converters.h
+    objects/basegraphicsitem.h \
+    objects/ellipsegraphicsitem.h \
+    objects/rectgraphicsitem.h \
+    objects/linegraphicsitem.h \
+    objects/pathgraphicsitem.h
 
 FORMS    +=
 
@@ -58,3 +67,5 @@ else:unix: PRE_TARGETDEPS += $$PWD/../build-vede-graphics-debug/libVeDe-Graphics
 
 RESOURCES += \
     images.qrc
+
+DISTFILES +=

@@ -5,6 +5,8 @@
 #include "vertex.h"
 #include "shape.h"
 #include <QList>
+#include <QPainterPath>
+
 
 namespace gx
 {
@@ -14,17 +16,26 @@ public:
     Path();
 
     void addPoint(Vertex vertex);
-    void addMove(int move);
-    void changeLastMove(int move);
-    void removeLastMove();
     void changeLastPoint(Vertex vertex);
     void removeLastPoint();
+    void addControlPoint(Vertex control);
+    void changeLastControl(Vertex control);
+    void removeLastControl();
 
-    void paintSelf(CustomPainter& painter) const;
+    QList<Vertex> vertices() const;
+
+    QList<bool> controls() const;
+
+    const QPainterPath& drawnPath() const;
+
+    QRectF boundingBox() const;
 
 private:
     QList<Vertex> m_vertices;
-    QList<int> m_moves;
+    QList<bool> m_controls;
+    QPainterPath m_drawnPath;
+
+    void constructPath();
 };
 }
 

@@ -8,4 +8,7 @@ class IncorrectPropertyType
 class UnknownModifierKey
 {};
 
+class ControlNotFound
+{};
+
 #endif // GRAPHICS_EXCEPTIONS_H

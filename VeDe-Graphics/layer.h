@@ -11,7 +11,7 @@ public:
     Layer();
 
 protected:
-    void paintSelf(CustomPainter& painter) const;
+    void paintSelf(CustomPainter& painter);
 };
 }
 

@@ -30,43 +30,51 @@ void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRigh
     //Doesn't work for some reason
 }
 
-void QtCustomPainter::drawPath(QList<gx::Vertex> vertices, QList<int> moves)
+void QtCustomPainter::drawPath(QList<gx::Vertex> vertices, QList<bool> controls)
 {
     QPainterPath path;
-    QPointF end, control, control2;
-    path.moveTo(vertices[0].x(), vertices[0].y());
-    int vIndex = 1;
+    path.setFillRule(Qt::WindingFill);
+    QPointF curr, prev, control1, control2;
+    bool hasControl1 = controls[0], hasControl2 = false;
+    int vIndex = (hasControl1) ? 2 : 1;
+    control1 = gx::Converters::toPoint(vertices[vIndex - 1]);
 
-    foreach (int move, moves) {
-        switch(move){
-            case -1:
-                path.closeSubpath();
-                break;
-            case 0:
-                path.lineTo(vertices[vIndex].x(), vertices[vIndex].y());
-                vIndex++;
-                break;
-            case 1:
-            //Remove logic
-                end = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
-                vIndex++;
-                control = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
-                vIndex++;
-                control = end + (end - control);
-                path.cubicTo(control, control, end);
-                break;
-            case 2:
-                control = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
-                vIndex++;
-                end = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
-                vIndex++;
-                control2 = QPointF(vertices[vIndex].x(), vertices[vIndex].y());
-                vIndex++;
-                path.cubicTo(control, control2, end);
-                break;
+    prev = gx::Converters::toPoint(vertices[0]);
+    path.moveTo(prev);
+
+
+    for (auto control = controls.begin() + 1; control != controls.end(); ++control) {
+        curr = gx::Converters::toPoint(vertices[vIndex]);
+        hasControl2 = *control;
+        if(hasControl2) {
+            control2 = 2 * curr - gx::Converters::toPoint(vertices[vIndex+1]);
+        } else {
+            control2 = curr;
+        }
+
+        if(hasControl1 || hasControl2){
+            path.cubicTo(control1, control2, curr);
+        } else {
+            path.lineTo(curr);
+        }
+
+        hasControl1 = hasControl2;
+        control1 = control2;
+        prev = curr;
+
+        if(hasControl2) {
+            vIndex += 2;
+            control1 = 2 * curr - control1;
+        } else {
+            vIndex ++;
         }
     }
 
+    m_painter->drawPath(path);
+}
+
+void QtCustomPainter::drawPath(QPainterPath &path)
+{
     m_painter->drawPath(path);
 }
 
@@ -78,13 +86,13 @@ void QtCustomPainter::setStrokeWidth(float width)
 
 void QtCustomPainter::setStrokeColor(const gx::Color &color)
 {
-    m_pen.setColor(Converters::toQColor(color));
+    m_pen.setColor(gx::Converters::toQColor(color));
     onChangePen();
 }
 
 void QtCustomPainter::setBackColor(const gx::Color &color)
 {
-    m_brush.setColor(Converters::toQColor(color));
+    m_brush.setColor(gx::Converters::toQColor(color));
     onChangeBrush();
 }
 
@@ -101,4 +109,9 @@ void QtCustomPainter::onChangePen()
 void QtCustomPainter::onChangeBrush()
 {
     m_painter->setBrush(m_brush);
+}
+
+void QtCustomPainter::setPainter(QPainter *painter)
+{
+    m_painter = painter;
 }

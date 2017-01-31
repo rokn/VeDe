@@ -12,6 +12,8 @@ class LineTool : public ShapeTool
 public:
     LineTool(Canvas* canvas);
 
+    void drawGui(CustomPainter* painter) const;
+
 private:
     std::shared_ptr<Line> m_line;
 

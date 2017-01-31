@@ -1,22 +1,25 @@
 #include "workspace.h"
 #include <QBrush>
+#include <QDebug>
 #include <QPalette>
 #include <QPixmap>
 #include <QWheelEvent>
 #include <QTimeLine>
 #include <QApplication>
+#include <QScrollBar>
 
 Workspace::Workspace(CanvasImpl *canvas, QWidget *parent)
     :QGraphicsView(parent), m_canvas(canvas)
 {
-    QGraphicsScene* scene = new QGraphicsScene(this);
-    scene->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
-    scene->addItem(canvas);
-    canvas->grabMouse();
+    canvas->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
+//    canvas->addItem(canvas);
+//    canvas->grabMouse();
     setFocusPolicy(Qt::WheelFocus);
-    setScene(scene);
+    setScene(canvas);
     setMouseTracking(true);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    m_pan = false;
 }
 
 Workspace::~Workspace()
@@ -34,37 +37,119 @@ void Workspace::wheelEvent(QWheelEvent *event)
 
 void Workspace::handleZooming(QWheelEvent *event)
 {
-    QPoint  pos  = event->pos();
-    QPointF posf = this->mapToScene(pos);
+   const QPointF p0scene = mapToScene(event->pos());
 
-    double by;
-    double angle = event->angleDelta().y();
+   qreal factor = std::pow(1.001, event->delta());
+   scale(factor, factor);
 
-    if      (angle > 0) { by = 1 + ( angle / 180 * 0.1); }
-    else if (angle < 0) { by = 1 - (-angle / 180 * 0.1); }
-    else                { by = 1; }
+   const QPointF p1mouse = mapFromScene(p0scene);
+   const QPointF move = p1mouse - event->pos(); // The move
+   horizontalScrollBar()->setValue(move.x() + horizontalScrollBar()->value());
+   verticalScrollBar()->setValue(move.y() + verticalScrollBar()->value());
+//    const int degrees = event->delta() / 8;
+//    int steps = degrees / 15;
 
-    this->scale(by, by);
-    this->m_canvas->setZoomFactor(m_canvas->getZoomFactor() * by);
+//    // Declare below as class member vars and set default values as below
+//    // qreal h11 = 1.0
+//    // qreal h12 = 0
+//    // qreal h21 = 1.0
+//    // qreal h22 = 0
 
-    double w = this->viewport()->width();
-    double h = this->viewport()->height();
+//    double scaleFactor = 1.0; //How fast we zoom
+//    const qreal minFactor = 1.0;
+//    const qreal maxFactor = 10.0;
+//    if(steps > 0)
+//    {
+//        h11 = (h11 >= maxFactor) ? h11 : (h11 + scaleFactor);
+//        h22 = (h22 >= maxFactor) ? h22 : (h22 + scaleFactor);
+//    }
+//    else
+//    {
+//        h11 = (h11 <= minFactor) ? minFactor : (h11 - scaleFactor);
+//        h22 = (h22 <= minFactor) ? minFactor : (h22 - scaleFactor);
+//    }
 
-    double wf = this->mapToScene(QPoint(w-1, 0)).x()
-                    - this->mapToScene(QPoint(0,0)).x();
-    double hf = this->mapToScene(QPoint(0, h-1)).y()
-                    - this->mapToScene(QPoint(0,0)).y();
+//    this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+//    this->setTransform(QTransform(h11, h12, h21, h22, 0, 0));
+//    QPoint  pos  = event->pos();
+//    QPointF posf = this->mapToScene(pos);
 
-    double lf = posf.x() - pos.x() * wf / w;
-    double tf = posf.y() - pos.y() * hf / h;
+//    double by;
+//    double angle = event->angleDelta().y();
 
-    /* try to set viewport properly */
-    this->ensureVisible(lf, tf, wf, hf, 0, 0);
+//    if      (angle > 0) { by = 1 + ( angle / 180 * 0.1); }
+//    else if (angle < 0) { by = 1 - (-angle / 180 * 0.1); }
+//    else                { by = 1; }
 
-    QPointF newPos = this->mapToScene(pos);
+//    this->scale(by, by);
+//    this->m_canvas->setZoomFactor(m_canvas->getZoomFactor() * by);
 
-    /* readjust according to the still remaining offset/drift
-     * I don't know how to do this any other way */
-    this->ensureVisible(QRectF(QPointF(lf, tf) - newPos + posf,
-                    QSizeF(wf, hf)), 0, 0);
+//    double w = this->viewport()->width();
+//    double h = this->viewport()->height();
+
+//    double wf = this->mapToScene(QPoint(w-1, 0)).x()
+//                    - this->mapToScene(QPoint(0,0)).x();
+//    double hf = this->mapToScene(QPoint(0, h-1)).y()
+//                    - this->mapToScene(QPoint(0,0)).y();
+
+//    double lf = posf.x() - pos.x() * wf / w;
+//    double tf = posf.y() - pos.y() * hf / h;
+
+//    /* try to set viewport properly */
+//    this->ensureVisible(lf, tf, wf, hf, 0, 0);
+
+//    QPointF newPos = this->mapToScene(pos);
+
+//    /* readjust according to the still remaining offset/drift
+//     * I don't know how to do this any other way */
+//    this->ensureVisible(QRectF(QPointF(lf, tf) - newPos + posf,
+   //                    QSizeF(wf, hf)), 0, 0);
+}
+
+void Workspace::mouseMoveEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseMoveEvent(event);
+
+    if (m_pan)
+    {
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - m_panStart.x()));
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - m_panStart.y()));
+        m_panStart = QPoint(event->x(), event->y());
+        m_canvas->redraw();
+        event->accept();
+        return;
+    }
+
+    event->ignore();
+}
+
+void Workspace::mousePressEvent(QMouseEvent *event)
+{
+    QGraphicsView::mousePressEvent(event);
+
+    if(event->button() == Qt::MiddleButton)
+    {
+        m_pan = true;
+        m_panStart = QPoint(event->x(), event->y());
+        setCursor(Qt::ClosedHandCursor);
+        event->accept();
+        return;
+    }
+
+    event->ignore();
+}
+
+void Workspace::mouseReleaseEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseReleaseEvent(event);
+
+    if(event->button() == Qt::MiddleButton)
+    {
+        m_pan = false;
+        setCursor(Qt::ArrowCursor);
+        event->accept();
+        return;
+    }
+
+    event->ignore();
 }

@@ -1,4 +1,5 @@
 #include "gobject.h"
+#include "helpers.h"
 #include "canvas.h"
 #include "graphics_exceptions.h"
 #include <QStack>
@@ -32,14 +33,6 @@ void gx::GObject::addChild(std::shared_ptr<GObject> child, const std::shared_ptr
 {
     child->setParent(parent);
     this->m_children.append(child);
-}
-
-void gx::GObject::paintAll(gx::CustomPainter& painter) //TODO: find a way to make it const
-{
-    forAllChildren([&painter](GObject* c){
-        c->paintSelf(painter);
-        return false;
-    });
 }
 
 std::shared_ptr<gx::GObject> gx::GObject::getParent() const
@@ -89,6 +82,21 @@ void gx::GObject::forAllChildren(std::function<bool (gx::GObject *)> action)
     }
 }
 
+void gx::GObject::onDestroy(gx::GObject::GobjectCallback callback)
+{
+    m_onDestroyCallbacks.append(callback);
+}
+
+void gx::GObject::onPreChange(gx::GObject::GobjectCallback callback)
+{
+    m_onPreChangeCallbacks.append(callback);
+}
+
+void gx::GObject::onChange(gx::GObject::GobjectCallback callback)
+{
+    m_onChangeCallbacks.append(callback);
+}
+
 void gx::GObject::remove()
 {
     m_parent->removeChild(m_id);
@@ -101,6 +109,12 @@ void gx::GObject::removeChild(unsigned int id)
     while(childIt != m_children.end())
     {
         if((*childIt)->getId() == id) {
+            foreach(GobjectCallback callback, (*childIt)->m_onDestroyCallbacks) {
+                callback((*childIt).get());
+            }
+            (*childIt)->m_onDestroyCallbacks.clear();
+
+
             childIt->reset();
             m_children.erase(childIt);
             break;
@@ -125,6 +139,41 @@ void gx::GObject::setCanvas(Canvas *value)
     m_canvas = value;
 }
 
+void gx::GObject::preparePropertyChange()
+{
+    preChange();
+}
+
+void gx::GObject::updateProperties()
+{
+    changed();
+}
+
+QRectF gx::GObject::boundingBox() const
+{
+    QRectF box;
+    foreach(std::shared_ptr<GObject> obj, m_children)
+    {
+        box = box.united(obj->boundingBox());
+    }
+
+    return box;
+}
+
+void gx::GObject::changed()
+{
+    foreach(GobjectCallback callback, m_onChangeCallbacks) {
+        callback(this);
+    }
+}
+
+void gx::GObject::preChange()
+{
+    foreach(GobjectCallback callback, m_onPreChangeCallbacks) {
+        callback(this);
+    }
+}
+
 unsigned int gx::GObject::getId() const
 {
     return m_id;
@@ -134,13 +183,3 @@ void gx::GObject::setId(unsigned int id)
 {
     m_id = id;
 }
-
-//gx::PropertyHolder& gx::GObject::getProperties()
-//{
-//    return m_properties;
-//}
-//
-//const gx::PropertyHolder &gx::GObject::getProperties() const
-//{
-//    return m_properties;
-//}

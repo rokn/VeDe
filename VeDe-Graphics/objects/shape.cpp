@@ -8,7 +8,7 @@ gx::Shape::Shape()
     PropertyFactory::addShapeProperties(this);
 }
 
-void gx::Shape::paintSelf(gx::CustomPainter &painter) const
+void gx::Shape::paintSelf(gx::CustomPainter &painter)
 {
     if(isGuiElement() && getCanvas() != nullptr)
     {

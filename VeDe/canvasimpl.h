@@ -2,18 +2,19 @@
 #define CANVASIMPL_H
 
 #include "canvas.h"
-#include <QGraphicsItem>
+#include "objects/gobject.h"
+#include <QGraphicsScene>
 #include <QMap>
+#include <QGraphicsItem>
 
-class CanvasWidget;
+//class CanvasWidget;
 
-class CanvasImpl : public gx::Canvas, public QGraphicsItem
+class CanvasImpl : public QGraphicsScene, public gx::Canvas
 {
     Q_OBJECT
 public:
-    CanvasImpl();
-    CanvasImpl(std::shared_ptr<gx::GObject> root);
-    static CanvasImpl* createCanvas(std::shared_ptr<gx::GObject> root = 0);
+    CanvasImpl(QObject* parent, std::shared_ptr<gx::GObject> root);
+    static CanvasImpl* createCanvas(QObject* parent = 0, std::shared_ptr<gx::GObject> root = 0);
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -21,10 +22,14 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     void redraw();
+    void redrawGui();
+    void redraw(gx::Rectangle area);
     gx::Vertex getCursor() const;
+    void onAddObject(std::shared_ptr<gx::GObject> object);
 
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
+protected:
+    void drawForeground(QPainter *painter, const QRectF &rect);
+
 private:
     gx::Vertex m_mousePos;
     QMap<Qt::KeyboardModifier, bool> m_modifierKeys;

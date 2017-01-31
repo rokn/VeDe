@@ -1,4 +1,6 @@
 #include "rectangle.h"
+#include "converters.h"
+#include "helpers.h"
 
 gx::Rectangle::Rectangle()
 {
@@ -6,32 +8,39 @@ gx::Rectangle::Rectangle()
 }
 
 gx::Rectangle::Rectangle(gx::Vertex upLeft, gx::Vertex downRight)
-    :m_upLeft(upLeft), m_downRight(downRight)
+    :m_topLeft(upLeft), m_bottomRight(downRight)
 {
 }
 
-gx::Vertex gx::Rectangle::getUpLeft() const
+gx::Vertex gx::Rectangle::getTopLeft() const
 {
-    return m_upLeft;
+    return m_topLeft;
 }
 
-void gx::Rectangle::setUpLeft(const Vertex &value)
+void gx::Rectangle::setTopLeft(const Vertex &value)
 {
-    m_upLeft = value;
+    preChange();
+    m_topLeft = value;
+    changed();
 }
 
-gx::Vertex gx::Rectangle::getDownRight() const
+gx::Vertex gx::Rectangle::getBottomRight() const
 {
-    return m_downRight;
+    return m_bottomRight;
 }
 
-void gx::Rectangle::setDownRight(const Vertex &value)
+void gx::Rectangle::setBottomRight(const Vertex &value)
 {
-    m_downRight = value;
+    preChange();
+    m_bottomRight = value;
+    changed();
 }
 
-void gx::Rectangle::paintSelf(gx::CustomPainter &painter) const
+QRectF gx::Rectangle::boundingBox() const
 {
-    Shape::paintSelf(painter);
-    painter.drawRectangle(m_upLeft, m_downRight);
+    QRectF baseBox = GObject::boundingBox();
+    QPointF p1, p2;
+    p1 = Converters::toPoint(getTopLeft());
+    p2 = Converters::toPoint(getBottomRight());
+    return baseBox.united(QRectF(p1,p2));
 }

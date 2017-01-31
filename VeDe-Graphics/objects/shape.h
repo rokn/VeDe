@@ -14,7 +14,7 @@ public:
     void setGuiElement(bool guiElement);
 
 protected:
-    void paintSelf(CustomPainter& painter) const;
+    void paintSelf(CustomPainter& painter);
 
 private:
     bool m_guiElement;

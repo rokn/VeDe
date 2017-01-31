@@ -24,9 +24,9 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         m_line->setStart(startPos);
         startPos.setX(startPos.x()+0.0001f);//Disable buggy division by zero
         m_line->setEnd(startPos);
-
         Command* command = new AddGObjectCommand(m_line, getCanvas());
         getCanvas()->executeCommand(command);
+
         moveToStateSilent(wait);
     });
 
@@ -46,7 +46,7 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         m_line->setGuiElement(false);
         m_line->copyPropertiesFrom(*this);
         m_line->copyPropertiesFrom(*getCanvas());
-        getCanvas()->redraw();
+        m_line->updateProperties();
         m_line.reset();
         moveToStateSilent(start);
     });
@@ -60,6 +60,14 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
     });
 
     moveToStateSilent(start);
+}
+
+void gx::LineTool::drawGui(gx::CustomPainter *painter) const
+{
+    if(m_line != nullptr)
+    {
+        painter->drawLine(m_line->start(), m_line->end());
+    }
 }
 
 void gx::LineTool::restrictPos(const gx::Vertex& p1, gx::Vertex &p2)
@@ -111,5 +119,5 @@ void gx::LineTool::moveEndPoint()
     }
 
     m_line->setEnd(pos);
-    getCanvas()->redraw();
+//    getCanvas()->redrawGui();
 }

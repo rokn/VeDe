@@ -3,6 +3,7 @@
 
 #include "tools/transition.h"
 #include "objects/gobject.h"
+#include "objects/rectangle.h"
 #include "layer.h"
 #include "commands/command.h"
 #include <memory>
@@ -16,7 +17,7 @@ class Tool;
 
 class Canvas : public PropertyHolder
 {
-    Q_OBJECT
+//    Q_OBJECT
 public:
     Canvas(std::shared_ptr<GObject> root = nullptr, QObject* parent = 0);
     virtual ~Canvas();
@@ -62,6 +63,8 @@ public:
      * @brief Simply redraws the whole canvas
      */
     virtual void redraw() = 0;
+    virtual void redrawGui() = 0;
+    virtual void redraw(Rectangle area) = 0;
 
     /**
      * @brief Adds an object to the current active layer
@@ -80,8 +83,9 @@ public:
     float getZoomFactor() const;
     void setZoomFactor(float zoomFactor);
 
-signals:
-    void activeToolChanged(gx::Tool* newTool);
+    virtual void onAddObject(std::shared_ptr<GObject> object);
+
+    Tool *getCurrTool() const;
 
 private:
     std::shared_ptr<GObject> m_root;

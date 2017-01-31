@@ -1,4 +1,6 @@
 #include "line.h"
+#include "helpers.h"
+#include "converters.h"
 
 gx::Line::Line()
 {
@@ -16,7 +18,9 @@ gx::Vertex gx::Line::end() const
 
 void gx::Line::setEnd(const Vertex &end)
 {
+    preChange();
     m_end = end;
+    changed();
 }
 
 gx::Vertex gx::Line::start() const
@@ -26,11 +30,21 @@ gx::Vertex gx::Line::start() const
 
 void gx::Line::setStart(const Vertex &start)
 {
+    preChange();
     m_start = start;
+    changed();
 }
 
-void gx::Line::paintSelf(gx::CustomPainter &painter) const
+QRectF gx::Line::boundingBox() const
 {
-    Shape::paintSelf(painter);
-    painter.drawLine(m_start, m_end);
+    QRectF baseBox = GObject::boundingBox();
+    QPointF p1, p2;
+    p1 = Converters::toPoint(start());
+    p2 = Converters::toPoint(end());
+    QPointF tl,dr;
+    tl.setX(qMin(p1.x(), p2.x()));
+    tl.setY(qMin(p1.y(), p2.y()));
+    dr.setX(qMax(p1.x(), p2.x()));
+    dr.setY(qMax(p1.y(), p2.y()));
+    return baseBox.united(QRectF(tl,dr));
 }

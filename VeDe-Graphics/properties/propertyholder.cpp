@@ -1,7 +1,7 @@
 #include "propertyholder.h"
 
 gx::PropertyHolder::PropertyHolder(QObject *parent)
-    :QObject(parent)
+//    :QObject(parent)
 {
 
 }
@@ -41,4 +41,13 @@ void gx::PropertyHolder::copyPropertiesFrom(const gx::PropertyHolder &other)
 QList<gx::Property *> gx::PropertyHolder::getAllProperties()
 {
     return m_properties.values();
+}
+
+void gx::PropertyHolder::preparePropertyChange()
+{
+
+}
+
+void gx::PropertyHolder::updateProperties()
+{
 }

@@ -18,7 +18,7 @@ public:
     Vertex end() const;
     void setEnd(const Vertex &end);
 
-    void paintSelf(CustomPainter& painter) const;
+    QRectF boundingBox() const;
 
 private:
     Vertex m_start;
