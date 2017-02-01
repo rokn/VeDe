@@ -7,9 +7,9 @@
 
 gx::Path::Path()
 {
-    onChange([this](const gx::GObject* o){
+    onChange() += [this](const gx::GObject* o){
         this->constructPath();
-    });
+    };
 }
 
 void gx::Path::addPoint(gx::Vertex vertex)

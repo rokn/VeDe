@@ -23,6 +23,8 @@ gx::Canvas::Canvas(std::shared_ptr<GObject> root, QObject *parent)
     m_zoomFactor = 1.0f;
     PropertyFactory::addCanvasProperties(this);
     getProp("Stroke Color")->toColor().setR(255);
+    setWidth(800);
+    setHeight(600);
 }
 
 float gx::Canvas::getZoomFactor() const
@@ -41,6 +43,31 @@ void gx::Canvas::onAddObject(std::shared_ptr<gx::GObject> object){}
 gx::Tool *gx::Canvas::getCurrTool() const
 {
     return m_currTool;
+}
+
+float gx::Canvas::getHeight() const
+{
+    return m_height;
+}
+
+void gx::Canvas::setHeight(float height)
+{
+    m_height = height;
+}
+
+gx::Event<gx::Tool *>& gx::Canvas::onToolChanged()
+{
+    return m_onToolChanged;
+}
+
+float gx::Canvas::getWidth() const
+{
+    return m_width;
+}
+
+void gx::Canvas::setWidth(float width)
+{
+    m_width = width;
 }
 
 std::shared_ptr<gx::Layer> gx::Canvas::getCurrLayer() const
@@ -146,5 +173,5 @@ void gx::Canvas::changeCurrTool(gx::Tool *newTool)
 
     m_currTool = newTool;
     m_currTool->setActive(true);
-//    emit activeToolChanged(m_currTool);
+    m_onToolChanged(m_currTool);
 }

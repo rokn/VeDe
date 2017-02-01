@@ -5,6 +5,7 @@
 #include "objects/gobject.h"
 #include "objects/rectangle.h"
 #include "layer.h"
+#include "event.h"
 #include "commands/command.h"
 #include <memory>
 #include <QVector>
@@ -88,6 +89,14 @@ public:
 
     Tool *getCurrTool() const;
 
+    float getWidth() const;
+    void setWidth(float width);
+
+    float getHeight() const;
+    void setHeight(float height);
+
+    Event<Tool *>& onToolChanged();
+
 private:
     std::shared_ptr<GObject> m_root;
     QVector<Command*> m_commandHistory;
@@ -96,6 +105,9 @@ private:
     std::shared_ptr<Layer> m_currLayer;
     unsigned int m_idCount;
     float m_zoomFactor;
+    float m_width;
+    float m_height;
+    Event<Tool*> m_onToolChanged;
 };
 }
 

@@ -82,19 +82,19 @@ void gx::GObject::forAllChildren(std::function<bool (gx::GObject *)> action)
     }
 }
 
-void gx::GObject::onDestroy(gx::GObject::GobjectCallback callback)
+gx::Event<const gx::GObject *> &gx::GObject::onDestroy()
 {
-    m_onDestroyCallbacks.append(callback);
+    return m_onDestroy;
 }
 
-void gx::GObject::onPreChange(gx::GObject::GobjectCallback callback)
+gx::Event<const gx::GObject*> &gx::GObject::onPreChange()
 {
-    m_onPreChangeCallbacks.append(callback);
+    return m_onPreChange;
 }
 
-void gx::GObject::onChange(gx::GObject::GobjectCallback callback)
+gx::Event<const gx::GObject *> &gx::GObject::onChange()
 {
-    m_onChangeCallbacks.append(callback);
+    return m_onChange;
 }
 
 void gx::GObject::remove()
@@ -109,11 +109,8 @@ void gx::GObject::removeChild(unsigned int id)
     while(childIt != m_children.end())
     {
         if((*childIt)->getId() == id) {
-            foreach(GobjectCallback callback, (*childIt)->m_onDestroyCallbacks) {
-                callback((*childIt).get());
-            }
-            (*childIt)->m_onDestroyCallbacks.clear();
-
+            (*childIt)->m_onDestroy((*childIt).get());
+            (*childIt)->m_onDestroy.clearCallbacks();
 
             childIt->reset();
             m_children.erase(childIt);
@@ -162,16 +159,12 @@ QRectF gx::GObject::boundingBox() const
 
 void gx::GObject::changed()
 {
-    foreach(GobjectCallback callback, m_onChangeCallbacks) {
-        callback(this);
-    }
+    m_onChange(this);
 }
 
 void gx::GObject::preChange()
 {
-    foreach(GobjectCallback callback, m_onPreChangeCallbacks) {
-        callback(this);
-    }
+    m_onPreChange(this);
 }
 
 unsigned int gx::GObject::getId() const

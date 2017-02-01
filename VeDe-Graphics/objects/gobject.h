@@ -5,6 +5,7 @@
 #include <QString>
 #include <QDebug>
 #include "custompainter.h"
+#include "event.h"
 #include "properties/propertyholder.h"
 #include <memory>
 #include <functional>
@@ -17,7 +18,7 @@ class Canvas; //Forw. decl.
 
 class GObject : public PropertyHolder
 {
-    typedef std::function<void(const GObject*)> GobjectCallback;
+//    typedef std::function<void(const GObject*)> GobjectCallback;
 
 public:
     GObject(std::shared_ptr<GObject> parent = nullptr);
@@ -36,9 +37,9 @@ public:
 
     void forAllChildren(std::function<bool(GObject *)> action);
 
-    void onDestroy(GobjectCallback callback);
-    void onPreChange(GobjectCallback callback);
-    void onChange(GobjectCallback callback);
+    Event<const GObject*> &onDestroy();
+    Event<const GObject*> &onPreChange();
+    Event<const GObject*> &onChange();
 
     void remove();
     void removeChild(unsigned int id);
@@ -52,7 +53,6 @@ public:
 
     virtual QRectF boundingBox() const;
 
-
 protected:
     void changed();
     void preChange();
@@ -63,9 +63,12 @@ private:
     Canvas* m_canvas;
     int m_zorder;
     unsigned int m_id;
-    QList<GobjectCallback> m_onDestroyCallbacks;
-    QList<GobjectCallback> m_onPreChangeCallbacks;
-    QList<GobjectCallback> m_onChangeCallbacks;
+//    QList<GobjectCallback> m_onDestroyCallbacks;
+//    QList<GobjectCallback> m_onPreChangeCallbacks;
+//    QList<GobjectCallback> m_onChangeCallbacks;
+    Event<const GObject*> m_onDestroy;
+    Event<const GObject*> m_onPreChange;
+    Event<const GObject*> m_onChange;
 };
 }
 

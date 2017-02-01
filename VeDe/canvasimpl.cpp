@@ -23,7 +23,7 @@ CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
     :QGraphicsScene(parent), gx::Canvas(root, nullptr)
 {
     QColor white = QColor(255,255,255,255);
-    addRect(0,0,800,600,QPen(white), QBrush(white));
+    addRect(0,0,getWidth(),getHeight(),QPen(white), QBrush(white));
 //    addEllipse(100,100,600,400);
 }
 
@@ -39,7 +39,7 @@ void CanvasImpl::redraw()
 
 void CanvasImpl::redrawGui()
 {
-    invalidate(0,0,800,600,ForegroundLayer);
+    invalidate(0,0,getWidth(),getHeight(),ForegroundLayer);
 }
 
 gx::Vertex CanvasImpl::getCursor() const

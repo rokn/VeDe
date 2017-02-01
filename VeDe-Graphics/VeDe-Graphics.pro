@@ -71,7 +71,8 @@ HEADERS += \
     objects/path.h \
     tools/pathtool.h \
     converters.h \
-    helpers.h
+    helpers.h \
+    event.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

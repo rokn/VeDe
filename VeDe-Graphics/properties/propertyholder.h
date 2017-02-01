@@ -4,12 +4,12 @@
 #include <QMap>
 #include <QObject>
 #include "properties/property.h"
+#include "event.h"
 
 namespace gx
 {
 class PropertyHolder
 {
-    typedef std::function<void(PropertyHolder*, const QString&)> GobjectCallback;
 public:
     PropertyHolder(QObject* parent = 0);
     virtual ~PropertyHolder();
@@ -22,7 +22,6 @@ public:
 
 private:
     QMap<QString, Property*> m_properties;
-    QList<GobjectCallback> m_onChangeCallbacks;
 };
 }
 

@@ -1,5 +1,6 @@
 #include "basegraphicsitem.h"
 #include "converters.h"
+#include "objects/gobject.h"
 #include "canvas.h"
 #include "properties/propertynames.h"
 #include <QPainter>
@@ -9,14 +10,14 @@
 BaseGraphicsItem::BaseGraphicsItem(std::shared_ptr<gx::Shape> object)
     :m_object(object)
 {
-    m_object->onDestroy([this](const gx::GObject* o)
+    m_object->onDestroy() += [this](const gx::GObject* o)
     {
         this->scene()->removeItem(this);
-    });
+    };
 
-    m_object->onPreChange([this](const gx::GObject* o){
+    m_object->onPreChange() += [this](const gx::GObject* o){
         this->prepareGeometryChange();
-    });
+    };
 }
 
 QRectF BaseGraphicsItem::boundingRect() const
@@ -39,6 +40,8 @@ void BaseGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     painter->drawRect(boundingRect());
 #endif
 
+    painter->setClipping(true);
+    painter->setClipRect(QRectF(0,0,m_object->getCanvas()->getWidth(), m_object->getCanvas()->getHeight()));
     painter->setBrush(QBrush(gx::Converters::toQColor(m_object->getProp(gx::PROP::BACK_COLOR)->toColor())));
     QPen pen(gx::Converters::toQColor(m_object->getProp(gx::PROP::STROKE_COLOR)->toColor()));
     pen.setWidthF(m_object->getProp(gx::PROP::STROKE_WIDTH)->toFloat());
