@@ -5,6 +5,10 @@ CurrToolToolbar::CurrToolToolbar(gx::Canvas *canvas, QWidget *parent)
     :QToolBar(parent)
 {
 //    connect(canvas, SIGNAL(activeToolChanged(gx::Tool*)), this, SLOT(canvasToolChanged(gx::Tool*)));
+    canvas->onToolChanged() += [this](gx::Tool* t){
+        canvasToolChanged(t);
+    };
+
     m_nameLabel = new QLabel(this);
     setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     setFloatable(false);
