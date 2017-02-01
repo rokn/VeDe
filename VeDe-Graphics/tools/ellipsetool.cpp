@@ -1,4 +1,5 @@
 #include "ellipsetool.h"
+#include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h"
 #include <QtMath>
 
@@ -16,11 +17,10 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
 
     addState(placeCenter, STATE_DEF {
         m_ellipse = std::make_shared<Ellipse>();
-        m_ellipse->copyPropertiesFrom(*this);
-        m_ellipse->copyPropertiesFrom(*getCanvas());
-        m_ellipse->updateProperties();
         m_ellipse->setCenter(getCanvas()->getCursor());
         m_ellipse->setRadius(Vertex(0,0));
+        m_ellipse->setGuiElement(true);
+        PropertyFactory::setShapePreviewProperties(m_ellipse.get());
 
         gx::Command* command = new gx::AddGObjectCommand(m_ellipse, getCanvas());
         getCanvas()->executeCommand(command);
@@ -40,6 +40,11 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
 
     addState(finished, STATE_DEF {
         setRestricted(false);
+        m_ellipse->setGuiElement(false);
+        m_ellipse->copyPropertiesFrom(*this);
+        m_ellipse->copyPropertiesFrom(*getCanvas());
+        m_ellipse->updateProperties();
+        getCanvas()->redraw(m_ellipse->boundingBox());
         m_ellipse.reset();
         moveToStateSilent(start);
     });

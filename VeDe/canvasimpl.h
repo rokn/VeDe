@@ -23,7 +23,7 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     void redraw();
     void redrawGui();
-    void redraw(gx::Rectangle area);
+    void redraw(QRectF area);
     gx::Vertex getCursor() const;
     void onAddObject(std::shared_ptr<gx::GObject> object);
 

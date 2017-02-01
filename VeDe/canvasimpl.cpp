@@ -27,11 +27,9 @@ CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
 //    addEllipse(100,100,600,400);
 }
 
-void CanvasImpl::redraw(gx::Rectangle area)
+void CanvasImpl::redraw(QRectF area)
 {
-    QPointF tl = gx::Converters::toPoint(area.getTopLeft());
-    QPointF br = gx::Converters::toPoint(area.getBottomRight());
-    this->update(QRectF(tl,br));
+    this->update(area);
 }
 
 void CanvasImpl::redraw()

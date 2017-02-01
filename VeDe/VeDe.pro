@@ -8,6 +8,8 @@
 
 QT       += core gui
 
+DEFINES += DEBUG
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = VeDe

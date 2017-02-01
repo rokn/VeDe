@@ -1,4 +1,5 @@
 #include "linetool.h"
+#include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h" // TODO: remove
 #include <QtMath>
 
@@ -16,10 +17,8 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
     addState(startLine, STATE_DEF {
         m_line = std::make_shared<Line>();
-        m_line->setCanvas(getCanvas());
         m_line->setGuiElement(true);
-//        m_line->copyPropertiesFrom(*this);
-//        m_line->copyPropertiesFrom(*getCanvas());
+        PropertyFactory::setShapePreviewProperties(m_line.get());
         Vertex startPos = getCanvas()->getCursor();
         m_line->setStart(startPos);
         startPos.setX(startPos.x()+0.0001f);//Disable buggy division by zero
@@ -47,6 +46,7 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         m_line->copyPropertiesFrom(*this);
         m_line->copyPropertiesFrom(*getCanvas());
         m_line->updateProperties();
+        getCanvas()->redraw(m_line->boundingBox());
         m_line.reset();
         moveToStateSilent(start);
     });
@@ -64,10 +64,10 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
 void gx::LineTool::drawGui(gx::CustomPainter *painter) const
 {
-    if(m_line != nullptr)
-    {
-        painter->drawLine(m_line->start(), m_line->end());
-    }
+//    if(m_line != nullptr)
+//    {
+//        painter->drawLine(m_line->start(), m_line->end());
+//    }
 }
 
 void gx::LineTool::restrictPos(const gx::Vertex& p1, gx::Vertex &p2)

@@ -132,6 +132,7 @@ void gx::Canvas::handleTransition(const Transition &transition)
 void gx::Canvas::addToCurrLayer(std::shared_ptr<gx::GObject> object)
 {
     object->setId(m_idCount++);
+    object->setCanvas(this);
     m_currLayer->addChild(object, m_currLayer);
     onAddObject(object);
 }

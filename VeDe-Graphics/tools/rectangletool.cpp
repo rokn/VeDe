@@ -1,4 +1,5 @@
 #include "rectangletool.h"
+#include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h"
 #include <QtMath>
 
@@ -17,11 +18,9 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
     addState(placeFirstCorner, STATE_DEF {
         anchorPoint = getCanvas()->getCursor();
         m_rect = std::make_shared<Rectangle>();
-        m_rect->copyPropertiesFrom(*this);
-        m_rect->copyPropertiesFrom(*getCanvas());
-        m_rect->updateProperties();
         m_rect->setTopLeft(anchorPoint);
         m_rect->setBottomRight(anchorPoint);
+        PropertyFactory::setShapePreviewProperties(m_rect.get());
 
         gx::Command* command = new gx::AddGObjectCommand(m_rect, getCanvas());
         getCanvas()->executeCommand(command);
@@ -42,6 +41,10 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
 
     addState(finished, STATE_DEF {
         setRestricted(false);
+        m_rect->copyPropertiesFrom(*this);
+        m_rect->copyPropertiesFrom(*getCanvas());
+        m_rect->updateProperties();
+        getCanvas()->redraw(m_rect->boundingBox());
         m_rect.reset();
         moveToStateSilent(start);
     });

@@ -41,5 +41,7 @@ QRectF gx::Ellipse::boundingBox() const
     QRectF baseBox = GObject::boundingBox();
     QPointF center = Converters::toPoint(this->center());
     QPointF radii = Converters::toPoint(this->radius());
-    return baseBox.united(QRectF(center - radii, center + radii));
+    QRectF rect(center - radii, center + radii);
+    fixBoxForStrokeWidth(rect);
+    return baseBox.united(rect);
 }

@@ -9,6 +9,7 @@ namespace PropertyFactory
 {
     void addShapeProperties(PropertyHolder* propHolder);
     void addCanvasProperties(PropertyHolder* propHolder);
+    void setShapePreviewProperties(gx::PropertyHolder *propHolder);
 };
 }
 

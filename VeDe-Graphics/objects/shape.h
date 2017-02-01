@@ -14,8 +14,7 @@ public:
     void setGuiElement(bool guiElement);
 
 protected:
-    void paintSelf(CustomPainter& painter);
-
+    void fixBoxForStrokeWidth(QRectF& rect, float factor=0.5f) const;
 private:
     bool m_guiElement;
 };

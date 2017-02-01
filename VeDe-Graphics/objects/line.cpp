@@ -46,5 +46,7 @@ QRectF gx::Line::boundingBox() const
     tl.setY(qMin(p1.y(), p2.y()));
     dr.setX(qMax(p1.x(), p2.x()));
     dr.setY(qMax(p1.y(), p2.y()));
-    return baseBox.united(QRectF(tl,dr));
+    QRectF rect(tl,dr);
+    fixBoxForStrokeWidth(rect, .7f);
+    return baseBox.united(rect);
 }

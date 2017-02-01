@@ -9,6 +9,7 @@
 #include <memory>
 #include <QVector>
 #include <QEvent>
+#include <QRectF>
 
 namespace gx
 {
@@ -64,7 +65,7 @@ public:
      */
     virtual void redraw() = 0;
     virtual void redrawGui() = 0;
-    virtual void redraw(Rectangle area) = 0;
+    virtual void redraw(QRectF area) = 0;
 
     /**
      * @brief Adds an object to the current active layer

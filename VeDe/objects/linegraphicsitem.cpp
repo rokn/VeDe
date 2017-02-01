@@ -16,6 +16,6 @@ void LineGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     p1 = gx::Converters::toPoint(m_line->start());
     p2 = gx::Converters::toPoint(m_line->end());
     painter->drawLine(p1,p2);
-    painter->setBrush(QBrush(QColor(255,255,255,0)));
-    painter->drawRect(boundingRect());
+//    painter->setBrush(QBrush(QColor(255,255,255,0)));
+//    painter->drawRect(boundingRect());
 }

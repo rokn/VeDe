@@ -42,5 +42,7 @@ QRectF gx::Rectangle::boundingBox() const
     QPointF p1, p2;
     p1 = Converters::toPoint(getTopLeft());
     p2 = Converters::toPoint(getBottomRight());
-    return baseBox.united(QRectF(p1,p2));
+    QRectF rect(p1,p2);
+    fixBoxForStrokeWidth(rect);
+    return baseBox.united(rect);
 }

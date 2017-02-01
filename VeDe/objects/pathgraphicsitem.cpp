@@ -12,6 +12,6 @@ void PathGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 {
     BaseGraphicsItem::paint(painter,option,widget);
     painter->drawPath(m_path->drawnPath());
-    painter->setBrush(QBrush(QColor(255,255,255,0)));
-    painter->drawRect(boundingRect());
+//    painter->setBrush(QBrush(QColor(255,255,255,0)));
+//    painter->drawRect(boundingRect());
 }
