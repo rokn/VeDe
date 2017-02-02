@@ -36,6 +36,7 @@ void gx::Canvas::setZoomFactor(float zoomFactor)
 {
     m_zoomFactor = zoomFactor;
     m_zoomFactor = qMax(0.02f, m_zoomFactor);
+    m_onZoomChange(m_zoomFactor);
 }
 
 void gx::Canvas::onAddObject(std::shared_ptr<gx::GObject> object){}
@@ -58,6 +59,11 @@ void gx::Canvas::setHeight(float height)
 gx::Event<gx::Tool *>& gx::Canvas::onToolChanged()
 {
     return m_onToolChanged;
+}
+
+gx::Event<float>& gx::Canvas::onZoomChange()
+{
+    return m_onZoomChange;
 }
 
 float gx::Canvas::getWidth() const

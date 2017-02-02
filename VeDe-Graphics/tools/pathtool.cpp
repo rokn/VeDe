@@ -58,10 +58,8 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(moveControlPoint, STATE_DEF {
         if(m_path != nullptr) {
-            //qInfo() << moveControlPoint;
             Vertex point = getCanvas()->getCursor();
             m_path->changeLastControl(point);
-//            getCanvas()->redraw();
         } else {
             moveToStateSilent(start);
         }
@@ -69,7 +67,6 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(finishControlPoint, STATE_DEF {
         if(m_path != nullptr) {
-                //qInfo() << moveControlPoint;
               moveToState(startNewPoint, t);
         } else {
             moveToStateSilent(start);
@@ -78,10 +75,8 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(startNewPoint, STATE_DEF {
         if(m_path != nullptr) {
-            //qInfo() << startNewPoint;
             Vertex point = getCanvas()->getCursor();
             m_path->addPoint(point);
-//            getCanvas()->redraw();
             moveToStateSilent(moveNewPoint);
         } else {
             moveToStateSilent(start);
@@ -90,10 +85,8 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(moveNewPoint, STATE_DEF {
         if(m_path != nullptr) {
-            //qInfo() << moveNewPoint;
             Vertex point = getCanvas()->getCursor();
             m_path->changeLastPoint(point);
-//            getCanvas()->redraw();
         } else {
             moveToStateSilent(start);
         }
@@ -101,8 +94,6 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(setNewPoint, STATE_DEF {
         if(m_path != nullptr) {
-            //qInfo() << setNewPoint;
-//              moveToState(startNewPoint, t);
         } else {
             moveToStateSilent(start);
         }
@@ -110,7 +101,6 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(removeNewPoint, STATE_DEF {
         if(m_path != nullptr) {
-            //qInfo() << removeNewPoint;
             m_path->removeLastPoint();
             moveToState(finish, t);
         } else {

@@ -2,6 +2,7 @@
 #include "converters.h"
 #include <QPainter>
 #include <QGraphicsScene>
+#include <QDebug>
 
 EllipseGraphicsItem::EllipseGraphicsItem(std::shared_ptr<gx::Ellipse> ellipse)
     :BaseGraphicsItem(ellipse), m_ellipse(ellipse)

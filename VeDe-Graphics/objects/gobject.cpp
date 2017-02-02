@@ -12,6 +12,7 @@ gx::GObject::GObject(std::shared_ptr<gx::GObject> parent)
         parent->addChild(this, parent);
     }
     m_canvas = nullptr;
+    m_selected = false;
 }
 
 gx::GObject::~GObject()
@@ -165,6 +166,16 @@ void gx::GObject::changed()
 void gx::GObject::preChange()
 {
     m_onPreChange(this);
+}
+
+bool gx::GObject::isSelected() const
+{
+    return m_selected;
+}
+
+void gx::GObject::setSelected(bool selected)
+{
+    m_selected = selected;
 }
 
 unsigned int gx::GObject::getId() const

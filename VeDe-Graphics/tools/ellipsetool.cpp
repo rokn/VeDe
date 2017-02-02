@@ -19,11 +19,12 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
         m_ellipse = std::make_shared<Ellipse>();
         m_ellipse->setCenter(getCanvas()->getCursor());
         m_ellipse->setRadius(Vertex(0,0));
-        m_ellipse->setGuiElement(true);
         PropertyFactory::setShapePreviewProperties(m_ellipse.get());
 
         gx::Command* command = new gx::AddGObjectCommand(m_ellipse, getCanvas());
         getCanvas()->executeCommand(command);
+
+        m_ellipse->setGuiElement(true);
         moveToStateSilent(wait);
     });
 

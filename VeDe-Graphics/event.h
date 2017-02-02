@@ -1,8 +1,9 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <QList>
+#include <QMap>
 #include <functional>
+#include "common.h"
 
 namespace gx
 {
@@ -11,11 +12,19 @@ class Event
 {
     typedef std::function<void(T)> Callback;
 public:
-    Event(){}
+
+    Event():m_idCounter(0){}
     Event& operator +=(const Callback& callback)
     {
-        m_callbacks.append(callback);
+        m_lastAdded = m_idCounter;
+        m_callbacks.insert(m_idCounter++, callback);
         return *this;
+    }
+
+    uint addListener(const Callback& callback)
+    {
+        *this += callback;
+        return lastAdded();
     }
 
     void clearCallbacks()
@@ -25,14 +34,24 @@ public:
 
     void operator ()(T arg)
     {
-        foreach (Callback cb, m_callbacks) {
+        foreach (Callback cb, m_callbacks.values()) {
             cb(arg);
         }
     }
 
+    Event& operator -=(const uint& handlerId){
+        m_callbacks.remove(handlerId);
+    }
+
+
+    uint lastAdded() const{
+        return m_lastAdded;
+    }
 
 private:
-    QList<Callback> m_callbacks;
+    uint m_idCounter;
+    uint m_lastAdded;
+    QMap<uint, Callback> m_callbacks;
 };
 }
 

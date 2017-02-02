@@ -50,18 +50,27 @@ gx::Vertex CanvasImpl::getCursor() const
 void CanvasImpl::onAddObject(std::shared_ptr<gx::GObject> object)
 {
     //Factory
+    QGraphicsItem* item;
     if(std::dynamic_pointer_cast<gx::Ellipse>(object) != nullptr) {
-        addItem(new EllipseGraphicsItem(std::dynamic_pointer_cast<gx::Ellipse>(object)));
+        item = new EllipseGraphicsItem(std::dynamic_pointer_cast<gx::Ellipse>(object));
     }
     else if(std::dynamic_pointer_cast<gx::Rectangle>(object) != nullptr) {
-        addItem(new RectGraphicsItem(std::dynamic_pointer_cast<gx::Rectangle>(object)));
+        item = new RectGraphicsItem(std::dynamic_pointer_cast<gx::Rectangle>(object));
     }
     else if(std::dynamic_pointer_cast<gx::Line>(object) != nullptr) {
-        addItem(new LineGraphicsItem(std::dynamic_pointer_cast<gx::Line>(object)));
+        item = new LineGraphicsItem(std::dynamic_pointer_cast<gx::Line>(object));
     }
     else if(std::dynamic_pointer_cast<gx::Path>(object) != nullptr) {
-        addItem(new PathGraphicsItem(std::dynamic_pointer_cast<gx::Path>(object)));
+        item = new PathGraphicsItem(std::dynamic_pointer_cast<gx::Path>(object));
     }
+
+    addItem(item);
+
+    object->onDestroy() += [=](const gx::GObject* o)
+    {
+        this->removeItem(item);
+        delete item;
+    };
 }
 
 void CanvasImpl::drawForeground(QPainter *painter, const QRectF &rect)

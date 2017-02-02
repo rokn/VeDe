@@ -53,6 +53,9 @@ public:
 
     virtual QRectF boundingBox() const;
 
+    bool isSelected() const;
+    void setSelected(bool selected);
+
 protected:
     void changed();
     void preChange();
@@ -63,6 +66,7 @@ private:
     Canvas* m_canvas;
     int m_zorder;
     unsigned int m_id;
+    bool m_selected;
 //    QList<GobjectCallback> m_onDestroyCallbacks;
 //    QList<GobjectCallback> m_onPreChangeCallbacks;
 //    QList<GobjectCallback> m_onChangeCallbacks;
