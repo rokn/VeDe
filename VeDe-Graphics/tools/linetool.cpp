@@ -50,9 +50,9 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         moveToStateSilent(start);
     });
 
-    addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), startLine);
-    addTransition(moveEnd, Transition(MOUSE_MOVE), moveEnd);
-    addTransition(moveEnd, Transition(MOUSE_RELEASE, Qt::LeftButton), finished);
+    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), startLine);
+    addTransition(moveEnd, UserEvent(MOUSE_MOVE), moveEnd);
+    addTransition(moveEnd, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finished);
 
     setUpRestriction(STATE_DEF{
         if(m_line != nullptr){

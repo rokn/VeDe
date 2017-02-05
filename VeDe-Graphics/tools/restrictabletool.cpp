@@ -33,6 +33,6 @@ void gx::RestrictableTool::setUpRestriction(gx::Tool::ToolStateCallBack onChange
         moveToStateSilent(getLastState());
     });
 
-    addTransition(ANY_STATE, Transition(KEY_PRESS, Qt::Key_Shift), restrictState);
-    addTransition(ANY_STATE, Transition(KEY_RELEASE, Qt::Key_Shift), unRestrictState);
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Shift), restrictState);
+    addTransition(ANY_STATE, UserEvent(KEY_RELEASE, Qt::Key_Shift), unRestrictState);
 }

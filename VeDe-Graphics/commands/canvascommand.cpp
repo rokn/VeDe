@@ -1,9 +1,5 @@
 #include "canvascommand.h"
 
-gx::CanvasCommand::CanvasCommand()
-{
-}
-
 gx::CanvasCommand::CanvasCommand(gx::Canvas *canvas)
     :m_canvas(canvas)
 {

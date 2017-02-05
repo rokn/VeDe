@@ -1,5 +1,6 @@
 #include "selecttool.h"
 #include "converters.h"
+#include "commands/selectcommand.h"
 #include "color.h"
 #include <QtMath>
 
@@ -11,7 +12,10 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     QString selectStart = "Started selection";
     QString moveSelect = "Move selection";
     QString endSelect = "Ending selection";
+    QString unionEnable = "Union enable";
+    QString unionDisable = "Union disable";
     m_selecting = false;
+    m_union = false;
 
     addState(start, EMPTY_STATE);
     addState(selectStart, STATE_DEF{
@@ -35,12 +39,25 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     addState(endSelect, STATE_DEF{
         moveToStateSilent(start);
         m_selecting = false;
+        selectObjects(m_selection);
         getCanvas()->redraw(m_selection);
     });
 
-    addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), selectStart);
-    addTransition(moveSelect, Transition(MOUSE_MOVE), moveSelect);
-    addTransition(moveSelect, Transition(MOUSE_RELEASE, Qt::LeftButton), endSelect);
+    addState(unionEnable, STATE_DEF{
+        m_union = true;
+        moveToStateSilent(getLastState());
+    });
+
+    addState(unionDisable, STATE_DEF{
+        m_union = false;
+        moveToStateSilent(getLastState());
+    });
+
+    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), selectStart);
+    addTransition(moveSelect, UserEvent(MOUSE_MOVE), moveSelect);
+    addTransition(moveSelect, UserEvent(MOUSE_RELEASE, Qt::LeftButton), endSelect);
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Shift), unionEnable);
+    addTransition(ANY_STATE, UserEvent(KEY_RELEASE, Qt::Key_Shift), unionDisable);
 
     moveToStateSilent(start);
 }
@@ -55,4 +72,24 @@ void gx::SelectTool::drawGui(CustomPainter &painter) const
         painter.drawRectangle(m_selection.topLeft().x(), m_selection.topLeft().y(),
                                m_selection.bottomRight().x(), m_selection.bottomRight().y());
     }
+}
+
+void gx::SelectTool::selectObjects(QRectF rect)
+{
+    if(!m_union){
+        getCanvas()->clearSelectedObjects();
+    }
+
+    auto currLayerObjects = getCanvas()->getCurrLayer()->getChildren();
+    QRectF redrawBox;
+    QList<std::shared_ptr<GObject>> selectedObjects;
+
+    foreach (auto& obj, currLayerObjects) {
+        if(obj->boundingBox().intersects(rect)) {
+            selectedObjects.append(obj);
+        }
+    }
+
+    Command* command = new SelectCommand(selectedObjects, getCanvas());
+    getCanvas()->executeCommand(command);
 }

@@ -2,21 +2,20 @@
 #define GUIDRAWER_H
 
 #include <QGraphicsItem>
-#include "tools/tool.h"
+#include "canvas.h"
 
 class GUIDrawer : public QGraphicsItem
 {
 public:
     GUIDrawer();
-    void setTool(gx::Tool *tool);
-    gx::Tool *getTool() const;
+    void setCanvas(gx::Canvas *canvas);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
 
 
 private:
-    gx::Tool* m_tool;
+    gx::Canvas* m_canvas;
 };
 
 #endif // GUIDRAWER_H

@@ -50,9 +50,9 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
     });
 
 
-    addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), placeCenter);
-    addTransition(moveRadiiState, Transition(MOUSE_MOVE), moveRadiiState);
-    addTransition(moveRadiiState, Transition(MOUSE_RELEASE, Qt::LeftButton), finished);
+    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), placeCenter);
+    addTransition(moveRadiiState, UserEvent(MOUSE_MOVE), moveRadiiState);
+    addTransition(moveRadiiState, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finished);
 
     setUpRestriction(STATE_DEF{
         if(m_ellipse != nullptr){

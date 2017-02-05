@@ -124,17 +124,17 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
         moveToStateSilent(start);
     });
 
-    addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), addStartPoint);
-    addTransition(addStartPoint, Transition(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
-    addTransition(addStartPoint, Transition(MOUSE_MOVE), addControlPoint);
-    addTransition(moveControlPoint, Transition(MOUSE_MOVE), moveControlPoint);
-    addTransition(moveControlPoint, Transition(MOUSE_RELEASE, Qt::LeftButton), finishControlPoint);
-    addTransition(moveControlPoint, Transition(MOUSE_PRESS, Qt::RightButton), finish);
-    addTransition(moveNewPoint, Transition(MOUSE_PRESS, Qt::LeftButton), setNewPoint);
-    addTransition(moveNewPoint, Transition(MOUSE_MOVE), moveNewPoint);
-    addTransition(moveNewPoint, Transition(MOUSE_PRESS, Qt::RightButton), removeNewPoint);
-    addTransition(setNewPoint, Transition(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
-    addTransition(setNewPoint, Transition(MOUSE_MOVE), addControlPoint);
+    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), addStartPoint);
+    addTransition(addStartPoint, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
+    addTransition(addStartPoint, UserEvent(MOUSE_MOVE), addControlPoint);
+    addTransition(moveControlPoint, UserEvent(MOUSE_MOVE), moveControlPoint);
+    addTransition(moveControlPoint, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishControlPoint);
+    addTransition(moveControlPoint, UserEvent(MOUSE_PRESS, Qt::RightButton), finish);
+    addTransition(moveNewPoint, UserEvent(MOUSE_PRESS, Qt::LeftButton), setNewPoint);
+    addTransition(moveNewPoint, UserEvent(MOUSE_MOVE), moveNewPoint);
+    addTransition(moveNewPoint, UserEvent(MOUSE_PRESS, Qt::RightButton), removeNewPoint);
+    addTransition(setNewPoint, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
+    addTransition(setNewPoint, UserEvent(MOUSE_MOVE), addControlPoint);
 
 //    setUpRestriction(, STATE_DEF{
 //        moveEndPoint();

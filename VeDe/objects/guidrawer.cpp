@@ -1,5 +1,6 @@
 #include "guidrawer.h"
 #include "qtcustompainter.h"
+#include "tools/tool.h"
 #include <QGraphicsScene>
 #include <limits>
 
@@ -8,14 +9,9 @@ GUIDrawer::GUIDrawer()
     setZValue(std::numeric_limits<double>::max());
 }
 
-void GUIDrawer::setTool(gx::Tool *tool)
+void GUIDrawer::setCanvas(gx::Canvas *canvas)
 {
-    m_tool = tool;
-}
-
-gx::Tool *GUIDrawer::getTool() const
-{
-    return m_tool;
+    m_canvas = canvas;
 }
 
 QRectF GUIDrawer::boundingRect() const
@@ -27,8 +23,23 @@ void GUIDrawer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     QtCustomPainter customPainter(painter);
 
-    if(m_tool != nullptr)
+    if(m_canvas != nullptr)
     {
-        m_tool->drawGui(customPainter);
+        m_canvas->getCurrTool()->drawGui(customPainter);
+        auto selectedObjects = m_canvas->getSelectedObjects();
+
+        if(selectedObjects.size() > 0)
+        {
+            painter->setBrush(QBrush(Qt::transparent));
+            QPen selectPen(Qt::black);
+            selectPen.setStyle(Qt::DashLine);
+            selectPen.setWidthF(1 / m_canvas->getZoomFactor());
+            painter->setPen(selectPen);
+
+            foreach(auto& obj, selectedObjects) {
+                painter->drawRect(obj->boundingBox());
+            }
+
+        }
     }
 }

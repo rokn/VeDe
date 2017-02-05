@@ -8,21 +8,21 @@
 #include <functional>
 #include "canvas.h"
 #include "custompainter.h"
-#include "transition.h"
+#include "userevent.h"
 #include "properties/propertyholder.h"
 
 namespace gx
 {
 class Tool : public PropertyHolder
 {
-    #define EMPTY_STATE [](const Transition&){}
-    #define STATE_DEF [=](const Transition& t)
-    #define STATE_DEF_NO_CAP (const Transition& t)
+    #define EMPTY_STATE [](const UserEvent&){}
+    #define STATE_DEF [=](const UserEvent& t)
+    #define STATE_DEF_NO_CAP (const UserEvent& t)
     #define ANY_STATE "ANY_STATE"
 
 
 protected:
-    typedef std::function<void(const Transition&)> ToolStateCallBack;
+    typedef std::function<void(const UserEvent&)> ToolStateCallBack;
 //    typedef unsigned int uint;
 
     //Struct/class declarations
@@ -31,17 +31,17 @@ private:
     {
         ToolStateCallBack callback;
         QString name;
-        QMap<Transition, QString> transitions;
+        QMap<UserEvent, QString> transitions;
     }ToolState;
 
 public:
     Tool(Canvas* canvas);
-    void handleEvent(const Transition& transition);
+    void handleEvent(const UserEvent& transition);
     Canvas *getCanvas();
     const Canvas *getCanvas() const;
     const QString& getCurrStateName() const;
     QVector<QString> getAllStateNames() const;
-    void moveToState(const QString &stateName, Transition transition);
+    void moveToState(const QString &stateName, UserEvent transition);
     void moveToStateSilent(const QString &stateName);
 
     bool isActive() const;
@@ -56,11 +56,11 @@ public:
 
 protected:
     void addState(const QString &name, ToolStateCallBack callBack);
-    void addTransition(const QString &transitionFrom, Transition transition, const QString &transitionTo);
+    void addTransition(const QString &transitionFrom, UserEvent transition, const QString &transitionTo);
 
 private:
     QMap<QString, ToolState> m_states;
-    QMap<Transition, QString> m_globalTransitions;
+    QMap<UserEvent, QString> m_globalTransitions;
     QString m_currState;
     QString m_name;
     QString m_lastState;

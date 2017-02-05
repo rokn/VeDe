@@ -31,7 +31,6 @@ SOURCES += \
     tools/ellipsetool.cpp \
     objects/rectangle.cpp \
     tools/rectangletool.cpp \
-    tools/transition.cpp \
     tools/restrictabletool.cpp \
     objects/shape.cpp \
     properties/propertyholder.cpp \
@@ -41,7 +40,9 @@ SOURCES += \
     tools/pathtool.cpp \
     converters.cpp \
     helpers.cpp \
-    tools/selecttool.cpp
+    tools/selecttool.cpp \
+    tools/userevent.cpp \
+    commands/selectcommand.cpp
 
 HEADERS += \
     vertex.h \
@@ -61,7 +62,6 @@ HEADERS += \
     tools/ellipsetool.h \
     objects/rectangle.h \
     tools/rectangletool.h \
-    tools/transition.h \
     tools/restrictabletool.h \
     graphics_exceptions.h \
     objects/shape.h \
@@ -69,14 +69,16 @@ HEADERS += \
     properties/propertyfactory.h \
     properties/propertynames.h \
     tools/shapetool.h \
-    tools/transitiontype.h \
     objects/path.h \
     tools/pathtool.h \
     converters.h \
     helpers.h \
     event.h \
     common.h \
-    tools/selecttool.h
+    tools/selecttool.h \
+    tools/userevent.h \
+    tools/usereventtype.h \
+    commands/selectcommand.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

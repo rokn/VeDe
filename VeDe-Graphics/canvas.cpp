@@ -1,6 +1,7 @@
 #include "canvas.h"
 #include "properties/propertyfactory.h"
 #include "tools/tool.h"
+#include "commands/selectcommand.h"
 #include <QtMath>
 #include <memory>
 
@@ -12,7 +13,9 @@ gx::Canvas::Canvas(std::shared_ptr<GObject> root, QObject *parent)
         m_currLayer = std::shared_ptr<Layer>(new Layer);
         m_root->addChild(m_currLayer, m_root);
         m_root->setId(m_idCount++);
+        m_root->setCanvas(this);
         m_currLayer->setId(m_idCount++);
+        m_currLayer->setCanvas(this);
     } else {
         //Find layer from root
     }
@@ -79,6 +82,31 @@ void gx::Canvas::lock()
 void gx::Canvas::unlock()
 {
     m_locked = false;
+}
+
+QList<std::shared_ptr<gx::GObject> > gx::Canvas::getSelectedObjects()
+{
+    return m_selectedObjects;
+}
+
+void gx::Canvas::clearSelectedObjects()
+{
+    if(m_selectedObjects.size() <= 0) return;
+
+    Command* deselectCommand = new SelectCommand(m_selectedObjects, this, false);
+    executeCommand(deselectCommand);
+}
+
+void gx::Canvas::selectObject(std::shared_ptr<gx::GObject> obj)
+{
+    obj->setSelected(true);
+    m_selectedObjects.append(obj);
+}
+
+void gx::Canvas::deselectObject(std::shared_ptr<gx::GObject> obj)
+{
+    obj->setSelected(false);
+    m_selectedObjects.removeOne(obj);
 }
 
 float gx::Canvas::getWidth() const
@@ -174,7 +202,7 @@ int gx::Canvas::redoCommand()
     return result;
 }
 
-void gx::Canvas::handleTransition(const Transition &transition)
+void gx::Canvas::handleTransition(const UserEvent &transition)
 {
     if(m_currTool != nullptr)
     {

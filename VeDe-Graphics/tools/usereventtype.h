@@ -1,9 +1,9 @@
-#ifndef TRANSITIONTYPE_H
-#define TRANSITIONTYPE_H
+#ifndef USEREVENTTYPE_H
+#define USEREVENTTYPE_H
 
 namespace gx
 {
-    enum TransitionType{
+    enum UserEventType{
         MOUSE_MOVE,
         MOUSE_PRESS,
         MOUSE_RELEASE,
@@ -13,4 +13,4 @@ namespace gx
 }
 
 
-#endif // TRANSITIONTYPE_H
+#endif // USEREVENTTYPE_H

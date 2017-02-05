@@ -6,7 +6,7 @@ gx::Tool::Tool(gx::Canvas *canvas)
 {
 }
 
-void gx::Tool::handleEvent(const Transition& transition)
+void gx::Tool::handleEvent(const UserEvent& transition)
 {
     auto state = m_states.find(m_currState);
     if(state == m_states.end()) return;
@@ -66,7 +66,7 @@ QVector<QString> gx::Tool::getAllStateNames() const
     return stateNames;
 }
 
-void gx::Tool::moveToState(const QString &stateName, Transition transition) {
+void gx::Tool::moveToState(const QString &stateName, UserEvent transition) {
     m_currState = stateName;
     m_states.find(m_currState)->callback(transition);
 }
@@ -86,7 +86,7 @@ void gx::Tool::addState(const QString& name, ToolStateCallBack callBack)
     m_states.insert(name, state);
 }
 
-void gx::Tool::addTransition(const QString& transitionFrom, Transition transition, const QString& transitionTo)
+void gx::Tool::addTransition(const QString& transitionFrom, UserEvent transition, const QString& transitionTo)
 {
     if(transitionFrom == ANY_STATE)
     {

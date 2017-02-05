@@ -1,7 +1,7 @@
 #include "canvasimpl.h"
 #include "converters.h"
 #include "qtcustompainter.h"
-#include "tools/transitiontype.h"
+#include "tools/usereventtype.h"
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -24,12 +24,9 @@ CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
 {
     addRect(0, 0, getWidth(),getHeight(),QPen(Qt::black, 1), QBrush(Qt::white));
     GUIDrawer *guiDrawer = new GUIDrawer();
+    guiDrawer->setCanvas(this);
 
     addItem(guiDrawer);
-
-    onToolChanged() += [=](gx::Tool* t){
-        guiDrawer->setTool(t);
-    };
 }
 
 void CanvasImpl::redraw(QRectF area)
@@ -141,7 +138,7 @@ void CanvasImpl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 //    grabMouse();
     m_mousePos.setX(event->scenePos().x());
     m_mousePos.setY(event->scenePos().y());
-    gx::Transition transition(gx::MOUSE_MOVE, event->button());
+    gx::UserEvent transition(gx::MOUSE_MOVE, event->button());
     handleTransition(transition);
     event->accept();
 }
@@ -151,7 +148,7 @@ void CanvasImpl::mousePressEvent(QGraphicsSceneMouseEvent *event)
 //    setFocus(Qt::OtherFocusReason);
     m_mousePos.setX(event->scenePos().x());
     m_mousePos.setY(event->scenePos().y());
-    gx::Transition transition(gx::MOUSE_PRESS, event->button());
+    gx::UserEvent transition(gx::MOUSE_PRESS, event->button());
     handleTransition(transition);
     event->accept();
 }
@@ -160,7 +157,7 @@ void CanvasImpl::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     m_mousePos.setX(event->scenePos().x());
     m_mousePos.setY(event->scenePos().y());
-    gx::Transition transition(gx::MOUSE_RELEASE, event->button());
+    gx::UserEvent transition(gx::MOUSE_RELEASE, event->button());
     handleTransition(transition);
 }
 
@@ -172,7 +169,7 @@ void CanvasImpl::keyPressEvent(QKeyEvent *event)
         m_modifierKeys[transformToMod(key)] = true;
     }
 
-    gx::Transition transition(gx::KEY_PRESS, key);
+    gx::UserEvent transition(gx::KEY_PRESS, key);
     handleTransition(transition);
 }
 
@@ -190,7 +187,7 @@ void CanvasImpl::keyReleaseEvent(QKeyEvent *event)
         }
     }
 
-    gx::Transition transition(gx::KEY_RELEASE, key);
+    gx::UserEvent transition(gx::KEY_RELEASE, key);
     handleTransition(transition);
 }
 

@@ -145,7 +145,8 @@ void Workspace::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
 
-    if(event->button() == Qt::MiddleButton)
+    if(event->button() == Qt::MiddleButton ||
+            (event->button() == Qt::LeftButton && event->modifiers() & Qt::ControlModifier))
     {
         m_pan = true;
         m_panStart = QPoint(event->x(), event->y());
@@ -161,7 +162,8 @@ void Workspace::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent(event);
 
-    if(event->button() == Qt::MiddleButton)
+    if(event->button() == Qt::MiddleButton ||
+            (event->button() == Qt::LeftButton && !(QApplication::mouseButtons() & Qt::MiddleButton)))
     {
         m_pan = false;
         setCursor(Qt::ArrowCursor);

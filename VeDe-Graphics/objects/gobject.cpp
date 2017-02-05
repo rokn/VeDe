@@ -112,6 +112,9 @@ void gx::GObject::removeChild(unsigned int id)
         if((*childIt)->getId() == id) {
             (*childIt)->m_onDestroy((*childIt).get());
             (*childIt)->m_onDestroy.clearCallbacks();
+            if((*childIt)->isSelected()){
+                getCanvas()->deselectObject(*childIt);
+            }
 
             childIt->reset();
             m_children.erase(childIt);
@@ -124,7 +127,7 @@ void gx::GObject::removeChild(unsigned int id)
 
 void gx::GObject::removeAllChildren()
 {
-    m_children.erase(m_children.begin(), m_children.end());
+    m_children.erase(m_children.begin(), m_children.end()); // TODO: Connect to removeChild function
 }
 
 gx::Canvas *gx::GObject::getCanvas() const

@@ -1,31 +1,31 @@
-#include "transition.h"
+#include "userevent.h"
 
-gx::Transition::Transition(TransitionType eventType)
+gx::UserEvent::UserEvent(UserEventType eventType)
     :m_eventType(eventType), m_key(Qt::Key_Escape), m_mouseButton(Qt::NoButton)
 {
 }
 
-gx::Transition::Transition(TransitionType eventType, Qt::Key key)
+gx::UserEvent::UserEvent(UserEventType eventType, Qt::Key key)
     :m_eventType(eventType), m_key(key), m_mouseButton(Qt::NoButton)
 {
 }
 
-gx::Transition::Transition(TransitionType eventType, Qt::MouseButton button)
+gx::UserEvent::UserEvent(UserEventType eventType, Qt::MouseButton button)
     :m_eventType(eventType), m_key(Qt::Key_Escape), m_mouseButton(button)
 {
 }
 
-Qt::Key gx::Transition::key() const
+Qt::Key gx::UserEvent::key() const
 {
     return m_key;
 }
 
-Qt::MouseButton gx::Transition::mouseButton() const
+Qt::MouseButton gx::UserEvent::mouseButton() const
 {
     return m_mouseButton;
 }
 
-bool gx::Transition::operator ==(const gx::Transition &other) const
+bool gx::UserEvent::operator ==(const gx::UserEvent &other) const
 {
     bool equal = false;
     equal &= this->m_eventType == other.m_eventType;
@@ -34,12 +34,12 @@ bool gx::Transition::operator ==(const gx::Transition &other) const
     return equal;
 }
 
-bool gx::Transition::operator !=(const gx::Transition &other) const
+bool gx::UserEvent::operator !=(const gx::UserEvent &other) const
 {
     return !(*this == other);
 }
 
-bool gx::Transition::operator <(const gx::Transition &other) const
+bool gx::UserEvent::operator <(const gx::UserEvent &other) const
 {
     if(*this != other)
     {
@@ -60,7 +60,7 @@ bool gx::Transition::operator <(const gx::Transition &other) const
     return false;
 }
 
-gx::TransitionType gx::Transition::eventType() const
+gx::UserEventType gx::UserEvent::eventType() const
 {
     return m_eventType;
 }

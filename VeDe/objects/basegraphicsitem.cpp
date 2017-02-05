@@ -24,14 +24,6 @@ QRectF BaseGraphicsItem::boundingRect() const
 
 void BaseGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(m_object->isSelected()) {
-        painter->setBrush(QBrush(Qt::transparent));
-        QPen selectPen(Qt::black);
-        selectPen.setStyle(Qt::DashLine);
-        selectPen.setWidthF(1 / m_object->getCanvas()->getZoomFactor());
-        painter->setPen(selectPen);
-        painter->drawRect(boundingRect());
-    }
 
     if(!m_object->isGuiElement())
     {

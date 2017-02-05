@@ -9,8 +9,7 @@ namespace gx
 class CanvasCommand : public Command
 {
 public:
-    CanvasCommand();
-    CanvasCommand(Canvas* canvas);
+    CanvasCommand(Canvas* canvas = nullptr);
 
     Canvas *getCanvas() const;
     void setCanvas(Canvas *canvas);
