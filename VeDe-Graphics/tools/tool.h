@@ -3,7 +3,7 @@
 
 #include <QMap>
 #include <QString>
-#include <QVector>
+#include <QList>
 #include <QEvent>
 #include <functional>
 #include "canvas.h"
@@ -18,6 +18,7 @@ class Tool : public PropertyHolder
     #define EMPTY_STATE [](const Transition&){}
     #define STATE_DEF [=](const Transition& t)
     #define STATE_DEF_NO_CAP (const Transition& t)
+    #define ANY_STATE "ANY_STATE"
 
 
 protected:
@@ -36,7 +37,8 @@ private:
 public:
     Tool(Canvas* canvas);
     void handleEvent(const Transition& transition);
-    Canvas* getCanvas();
+    Canvas *getCanvas();
+    const Canvas *getCanvas() const;
     const QString& getCurrStateName() const;
     QVector<QString> getAllStateNames() const;
     void moveToState(const QString &stateName, Transition transition);
@@ -46,9 +48,11 @@ public:
     void setActive(bool active);
     void switchTo();
 
-    QString getName() const;
+    const QString &getName() const;
     void setName(const QString &name);
-    virtual void drawGui(CustomPainter* painter) const;
+    virtual void drawGui(CustomPainter &painter) const;
+
+    const QString& getLastState() const;
 
 protected:
     void addState(const QString &name, ToolStateCallBack callBack);
@@ -56,8 +60,10 @@ protected:
 
 private:
     QMap<QString, ToolState> m_states;
+    QMap<Transition, QString> m_globalTransitions;
     QString m_currState;
     QString m_name;
+    QString m_lastState;
     Canvas* m_canvas;
     bool m_active;
 };

@@ -16,7 +16,7 @@ void gx::RestrictableTool::setRestricted(bool restricted)
     m_restricted = restricted;
 }
 
-void gx::RestrictableTool::setUpRestriction(const QString &from, gx::Tool::ToolStateCallBack onChange)
+void gx::RestrictableTool::setUpRestriction(gx::Tool::ToolStateCallBack onChange)
 {
     QString restrictState = "Restrict";
     QString unRestrictState = "UnRestrict";
@@ -24,15 +24,15 @@ void gx::RestrictableTool::setUpRestriction(const QString &from, gx::Tool::ToolS
     addState(restrictState, STATE_DEF{
         m_restricted = true;
         onChange(t);
-        moveToStateSilent(from);
+        moveToStateSilent(getLastState());
     });
 
     addState(unRestrictState, STATE_DEF{
         m_restricted = false;
         onChange(t);
-        moveToStateSilent(from);
+        moveToStateSilent(getLastState());
     });
 
-    addTransition(from, Transition(KEY_PRESS, Qt::Key_Shift), restrictState);
-    addTransition(from, Transition(KEY_RELEASE, Qt::Key_Shift), unRestrictState);
+    addTransition(ANY_STATE, Transition(KEY_PRESS, Qt::Key_Shift), restrictState);
+    addTransition(ANY_STATE, Transition(KEY_RELEASE, Qt::Key_Shift), unRestrictState);
 }

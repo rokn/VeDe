@@ -12,7 +12,7 @@ public:
 protected:
     bool isRestricted() const;
     void setRestricted(bool restricted);
-    void setUpRestriction(const QString& from, Tool::ToolStateCallBack onChange);
+    void setUpRestriction(gx::Tool::ToolStateCallBack onChange);
 
 private:
     bool m_restricted;

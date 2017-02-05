@@ -10,17 +10,36 @@ void gx::Tool::handleEvent(const Transition& transition)
 {
     auto state = m_states.find(m_currState);
     if(state == m_states.end()) return;
+    bool changed = false;
+    QString newState;
 
     auto transitions = state->transitions;
 
     if(transitions.contains(transition))
     {
-        m_currState = transitions.value(transition);
+        newState = transitions.value(transition);
+        changed = true;
+    }
+    else if(m_globalTransitions.contains(transition))
+    {
+        newState = m_globalTransitions.value(transition);
+        changed = true;
+    }
+
+    if(changed)
+    {
+        m_lastState = m_currState;
+        m_currState = newState;
         m_states.find(m_currState)->callback(transition);
     }
 }
 
 gx::Canvas *gx::Tool::getCanvas()
+{
+    return m_canvas;
+}
+
+const gx::Canvas *gx::Tool::getCanvas() const
 {
     return m_canvas;
 }
@@ -54,11 +73,7 @@ void gx::Tool::moveToState(const QString &stateName, Transition transition) {
 
 void gx::Tool::moveToStateSilent(const QString &stateName)
 {
-     //TODO: See if necessary
-//    if(m_states.find(stateName) != m_states.end())
-//    {
-        m_currState = stateName;
-//    }
+    m_currState = stateName;
 }
 
 
@@ -73,6 +88,12 @@ void gx::Tool::addState(const QString& name, ToolStateCallBack callBack)
 
 void gx::Tool::addTransition(const QString& transitionFrom, Transition transition, const QString& transitionTo)
 {
+    if(transitionFrom == ANY_STATE)
+    {
+        m_globalTransitions.insert(transition, transitionTo);
+        return;
+    }
+
     auto state = m_states.find(transitionFrom);
 
     if(state != m_states.end())
@@ -81,7 +102,12 @@ void gx::Tool::addTransition(const QString& transitionFrom, Transition transitio
     }
 }
 
-QString gx::Tool::getName() const
+const QString& gx::Tool::getLastState() const
+{
+    return m_lastState;
+}
+
+const QString& gx::Tool::getName() const
 {
     return m_name;
 }
@@ -91,7 +117,7 @@ void gx::Tool::setName(const QString &name)
     m_name = name;
 }
 
-void gx::Tool::drawGui(gx::CustomPainter *painter) const
+void gx::Tool::drawGui(gx::CustomPainter &painter) const
 {
 }
 

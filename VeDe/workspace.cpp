@@ -11,7 +11,8 @@
 Workspace::Workspace(CanvasImpl *canvas, QWidget *parent)
     :QGraphicsView(parent), m_canvas(canvas)
 {
-    canvas->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
+//    canvas->setBackgroundBrush(QBrush(QPixmap(":/images/grid.png")));
+    canvas->setBackgroundBrush(Qt::white);
 //    canvas->addItem(canvas);
 //    canvas->grabMouse();
     setFocusPolicy(Qt::WheelFocus);
@@ -19,6 +20,11 @@ Workspace::Workspace(CanvasImpl *canvas, QWidget *parent)
     setMouseTracking(true);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+//    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setSceneRect(QRectF(-5000,-5000,10000,10000));
+    centerOn(0, 0);
+//    translate(canvas->getWidth() / 2, canvas->getHeight() / 2);
+//    rotate(90);
     m_pan = false;
 }
 
@@ -32,7 +38,9 @@ void Workspace::wheelEvent(QWheelEvent *event)
     {
         handleZooming(event);
         event->accept();
+        return;
     }
+    event->ignore();
 }
 
 void Workspace::handleZooming(QWheelEvent *event)
@@ -113,10 +121,19 @@ void Workspace::mouseMoveEvent(QMouseEvent *event)
 
     if (m_pan)
     {
+//        QPointF oldP = mapToScene(m_panStart);
+//        QPointF newP = mapToScene(event->pos());
+//        QPointF translation = newP - oldP;
+
+//        translate(translation.x(), translation.y());
+
+//        m_originX = event->x();
+//        m_originY = event->y();
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - m_panStart.x()));
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - m_panStart.y()));
         m_panStart = QPoint(event->x(), event->y());
         m_canvas->redraw();
+//        m_panStart = QPoint(event->x(), event->y());
         event->accept();
         return;
     }

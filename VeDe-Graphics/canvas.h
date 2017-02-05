@@ -99,6 +99,10 @@ public:
 
     Event<float>& onZoomChange();
 
+    bool isLocked() const;
+    void lock();
+    void unlock();
+
 private:
     std::shared_ptr<GObject> m_root;
     QVector<Command*> m_commandHistory;
@@ -109,6 +113,7 @@ private:
     float m_zoomFactor;
     float m_width;
     float m_height;
+    bool m_locked;
     Event<Tool*> m_onToolChanged;
     Event<float> m_onZoomChange;
 };

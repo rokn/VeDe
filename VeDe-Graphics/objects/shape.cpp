@@ -6,7 +6,7 @@
 gx::Shape::Shape()
 {
     PropertyFactory::addShapeProperties(this);
-
+//    setSelected(true);
 }
 
 gx::Shape::~Shape()

@@ -66,6 +66,21 @@ gx::Event<float>& gx::Canvas::onZoomChange()
     return m_onZoomChange;
 }
 
+bool gx::Canvas::isLocked() const
+{
+    return m_locked;
+}
+
+void gx::Canvas::lock()
+{
+    m_locked = true;
+}
+
+void gx::Canvas::unlock()
+{
+    m_locked = false;
+}
+
 float gx::Canvas::getWidth() const
 {
     return m_width;
@@ -98,6 +113,7 @@ std::shared_ptr<gx::GObject> gx::Canvas::root()
 
 int gx::Canvas::executeCommand(gx::Command* command)
 {
+    if(isLocked()) return -1;
     int result = command->execute();
 
     if(result == 0)
@@ -123,6 +139,8 @@ int gx::Canvas::executeCommand(gx::Command* command)
 int gx::Canvas::undoCommand()
 {
     int result = -1;
+    if (isLocked()) return result;
+
     if(m_currCommand > 0)
     {
         result = m_commandHistory.at(m_currCommand - 1)->undo();
@@ -140,6 +158,8 @@ int gx::Canvas::undoCommand()
 int gx::Canvas::redoCommand()
 {
     int result = -1;
+    if (isLocked()) return result;
+
     if(m_currCommand < m_commandHistory.size())
     {
         result = m_commandHistory.at(m_currCommand)->execute();

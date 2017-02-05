@@ -41,6 +41,7 @@ public:
 
     Event& operator -=(const uint& handlerId){
         m_callbacks.remove(handlerId);
+        return *this;
     }
 
 

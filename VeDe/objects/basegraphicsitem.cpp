@@ -24,16 +24,23 @@ QRectF BaseGraphicsItem::boundingRect() const
 
 void BaseGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-#if DEBUG
-    painter->setBrush(QBrush(QColor(0,0,0,0)));
-    QPen debugPen(QColor(255,0,0,255));
-    debugPen.setWidthF(1.0f / m_object->getCanvas()->getZoomFactor());
-    painter->setPen(debugPen);
-    painter->drawRect(boundingRect());
-#endif
+    if(m_object->isSelected()) {
+        painter->setBrush(QBrush(Qt::transparent));
+        QPen selectPen(Qt::black);
+        selectPen.setStyle(Qt::DashLine);
+        selectPen.setWidthF(1 / m_object->getCanvas()->getZoomFactor());
+        painter->setPen(selectPen);
+        painter->drawRect(boundingRect());
+    }
 
-    painter->setClipping(true);
-    painter->setClipRect(QRectF(0,0,m_object->getCanvas()->getWidth(), m_object->getCanvas()->getHeight()));
+    if(!m_object->isGuiElement())
+    {
+        painter->setClipping(true);
+        float canvasWidth = m_object->getCanvas()->getWidth();
+        float canvasHeight = m_object->getCanvas()->getHeight();
+        painter->setClipRect(QRectF( 0.5,  0.5, canvasWidth - 1, canvasHeight - 1)); // Fix for canvas border
+    }
+
     painter->setBrush(QBrush(gx::Converters::toQColor(m_object->getProp(gx::PROP::BACK_COLOR)->toColor())));
     QPen pen(gx::Converters::toQColor(m_object->getProp(gx::PROP::STROKE_COLOR)->toColor()));
     pen.setWidthF(m_object->getProp(gx::PROP::STROKE_WIDTH)->toFloat());

@@ -1,6 +1,5 @@
 #include "canvasimpl.h"
 #include "converters.h"
-//#include "canvaswidget.h"
 #include "qtcustompainter.h"
 #include "tools/transitiontype.h"
 #include <QGraphicsScene>
@@ -22,9 +21,7 @@
 CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
     :QGraphicsScene(parent), gx::Canvas(root, nullptr)
 {
-    QColor white = QColor(255,255,255,255);
-    addRect(0,0,getWidth(),getHeight(),QPen(white), QBrush(white));
-//    addEllipse(100,100,600,400);
+    addRect(0, 0, getWidth(),getHeight(),QPen(Qt::black, 1), QBrush(Qt::white));
 }
 
 void CanvasImpl::redraw(QRectF area)
@@ -78,7 +75,7 @@ void CanvasImpl::drawForeground(QPainter *painter, const QRectF &rect)
     if(getCurrTool() != nullptr)
     {
         QtCustomPainter customPainter(painter);
-        getCurrTool()->drawGui(&customPainter);
+//        getCurrTool()->drawGui(&customPainter);
     }
 }
 

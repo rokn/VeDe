@@ -24,13 +24,15 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(addStartPoint, STATE_DEF {
         m_path = std::make_shared<Path>();
-        m_path->setGuiElement(true);
         m_startPoint = getCanvas()->getCursor();
         m_path->addPoint(m_startPoint);
         PropertyFactory::setShapePreviewProperties(m_path.get());
 
         Command* command = new AddGObjectCommand(m_path, getCanvas());
         getCanvas()->executeCommand(command);
+        getCanvas()->lock();
+
+        m_path->setGuiElement(true);
     });
 
     addState(finishPoint, STATE_DEF {
@@ -114,7 +116,10 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
         m_path->copyPropertiesFrom(*this);
         m_path->copyPropertiesFrom(*getCanvas());
         m_path->updateProperties();
+
         getCanvas()->redraw(m_path->boundingBox());
+        getCanvas()->unlock();
+
         m_path.reset();
         moveToStateSilent(start);
     });

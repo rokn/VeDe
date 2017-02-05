@@ -9,8 +9,7 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
     setName("Ellipse tool");
     QString start = "Place the center";
     QString placeCenter = "Placing center";
-    QString wait = "Place second corner";
-    QString moveRadiiState = "Move second corner";
+    QString moveRadiiState = "Choose radii";
     QString finished = "Finished";
 
     addState(start, EMPTY_STATE);
@@ -23,12 +22,11 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
 
         gx::Command* command = new gx::AddGObjectCommand(m_ellipse, getCanvas());
         getCanvas()->executeCommand(command);
+        getCanvas()->lock();
 
         m_ellipse->setGuiElement(true);
-        moveToStateSilent(wait);
+        moveToStateSilent(moveRadiiState);
     });
-
-    addState(wait, EMPTY_STATE);
 
     addState(moveRadiiState, STATE_DEF {
         if(m_ellipse == nullptr) {
@@ -36,27 +34,30 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
         }
 
         moveRadii();
-        moveToStateSilent(wait);
     });
 
     addState(finished, STATE_DEF {
-        setRestricted(false);
         m_ellipse->setGuiElement(false);
         m_ellipse->copyPropertiesFrom(*this);
         m_ellipse->copyPropertiesFrom(*getCanvas());
         m_ellipse->updateProperties();
+
         getCanvas()->redraw(m_ellipse->boundingBox());
+        getCanvas()->unlock();
+
         m_ellipse.reset();
         moveToStateSilent(start);
     });
 
 
     addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), placeCenter);
-    addTransition(wait, Transition(MOUSE_MOVE), moveRadiiState);
-    addTransition(wait, Transition(MOUSE_PRESS, Qt::LeftButton), finished);
+    addTransition(moveRadiiState, Transition(MOUSE_MOVE), moveRadiiState);
+    addTransition(moveRadiiState, Transition(MOUSE_RELEASE, Qt::LeftButton), finished);
 
-    setUpRestriction(wait, STATE_DEF{
-        moveRadii();
+    setUpRestriction(STATE_DEF{
+        if(m_ellipse != nullptr){
+            moveRadii();
+        }
     });
 
     moveToStateSilent(start);

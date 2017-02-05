@@ -9,15 +9,13 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
     setName("Line tool");
     QString start = "Place a point";
     QString startLine = "Start line";
-    QString wait = "Place end point";
-    QString moveEnd = "Move end";
+    QString moveEnd = "Place end point";
     QString finished = "Finished";
 
     addState(start, EMPTY_STATE);
 
     addState(startLine, STATE_DEF {
         m_line = std::make_shared<Line>();
-        m_line->setGuiElement(true);
         PropertyFactory::setShapePreviewProperties(m_line.get());
         Vertex startPos = getCanvas()->getCursor();
         m_line->setStart(startPos);
@@ -25,16 +23,16 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         m_line->setEnd(startPos);
         Command* command = new AddGObjectCommand(m_line, getCanvas());
         getCanvas()->executeCommand(command);
+        getCanvas()->lock();
 
-        moveToStateSilent(wait);
+        m_line->setGuiElement(true);
+
+        moveToStateSilent(moveEnd);
     });
-
-    addState(wait, EMPTY_STATE);
 
     addState(moveEnd, STATE_DEF {
         if(m_line != nullptr) {
             moveEndPoint();
-            moveToStateSilent(wait);
         } else {
             moveToStateSilent(start);
         }
@@ -47,16 +45,19 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         m_line->copyPropertiesFrom(*getCanvas());
         m_line->updateProperties();
         getCanvas()->redraw(m_line->boundingBox());
+        getCanvas()->unlock();
         m_line.reset();
         moveToStateSilent(start);
     });
 
     addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), startLine);
-    addTransition(wait, Transition(MOUSE_MOVE), moveEnd);
-    addTransition(wait, Transition(MOUSE_PRESS, Qt::LeftButton), finished);
+    addTransition(moveEnd, Transition(MOUSE_MOVE), moveEnd);
+    addTransition(moveEnd, Transition(MOUSE_RELEASE, Qt::LeftButton), finished);
 
-    setUpRestriction(wait, STATE_DEF{
-        moveEndPoint();
+    setUpRestriction(STATE_DEF{
+        if(m_line != nullptr){
+            moveEndPoint();
+        }
     });
 
     moveToStateSilent(start);
@@ -64,10 +65,6 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
 void gx::LineTool::drawGui(gx::CustomPainter *painter) const
 {
-//    if(m_line != nullptr)
-//    {
-//        painter->drawLine(m_line->start(), m_line->end());
-//    }
 }
 
 void gx::LineTool::restrictPos(const gx::Vertex& p1, gx::Vertex &p2)
@@ -119,5 +116,4 @@ void gx::LineTool::moveEndPoint()
     }
 
     m_line->setEnd(pos);
-//    getCanvas()->redrawGui();
 }

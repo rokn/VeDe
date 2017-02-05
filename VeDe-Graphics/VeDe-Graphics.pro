@@ -40,7 +40,8 @@ SOURCES += \
     objects/path.cpp \
     tools/pathtool.cpp \
     converters.cpp \
-    helpers.cpp
+    helpers.cpp \
+    tools/selecttool.cpp
 
 HEADERS += \
     vertex.h \
@@ -74,7 +75,8 @@ HEADERS += \
     converters.h \
     helpers.h \
     event.h \
-    common.h
+    common.h \
+    tools/selecttool.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

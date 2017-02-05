@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     objects/ellipsegraphicsitem.cpp \
     objects/linegraphicsitem.cpp \
     objects/rectgraphicsitem.cpp \
-    objects/pathgraphicsitem.cpp
+    objects/pathgraphicsitem.cpp \
+    objects/guidrawer.cpp
 
 HEADERS  += mainwindow.h \
     qtcustompainter.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     objects/ellipsegraphicsitem.h \
     objects/rectgraphicsitem.h \
     objects/linegraphicsitem.h \
-    objects/pathgraphicsitem.h
+    objects/pathgraphicsitem.h \
+    objects/guidrawer.h
 
 FORMS    +=
 
