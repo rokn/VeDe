@@ -69,7 +69,7 @@ public:
     void unlock();
 
     QList<std::shared_ptr<GObject>> getSelectedObjects();
-    void clearSelectedObjects();
+    void clearSelectedObjects(bool withCommand = true);
     void selectObject(std::shared_ptr<GObject> obj);
     void deselectObject(std::shared_ptr<GObject> obj);
 

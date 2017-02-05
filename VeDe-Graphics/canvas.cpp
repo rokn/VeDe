@@ -89,12 +89,28 @@ QList<std::shared_ptr<gx::GObject> > gx::Canvas::getSelectedObjects()
     return m_selectedObjects;
 }
 
-void gx::Canvas::clearSelectedObjects()
+void gx::Canvas::clearSelectedObjects(bool withCommand)
 {
     if(m_selectedObjects.size() <= 0) return;
 
-    Command* deselectCommand = new SelectCommand(m_selectedObjects, this, false);
-    executeCommand(deselectCommand);
+    if(withCommand)
+    {
+        Command* deselectCommand = new SelectCommand(m_selectedObjects, this, false);
+        executeCommand(deselectCommand);
+    }
+    else
+    {
+        QRectF redrawRect;
+
+        foreach(auto& obj, m_selectedObjects)
+        {
+            deselectObject(obj);
+            redrawRect.united(obj->boundingBox());
+        }
+
+        redraw(redrawRect);
+        m_selectedObjects.clear();
+    }
 }
 
 void gx::Canvas::selectObject(std::shared_ptr<gx::GObject> obj)

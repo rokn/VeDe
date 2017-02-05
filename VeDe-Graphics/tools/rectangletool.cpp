@@ -1,6 +1,7 @@
 #include "rectangletool.h"
 #include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h"
+#include "commands/selectcommand.h" // TODO: remove
 #include <QtMath>
 
 gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
@@ -45,6 +46,9 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
 
         getCanvas()->redraw(m_rect->boundingBox());
         getCanvas()->unlock();
+
+        getCanvas()->clearSelectedObjects(false);
+        getCanvas()->selectObject(m_rect);
 
         m_rect.reset();
         moveToStateSilent(start);

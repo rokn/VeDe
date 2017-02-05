@@ -1,6 +1,7 @@
 #include "linetool.h"
 #include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h" // TODO: remove
+#include "commands/selectcommand.h" // TODO: remove
 #include <QtMath>
 
 gx::LineTool::LineTool(gx::Canvas *canvas)
@@ -46,6 +47,10 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
         m_line->updateProperties();
         getCanvas()->redraw(m_line->boundingBox());
         getCanvas()->unlock();
+
+        getCanvas()->clearSelectedObjects(false);
+        getCanvas()->selectObject(m_line);
+
         m_line.reset();
         moveToStateSilent(start);
     });

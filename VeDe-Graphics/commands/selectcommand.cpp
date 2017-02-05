@@ -10,6 +10,17 @@ gx::SelectCommand::SelectCommand(const QList<std::shared_ptr<gx::GObject> > &obj
 {
 }
 
+gx::SelectCommand::SelectCommand(const std::shared_ptr<gx::GObject> &object, bool select)
+    :SelectCommand(object, nullptr, select)
+{
+}
+
+gx::SelectCommand::SelectCommand(const std::shared_ptr<gx::GObject> &object, gx::Canvas *canvas, bool select)
+    :CanvasCommand(canvas), m_select(select)
+{
+    m_objects.append(object);
+}
+
 int gx::SelectCommand::execute()
 {
     QRectF redrawRect;

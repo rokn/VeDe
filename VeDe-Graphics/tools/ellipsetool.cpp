@@ -1,6 +1,7 @@
 #include "ellipsetool.h"
 #include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h"
+#include "commands/selectcommand.h" // TODO: remove
 #include <QtMath>
 
 gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
@@ -44,6 +45,9 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
 
         getCanvas()->redraw(m_ellipse->boundingBox());
         getCanvas()->unlock();
+
+        getCanvas()->clearSelectedObjects(false);
+        getCanvas()->selectObject(m_ellipse);
 
         m_ellipse.reset();
         moveToStateSilent(start);

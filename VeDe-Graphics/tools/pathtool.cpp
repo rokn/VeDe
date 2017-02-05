@@ -1,6 +1,7 @@
 #include "pathtool.h"
 #include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h" // TODO: remove
+#include "commands/selectcommand.h" // TODO: remove
 #include <QtMath>
 #include <QDebug>
 
@@ -119,6 +120,9 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
         getCanvas()->redraw(m_path->boundingBox());
         getCanvas()->unlock();
+
+        getCanvas()->clearSelectedObjects(false);
+        getCanvas()->selectObject(m_path);
 
         m_path.reset();
         moveToStateSilent(start);
