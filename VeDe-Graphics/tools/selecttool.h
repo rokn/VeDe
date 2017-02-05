@@ -11,7 +11,7 @@ class SelectTool : public Tool
 public:
     SelectTool(Canvas* canvas);
 
-    void drawGui(CustomPainter* painter) const;
+    void drawGui(CustomPainter& painter) const;
 
 private:
     QRectF m_selection;

@@ -16,12 +16,20 @@
 #include "objects/line.h"
 #include "objects/rectangle.h"
 #include "objects/path.h"
+#include "objects/guidrawer.h"
 #include "tools/tool.h"
 
 CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
     :QGraphicsScene(parent), gx::Canvas(root, nullptr)
 {
     addRect(0, 0, getWidth(),getHeight(),QPen(Qt::black, 1), QBrush(Qt::white));
+    GUIDrawer *guiDrawer = new GUIDrawer();
+
+    addItem(guiDrawer);
+
+    onToolChanged() += [=](gx::Tool* t){
+        guiDrawer->setTool(t);
+    };
 }
 
 void CanvasImpl::redraw(QRectF area)
@@ -36,7 +44,8 @@ void CanvasImpl::redraw()
 
 void CanvasImpl::redrawGui()
 {
-    invalidate(0,0,getWidth(),getHeight(),ForegroundLayer);
+//    invalidate(0,0,getWidth(),getHeight(),ForegroundLayer);
+    this->update(sceneRect());
 }
 
 gx::Vertex CanvasImpl::getCursor() const
@@ -72,11 +81,11 @@ void CanvasImpl::onAddObject(std::shared_ptr<gx::GObject> object)
 
 void CanvasImpl::drawForeground(QPainter *painter, const QRectF &rect)
 {
-    if(getCurrTool() != nullptr)
-    {
-        QtCustomPainter customPainter(painter);
+//    if(getCurrTool() != nullptr)
+//    {
+//        QtCustomPainter customPainter(painter);
 //        getCurrTool()->drawGui(&customPainter);
-    }
+//    }
 }
 
 void CanvasImpl::initModifierKeys()

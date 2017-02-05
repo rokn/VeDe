@@ -63,10 +63,6 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
     moveToStateSilent(start);
 }
 
-void gx::LineTool::drawGui(gx::CustomPainter *painter) const
-{
-}
-
 void gx::LineTool::restrictPos(const gx::Vertex& p1, gx::Vertex &p2)
 {
     unsigned int x_diff = qAbs(p2.x() - p1.x());

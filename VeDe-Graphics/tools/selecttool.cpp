@@ -16,6 +16,7 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     addState(start, EMPTY_STATE);
     addState(selectStart, STATE_DEF{
         Vertex cursorPos = getCanvas()->getCursor();
+        m_anchorPoint = cursorPos;
         m_selection = QRectF(cursorPos.x(), cursorPos.y(), 1, 1);
         m_selecting = true;
         moveToStateSilent(moveSelect);
@@ -25,15 +26,16 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         Vertex cursor = getCanvas()->getCursor();
         Vertex upLeft(qMin(cursor.x(), m_anchorPoint.x()), qMin(cursor.y(), m_anchorPoint.y()));
         Vertex downRight(qMax(cursor.x(), m_anchorPoint.x()), qMax(cursor.y(), m_anchorPoint.y()));
+        QRectF old = m_selection;
         m_selection.setTopLeft(Converters::toPoint(upLeft));
         m_selection.setBottomRight(Converters::toPoint(downRight));
-        getCanvas()->redrawGui();
+        getCanvas()->redraw(m_selection.united(old));
     });
 
     addState(endSelect, STATE_DEF{
         moveToStateSilent(start);
         m_selecting = false;
-        getCanvas()->redrawGui();
+        getCanvas()->redraw(m_selection);
     });
 
     addTransition(start, Transition(MOUSE_PRESS, Qt::LeftButton), selectStart);
@@ -43,14 +45,14 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     moveToStateSilent(start);
 }
 
-void gx::SelectTool::drawGui(gx::CustomPainter *painter) const
+void gx::SelectTool::drawGui(CustomPainter &painter) const
 {
     if(m_selecting)
     {
-        painter->setStrokeColor(Color(0,0,0));
-        painter->setBackColor(Color(0,0,0,0));
-        painter->setStrokeWidth(1.0f / getCanvas()->getZoomFactor());
-        painter->drawRectangle(m_selection.topLeft().x(), m_selection.topLeft().y(),
+        painter.setStrokeColor(Color(0,0,0));
+        painter.setBackColor(Color(0,0,0,0));
+        painter.setStrokeWidth(1.0f / getCanvas()->getZoomFactor());
+        painter.drawRectangle(m_selection.topLeft().x(), m_selection.topLeft().y(),
                                m_selection.bottomRight().x(), m_selection.bottomRight().y());
     }
 }

@@ -11,6 +11,7 @@ public:
     void setTool(gx::Tool *tool);
     gx::Tool *getTool() const;
 
+    QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
 
 
