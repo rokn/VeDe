@@ -21,6 +21,7 @@ public:
     void addControlPoint(Vertex control);
     void changeLastControl(Vertex control);
     void removeLastControl();
+    void closePath();
 
     QList<Vertex> vertices() const;
 
@@ -34,6 +35,7 @@ private:
     QList<Vertex> m_vertices;
     QList<bool> m_controls;
     QPainterPath m_drawnPath;
+    bool m_closed;
 
     void constructPath();
 };

@@ -10,6 +10,7 @@ gx::Path::Path()
     onChange() += [this](const gx::GObject* o){
         this->constructPath();
     };
+    m_closed = false;
 }
 
 void gx::Path::addPoint(gx::Vertex vertex)
@@ -79,6 +80,11 @@ void gx::Path::removeLastControl()
     }
 }
 
+void gx::Path::closePath()
+{
+    m_closed = true;
+}
+
 QList<bool> gx::Path::controls() const
 {
     return m_controls;
@@ -140,5 +146,9 @@ void gx::Path::constructPath()
         } else {
             vIndex ++;
         }
+    }
+
+    if(m_closed) {
+        m_drawnPath.closeSubpath();
     }
 }

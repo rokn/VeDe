@@ -12,11 +12,14 @@ class LineTool : public ShapeTool
 public:
     LineTool(Canvas* canvas);
 
+protected:
+    bool startShape(Vertex mousePos);
+    void moveControl(Vertex mousePos);
+
 private:
     std::shared_ptr<Line> m_line;
 
     void restrictPos(const Vertex &p1, Vertex& p2);
-    void moveEndPoint();
 };
 }
 

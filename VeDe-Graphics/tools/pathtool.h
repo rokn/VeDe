@@ -13,6 +13,9 @@ class PathTool : public ShapeTool
 public:
     PathTool(Canvas* canvas);
 
+protected:
+    bool startShape(Vertex mousePos);
+
 private:
     std::shared_ptr<Path> m_path;
     Vertex m_startPoint;

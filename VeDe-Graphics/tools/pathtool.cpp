@@ -9,9 +9,8 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     :ShapeTool(canvas)
 {
     setName("Path tool");
-    QString start = "Place a point";
-    QString addStartPoint = "Add start point";
-    QString finishPoint = "Finish start point";
+    m_startState = "Place a point";
+    QString finishPoint = "Finish point";
     QString addControlPoint = "Add control point";
     QString moveControlPoint = "Move control point";
     QString finishControlPoint = "Finish control point";
@@ -19,28 +18,12 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     QString moveNewPoint = "Move new point";
     QString setNewPoint = "Set new point";
     QString removeNewPoint = "Remove new point";
-    QString finish = "Finish";
-
-    addState(start, EMPTY_STATE);
-
-    addState(addStartPoint, STATE_DEF {
-        m_path = std::make_shared<Path>();
-        m_startPoint = getCanvas()->getCursor();
-        m_path->addPoint(m_startPoint);
-        PropertyFactory::setShapePreviewProperties(m_path.get());
-
-        Command* command = new AddGObjectCommand(m_path, getCanvas());
-        getCanvas()->executeCommand(command);
-        getCanvas()->lock();
-
-        m_path->setGuiElement(true);
-    });
 
     addState(finishPoint, STATE_DEF {
         if(m_path != nullptr) {
             moveToState(startNewPoint, t);
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
@@ -55,7 +38,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 //            } else {
 //            }
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
@@ -64,7 +47,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
             Vertex point = getCanvas()->getCursor();
             m_path->changeLastControl(point);
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
@@ -72,7 +55,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
         if(m_path != nullptr) {
               moveToState(startNewPoint, t);
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
@@ -82,7 +65,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
             m_path->addPoint(point);
             moveToStateSilent(moveNewPoint);
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
@@ -91,58 +74,45 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
             Vertex point = getCanvas()->getCursor();
             m_path->changeLastPoint(point);
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
     addState(setNewPoint, STATE_DEF {
         if(m_path != nullptr) {
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
     addState(removeNewPoint, STATE_DEF {
         if(m_path != nullptr) {
             m_path->removeLastPoint();
-            moveToState(finish, t);
+            moveToState(m_finishedState, t);
         } else {
-            moveToStateSilent(start);
+            moveToStateSilent(m_startState);
         }
     });
 
-    addState(finish, STATE_DEF {
-        setRestricted(false);
-        m_path->setGuiElement(false);
-        m_path->copyPropertiesFrom(*this);
-        m_path->copyPropertiesFrom(*getCanvas());
-        m_path->updateProperties();
-
-        getCanvas()->redraw(m_path->boundingBox());
-        getCanvas()->unlock();
-
-        getCanvas()->clearSelectedObjects(false);
-        getCanvas()->selectObject(m_path);
-
-        m_path.reset();
-        moveToStateSilent(start);
-    });
-
-    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), addStartPoint);
-    addTransition(addStartPoint, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
-    addTransition(addStartPoint, UserEvent(MOUSE_MOVE), addControlPoint);
+    addTransition(m_placeFirstState, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
+    addTransition(m_placeFirstState, UserEvent(MOUSE_MOVE), addControlPoint);
     addTransition(moveControlPoint, UserEvent(MOUSE_MOVE), moveControlPoint);
     addTransition(moveControlPoint, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishControlPoint);
-    addTransition(moveControlPoint, UserEvent(MOUSE_PRESS, Qt::RightButton), finish);
+    addTransition(moveControlPoint, UserEvent(MOUSE_PRESS, Qt::RightButton), m_finishedState);
     addTransition(moveNewPoint, UserEvent(MOUSE_PRESS, Qt::LeftButton), setNewPoint);
     addTransition(moveNewPoint, UserEvent(MOUSE_MOVE), moveNewPoint);
     addTransition(moveNewPoint, UserEvent(MOUSE_PRESS, Qt::RightButton), removeNewPoint);
     addTransition(setNewPoint, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
     addTransition(setNewPoint, UserEvent(MOUSE_MOVE), addControlPoint);
 
-//    setUpRestriction(, STATE_DEF{
-//        moveEndPoint();
-//    });
+    initStates(false);
+}
 
-    moveToStateSilent(start);
+bool gx::PathTool::startShape(gx::Vertex mousePos)
+{
+    m_path = std::make_shared<Path>();
+    m_startPoint = getCanvas()->getCursor();
+    m_path->addPoint(m_startPoint);
+    setShape(m_path);
+    return false;
 }

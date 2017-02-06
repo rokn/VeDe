@@ -12,11 +12,12 @@ class EllipseTool : public ShapeTool
 public:
     EllipseTool(Canvas* canvas);
 
-private:
-    void moveRadii();
+protected:
+    bool startShape(Vertex mousePos);
+    void moveControl(Vertex mousePos);
+
 private:
     std::shared_ptr<Ellipse> m_ellipse;
-    bool m_restricted;
 };
 }
 

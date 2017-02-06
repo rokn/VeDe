@@ -1,71 +1,35 @@
 #include "linetool.h"
-#include "properties/propertyfactory.h"
-#include "commands/addgobjectcommand.h" // TODO: remove
-#include "commands/selectcommand.h" // TODO: remove
 #include <QtMath>
 
 gx::LineTool::LineTool(gx::Canvas *canvas)
     :ShapeTool(canvas)
 {
     setName("Line tool");
-    QString start = "Place a point";
-    QString startLine = "Start line";
-    QString moveEnd = "Place end point";
-    QString finished = "Finished";
+    m_startState = "Place a point";
+    m_moveState = "Place end point";
+    initStates();
+}
 
-    addState(start, EMPTY_STATE);
+bool gx::LineTool::startShape(gx::Vertex mousePos)
+{
+    m_line = std::make_shared<Line>();
+    m_line->setStart(mousePos);
+    mousePos.setX(mousePos.x()+0.0001f);//Disable buggy division by zero
+    m_line->setEnd(mousePos);
+    setShape(m_line);
+    return true;
+}
 
-    addState(startLine, STATE_DEF {
-        m_line = std::make_shared<Line>();
-        PropertyFactory::setShapePreviewProperties(m_line.get());
-        Vertex startPos = getCanvas()->getCursor();
-        m_line->setStart(startPos);
-        startPos.setX(startPos.x()+0.0001f);//Disable buggy division by zero
-        m_line->setEnd(startPos);
-        Command* command = new AddGObjectCommand(m_line, getCanvas());
-        getCanvas()->executeCommand(command);
-        getCanvas()->lock();
+void gx::LineTool::moveControl(gx::Vertex mousePos)
+{
+    Vertex pos = getCanvas()->getCursor();
 
-        m_line->setGuiElement(true);
+    if(isRestricted())
+    {
+        restrictPos(m_line->start(), pos);
+    }
 
-        moveToStateSilent(moveEnd);
-    });
-
-    addState(moveEnd, STATE_DEF {
-        if(m_line != nullptr) {
-            moveEndPoint();
-        } else {
-            moveToStateSilent(start);
-        }
-    });
-
-    addState(finished, STATE_DEF {
-        setRestricted(false);
-        m_line->setGuiElement(false);
-        m_line->copyPropertiesFrom(*this);
-        m_line->copyPropertiesFrom(*getCanvas());
-        m_line->updateProperties();
-        getCanvas()->redraw(m_line->boundingBox());
-        getCanvas()->unlock();
-
-        getCanvas()->clearSelectedObjects(false);
-        getCanvas()->selectObject(m_line);
-
-        m_line.reset();
-        moveToStateSilent(start);
-    });
-
-    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), startLine);
-    addTransition(moveEnd, UserEvent(MOUSE_MOVE), moveEnd);
-    addTransition(moveEnd, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finished);
-
-    setUpRestriction(STATE_DEF{
-        if(m_line != nullptr){
-            moveEndPoint();
-        }
-    });
-
-    moveToStateSilent(start);
+    m_line->setEnd(pos);
 }
 
 void gx::LineTool::restrictPos(const gx::Vertex& p1, gx::Vertex &p2)
@@ -105,16 +69,4 @@ void gx::LineTool::restrictPos(const gx::Vertex& p1, gx::Vertex &p2)
             p2.setY(p1.y() + max_diff);
         }
     }
-}
-
-void gx::LineTool::moveEndPoint()
-{
-    Vertex pos = getCanvas()->getCursor();
-
-    if(isRestricted())
-    {
-        restrictPos(m_line->start(), pos);
-    }
-
-    m_line->setEnd(pos);
 }

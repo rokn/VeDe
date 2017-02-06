@@ -14,6 +14,7 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     QString endSelect = "Ending selection";
     QString unionEnable = "Union enable";
     QString unionDisable = "Union disable";
+    QString clearSelection = "Clear selection";
     m_selecting = false;
     m_union = false;
 
@@ -53,11 +54,23 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         moveToStateSilent(getLastState());
     });
 
+    addState(clearSelection, STATE_DEF{
+        if(m_selecting){
+            m_selecting = false;
+            getCanvas()->redraw(m_selection);
+        }
+
+        getCanvas()->clearSelectedObjects();
+        moveToStateSilent(start);
+    });
+
     addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), selectStart);
     addTransition(moveSelect, UserEvent(MOUSE_MOVE), moveSelect);
     addTransition(moveSelect, UserEvent(MOUSE_RELEASE, Qt::LeftButton), endSelect);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Shift), unionEnable);
     addTransition(ANY_STATE, UserEvent(KEY_RELEASE, Qt::Key_Shift), unionDisable);
+    addTransition(ANY_STATE, UserEvent(MOUSE_PRESS, Qt::RightButton), clearSelection);
+    addTransition(ANY_STATE, UserEvent(KEY_RELEASE, Qt::Key_Escape), clearSelection);
 
     moveToStateSilent(start);
 }
@@ -76,20 +89,22 @@ void gx::SelectTool::drawGui(CustomPainter &painter) const
 
 void gx::SelectTool::selectObjects(QRectF rect)
 {
-    if(!m_union){
-        getCanvas()->clearSelectedObjects();
-    }
-
     auto currLayerObjects = getCanvas()->getCurrLayer()->getChildren();
     QRectF redrawBox;
     QList<std::shared_ptr<GObject>> selectedObjects;
 
     foreach (auto& obj, currLayerObjects) {
-        if(obj->boundingBox().intersects(rect)) {
+        if(rect.contains(obj->boundingBox())) {
             selectedObjects.append(obj);
         }
     }
 
-    Command* command = new SelectCommand(selectedObjects, getCanvas());
-    getCanvas()->executeCommand(command);
+    if(selectedObjects.size() > 0){
+        if(!m_union){
+            getCanvas()->clearSelectedObjects();
+        }
+
+        Command* command = new SelectCommand(selectedObjects, getCanvas());
+        getCanvas()->executeCommand(command);
+    }
 }
