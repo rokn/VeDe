@@ -1,4 +1,5 @@
 #include "selecttool.h"
+#include "commonstates.h"
 #include "converters.h"
 #include "commands/selectcommand.h"
 #include "color.h"
@@ -14,7 +15,9 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     QString endSelect = "Ending selection";
     QString unionEnable = "Union enable";
     QString unionDisable = "Union disable";
-    QString clearSelection = "Clear selection";
+    QString deleteObjects = "Delete objects";
+    QString selectAll = "Select all";
+    QString deselectAll = "Deselect all";
     m_selecting = false;
     m_union = false;
 
@@ -54,23 +57,20 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         moveToStateSilent(getLastState());
     });
 
-    addState(clearSelection, STATE_DEF{
-        if(m_selecting){
-            m_selecting = false;
-            getCanvas()->redraw(m_selection);
-        }
-
-        getCanvas()->clearSelectedObjects();
-        moveToStateSilent(start);
-    });
+    addState(deleteObjects, CommonStates::deleteSelectedObjects(this));
+    addState(selectAll, CommonStates::selectAllOnCurrLayer(this));
+    addState(deselectAll, CommonStates::deselectAll(this));
 
     addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), selectStart);
     addTransition(moveSelect, UserEvent(MOUSE_MOVE), moveSelect);
     addTransition(moveSelect, UserEvent(MOUSE_RELEASE, Qt::LeftButton), endSelect);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Shift), unionEnable);
     addTransition(ANY_STATE, UserEvent(KEY_RELEASE, Qt::Key_Shift), unionDisable);
-    addTransition(ANY_STATE, UserEvent(MOUSE_PRESS, Qt::RightButton), clearSelection);
-    addTransition(ANY_STATE, UserEvent(KEY_RELEASE, Qt::Key_Escape), clearSelection);
+
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Delete), deleteObjects);
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_A), selectAll);
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Escape), deselectAll);
+    addTransition(ANY_STATE, UserEvent(MOUSE_PRESS, Qt::RightButton), deselectAll);
 
     moveToStateSilent(start);
 }

@@ -1,4 +1,5 @@
 #include "shapetool.h"
+#include "commonstates.h"
 #include "properties/propertynames.h"
 #include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h"
@@ -15,6 +16,10 @@ gx::ShapeTool::ShapeTool(gx::Canvas *canvas)
 
 void gx::ShapeTool::initStates(bool includeTransitions)
 {
+    QString deleteObjects = "Delete objects";
+    QString selectAll = "Select all";
+    QString deselectAll = "Deselect all";
+
     addState(m_startState, EMPTY_STATE);
 
     addState(m_placeFirstState, STATE_DEF {
@@ -62,11 +67,19 @@ void gx::ShapeTool::initStates(bool includeTransitions)
         moveToStateSilent(m_startState);
     });
 
+    addState(deleteObjects, CommonStates::deleteSelectedObjects(this));
+    addState(selectAll, CommonStates::selectAllOnCurrLayer(this));
+    addState(deselectAll, CommonStates::deselectAll(this));
+
     if(includeTransitions) {
         addTransition(m_startState, UserEvent(MOUSE_PRESS, Qt::LeftButton), m_placeFirstState);
         addTransition(m_moveState, UserEvent(MOUSE_MOVE), m_moveState);
         addTransition(m_moveState, UserEvent(MOUSE_RELEASE, Qt::LeftButton), m_finishedState);
     }
+
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Delete), deleteObjects);
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_A), selectAll);
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Escape), deselectAll);
 
     setUpRestriction(STATE_DEF{
         if(m_shape != nullptr){

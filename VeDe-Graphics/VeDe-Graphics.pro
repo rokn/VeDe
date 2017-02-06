@@ -42,7 +42,8 @@ SOURCES += \
     helpers.cpp \
     tools/selecttool.cpp \
     tools/userevent.cpp \
-    commands/selectcommand.cpp
+    commands/selectcommand.cpp \
+    tools/commonstates.cpp
 
 HEADERS += \
     vertex.h \
@@ -78,7 +79,8 @@ HEADERS += \
     tools/selecttool.h \
     tools/userevent.h \
     tools/usereventtype.h \
-    commands/selectcommand.h
+    commands/selectcommand.h \
+    tools/commonstates.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

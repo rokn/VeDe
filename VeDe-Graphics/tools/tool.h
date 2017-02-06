@@ -11,21 +11,19 @@
 #include "userevent.h"
 #include "properties/propertyholder.h"
 
+
+#define EMPTY_STATE [](const UserEvent&){}
+#define STATE_DEF [=](const UserEvent& t)
+#define STATE_DEF_NO_CAP (const UserEvent& t)
+#define ANY_STATE "ANY_STATE"
+
 namespace gx
 {
 class Tool : public PropertyHolder
 {
-    #define EMPTY_STATE [](const UserEvent&){}
-    #define STATE_DEF [=](const UserEvent& t)
-    #define STATE_DEF_NO_CAP (const UserEvent& t)
-    #define ANY_STATE "ANY_STATE"
-
-
-protected:
+public:
     typedef std::function<void(const UserEvent&)> ToolStateCallBack;
-//    typedef unsigned int uint;
 
-    //Struct/class declarations
 private:
     typedef struct
     {
@@ -35,6 +33,7 @@ private:
     }ToolState;
 
 public:
+
     Tool(Canvas* canvas);
     void handleEvent(const UserEvent& transition);
     Canvas *getCanvas();
