@@ -21,6 +21,7 @@ gx::Tool::ToolStateCallBack gx::CommonStates::selectAllOnCurrLayer(gx::Tool *too
         if(objects.size() > 0){
             Command* selectObjects = new SelectCommand(objects, tool->getCanvas());
             tool->getCanvas()->executeCommand(selectObjects);
+
         }
         tool->moveToStateSilent(tool->getLastState());
     };

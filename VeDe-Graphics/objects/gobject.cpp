@@ -161,6 +161,17 @@ QRectF gx::GObject::boundingBox() const
     return box;
 }
 
+bool gx::GObject::containsPoint(const gx::Vertex &point) const
+{
+    bool contains;
+    foreach(std::shared_ptr<GObject> obj, m_children)
+    {
+        contains |= obj->containsPoint(point);
+    }
+
+    return contains;
+}
+
 void gx::GObject::changed()
 {
     m_onChange(this);

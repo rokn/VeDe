@@ -16,6 +16,27 @@ public:
     float y() const;
     void setY(float y);
 
+    Vertex& operator +=(const Vertex& other);
+    Vertex& operator -=(const Vertex& other);
+
+    Vertex operator +(const Vertex& other) const;
+    Vertex operator -(const Vertex& other) const;
+    float operator *(const Vertex& other) const;
+
+    Vertex& operator +=(float& scalar);
+    Vertex& operator -=(float& scalar);
+    Vertex& operator *=(float& scalar);
+    Vertex& operator /=(float& scalar);
+
+    Vertex operator +(float& scalar) const;
+    Vertex operator -(float& scalar) const;
+    Vertex operator *(float& scalar) const;
+    Vertex operator /(float& scalar) const;
+
+    float distance(const Vertex& other) const;
+    float length() const;
+    float lengthSquared() const;
+
 private:
     float m_x;
     float m_y;

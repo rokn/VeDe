@@ -18,8 +18,6 @@ class Canvas; //Forw. decl.
 
 class GObject : public PropertyHolder
 {
-//    typedef std::function<void(const GObject*)> GobjectCallback;
-
 public:
     GObject(std::shared_ptr<GObject> parent = nullptr);
     virtual ~GObject();
@@ -52,6 +50,7 @@ public:
     void updateProperties();
 
     virtual QRectF boundingBox() const;
+    virtual bool containsPoint(const gx::Vertex &point) const;
 
     bool isSelected() const;
     void setSelected(bool selected);
@@ -67,9 +66,6 @@ private:
     int m_zorder;
     unsigned int m_id;
     bool m_selected;
-//    QList<GobjectCallback> m_onDestroyCallbacks;
-//    QList<GobjectCallback> m_onPreChangeCallbacks;
-//    QList<GobjectCallback> m_onChangeCallbacks;
     Event<const GObject*> m_onDestroy;
     Event<const GObject*> m_onPreChange;
     Event<const GObject*> m_onChange;

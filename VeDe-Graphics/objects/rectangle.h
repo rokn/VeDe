@@ -20,6 +20,7 @@ public:
     void paintSelf(CustomPainter &painter);
 
     QRectF boundingBox() const;
+    bool containsPoint(const gx::Vertex &point) const;
 
 private:
     Vertex m_topLeft;

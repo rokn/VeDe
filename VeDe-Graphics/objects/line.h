@@ -19,6 +19,9 @@ public:
     void setEnd(const Vertex &end);
 
     QRectF boundingBox() const;
+    bool containsPoint(const gx::Vertex &point) const;
+
+    float distanceToPoint(const Vertex& point) const;
 
 private:
     Vertex m_start;

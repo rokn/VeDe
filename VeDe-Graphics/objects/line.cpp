@@ -1,6 +1,8 @@
 #include "line.h"
 #include "helpers.h"
 #include "converters.h"
+#include "properties/propertynames.h"
+#include <QtMath>
 
 gx::Line::Line()
 {
@@ -49,4 +51,20 @@ QRectF gx::Line::boundingBox() const
     QRectF rect(tl,dr);
     fixBoxForStrokeWidth(rect, .7f);
     return baseBox.united(rect);
+}
+
+bool gx::Line::containsPoint(const gx::Vertex &point) const
+{
+    return distanceToPoint(point) <= getProp(PROP::STROKE_WIDTH)->toFloat();
+}
+
+float gx::Line::distanceToPoint(const gx::Vertex &point) const
+{
+    float lengthSquared = (m_end - m_start).lengthSquared();
+
+    if(lengthSquared < 0.00001) return m_start.distance(point);
+
+    float t = qMax(0.f, qMin(1.f, (point - m_start) * (m_end - m_start) / lengthSquared));
+    Vertex projection = m_start + (m_end - m_start) * t;
+    return point.distance(projection);
 }
