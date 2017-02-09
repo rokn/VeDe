@@ -1,6 +1,8 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
+#include <QTransform>
+
 namespace gx
 {
 class Vertex
@@ -36,6 +38,8 @@ public:
     float distance(const Vertex& other) const;
     float length() const;
     float lengthSquared() const;
+
+    Vertex transformed(const QTransform &transform) const;
 
 private:
     float m_x;

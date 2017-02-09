@@ -72,11 +72,11 @@ void gx::ShapeTool::initStates(bool includeTransitions)
     addState(deselectAll, CommonStates::deselectAll(this));
 
     if(includeTransitions) {
-        addTransition(m_startState, UserEvent(MOUSE_PRESS, Qt::LeftButton), m_placeFirstState);
         addTransition(m_moveState, UserEvent(MOUSE_MOVE), m_moveState);
         addTransition(m_moveState, UserEvent(MOUSE_RELEASE, Qt::LeftButton), m_finishedState);
     }
 
+    addTransition(m_startState, UserEvent(MOUSE_PRESS, Qt::LeftButton), m_placeFirstState);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Delete), deleteObjects);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_A), selectAll);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Escape), deselectAll);

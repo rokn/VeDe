@@ -38,7 +38,7 @@ public:
     void handleEvent(const UserEvent& transition);
     Canvas *getCanvas();
     const Canvas *getCanvas() const;
-    const QString& getCurrStateName() const;
+    QString getCurrStateName() const;
     QVector<QString> getAllStateNames() const;
     void moveToState(const QString &stateName, UserEvent transition);
     void moveToStateSilent(const QString &stateName);

@@ -36,12 +36,15 @@ void gx::Ellipse::setRadius(const Vertex &radius)
     changed();
 }
 
-QRectF gx::Ellipse::boundingBox() const
+QRectF gx::Ellipse::shapeBoundingBox() const
 {
-    QRectF baseBox = GObject::boundingBox();
     QPointF center = Converters::toPoint(this->center());
     QPointF radii = Converters::toPoint(this->radius());
     QRectF rect(center - radii, center + radii);
     fixBoxForStrokeWidth(rect);
-    return baseBox.united(rect);
+    return rect;
+}
+
+bool gx::Ellipse::shapeContainsPoint(const gx::Vertex &point) const
+{
 }

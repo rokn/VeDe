@@ -10,6 +10,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 {
     setName("Path tool");
     m_startState = "Place a point";
+    m_placeFirstState = "Place first point";
     QString finishPoint = "Finish point";
     QString addControlPoint = "Add control point";
     QString moveControlPoint = "Move control point";
@@ -94,6 +95,8 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
         }
     });
 
+    initStates(false);
+
     addTransition(m_placeFirstState, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
     addTransition(m_placeFirstState, UserEvent(MOUSE_MOVE), addControlPoint);
     addTransition(moveControlPoint, UserEvent(MOUSE_MOVE), moveControlPoint);
@@ -104,8 +107,6 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     addTransition(moveNewPoint, UserEvent(MOUSE_PRESS, Qt::RightButton), removeNewPoint);
     addTransition(setNewPoint, UserEvent(MOUSE_RELEASE, Qt::LeftButton), finishPoint);
     addTransition(setNewPoint, UserEvent(MOUSE_MOVE), addControlPoint);
-
-    initStates(false);
 }
 
 bool gx::PathTool::startShape(gx::Vertex mousePos)

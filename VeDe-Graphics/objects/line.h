@@ -18,10 +18,12 @@ public:
     Vertex end() const;
     void setEnd(const Vertex &end);
 
-    QRectF boundingBox() const;
-    bool containsPoint(const gx::Vertex &point) const;
 
     float distanceToPoint(const Vertex& point) const;
+
+protected:
+    QRectF shapeBoundingBox() const;
+    bool shapeContainsPoint(const gx::Vertex &point) const;
 
 private:
     Vertex m_start;

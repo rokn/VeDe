@@ -4,7 +4,7 @@
 #include "objects/basegraphicsitem.h"
 #include "objects/line.h"
 
-class LineGraphicsItem : public BaseGraphicsItem
+class LineGraphicsItem : public BaseShapeItem
 {
 public:
     LineGraphicsItem(std::shared_ptr<gx::Line> line);

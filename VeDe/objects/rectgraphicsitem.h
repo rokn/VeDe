@@ -4,7 +4,7 @@
 #include "objects/basegraphicsitem.h"
 #include "objects/rectangle.h"
 
-class RectGraphicsItem : public BaseGraphicsItem
+class RectGraphicsItem : public BaseShapeItem
 {
 public:
     RectGraphicsItem(std::shared_ptr<gx::Rectangle> rect);

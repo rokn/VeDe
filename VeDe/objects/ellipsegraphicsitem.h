@@ -4,7 +4,7 @@
 #include "objects/basegraphicsitem.h"
 #include "objects/ellipse.h"
 
-class EllipseGraphicsItem : public BaseGraphicsItem
+class EllipseGraphicsItem : public BaseShapeItem
 {
 public:
     EllipseGraphicsItem(std::shared_ptr<gx::Ellipse> ellipse);

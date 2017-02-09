@@ -95,12 +95,11 @@ const QPainterPath& gx::Path::drawnPath() const
     return m_drawnPath;
 }
 
-QRectF gx::Path::boundingBox() const
+QRectF gx::Path::shapeBoundingBox() const
 {
-    QRectF baseBox = GObject::boundingBox();
     QRectF rect = m_drawnPath.boundingRect();
     fixBoxForStrokeWidth(rect);
-    return baseBox.united(rect);
+    return rect;
 }
 
 QList<gx::Vertex> gx::Path::vertices() const

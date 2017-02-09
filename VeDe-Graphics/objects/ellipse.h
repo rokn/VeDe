@@ -18,7 +18,9 @@ public:
     Vertex radius() const;
     void setRadius(const Vertex &radius);
 
-    QRectF boundingBox() const;
+protected:
+    QRectF shapeBoundingBox() const;
+    bool shapeContainsPoint(const gx::Vertex &point) const;
 
 private:
     Vertex m_center;

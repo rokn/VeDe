@@ -158,18 +158,21 @@ QRectF gx::GObject::boundingBox() const
         box = box.united(obj->boundingBox());
     }
 
-    return box;
+    return box.united(shapeBoundingBox());
 }
 
 bool gx::GObject::containsPoint(const gx::Vertex &point) const
 {
-    bool contains;
+    if(shapeContainsPoint(point)) return true;
+
     foreach(std::shared_ptr<GObject> obj, m_children)
     {
-        contains |= obj->containsPoint(point);
+        if(obj->containsPoint(point)) {
+            return true;
+        }
     }
 
-    return contains;
+    return false;
 }
 
 void gx::GObject::changed()
@@ -180,6 +183,26 @@ void gx::GObject::changed()
 void gx::GObject::preChange()
 {
     m_onPreChange(this);
+}
+
+QRectF gx::GObject::shapeBoundingBox() const
+{
+    return QRectF();
+}
+
+bool gx::GObject::shapeContainsPoint(const gx::Vertex &point) const
+{
+    return false;
+}
+
+const QTransform& gx::GObject::getTransform() const
+{
+    return m_transform;
+}
+
+void gx::GObject::setTransform(const QTransform &transform)
+{
+    m_transform = transform;
 }
 
 bool gx::GObject::isSelected() const

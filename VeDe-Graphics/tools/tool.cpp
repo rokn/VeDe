@@ -44,7 +44,7 @@ const gx::Canvas *gx::Tool::getCanvas() const
     return m_canvas;
 }
 
-const QString &gx::Tool::getCurrStateName() const
+QString gx::Tool::getCurrStateName() const
 {
     auto state = m_states.find(m_currState);
     if(state != m_states.end())

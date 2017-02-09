@@ -10,6 +10,7 @@
 #include <memory>
 #include <functional>
 #include <QRectF>
+#include <QTransform>
 
 namespace gx
 {
@@ -49,15 +50,21 @@ public:
     void preparePropertyChange();
     void updateProperties();
 
-    virtual QRectF boundingBox() const;
-    virtual bool containsPoint(const gx::Vertex &point) const;
+    QRectF boundingBox() const;
+    bool containsPoint(const gx::Vertex &point) const;
 
     bool isSelected() const;
     void setSelected(bool selected);
 
+    const QTransform& getTransform() const;
+    void setTransform(const QTransform &transform);
+
 protected:
     void changed();
     void preChange();
+
+    virtual QRectF shapeBoundingBox() const;
+    virtual bool shapeContainsPoint(const gx::Vertex &point) const;
 
 private:
     QList<std::shared_ptr<GObject>> m_children;
@@ -66,6 +73,7 @@ private:
     int m_zorder;
     unsigned int m_id;
     bool m_selected;
+    QTransform m_transform;
     Event<const GObject*> m_onDestroy;
     Event<const GObject*> m_onPreChange;
     Event<const GObject*> m_onChange;

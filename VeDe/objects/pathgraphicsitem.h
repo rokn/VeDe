@@ -4,7 +4,7 @@
 #include "basegraphicsitem.h"
 #include "objects/path.h"
 
-class PathGraphicsItem : public BaseGraphicsItem
+class PathGraphicsItem : public BaseShapeItem
 {
 public:
     PathGraphicsItem(std::shared_ptr<gx::Path> path);

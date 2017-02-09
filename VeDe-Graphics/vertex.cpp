@@ -1,4 +1,5 @@
 #include "vertex.h"
+#include "converters.h"
 #include <QtMath>
 
 gx::Vertex::Vertex()
@@ -126,4 +127,10 @@ float gx::Vertex::length() const
 float gx::Vertex::lengthSquared() const
 {
     return qPow(m_x, 2) + qPow(m_y, 2);
+}
+
+gx::Vertex gx::Vertex::transformed(const QTransform& transform) const
+{
+    QPointF transfPoint = transform.map(Converters::toPoint(*this));
+    return Converters::toVertex(transfPoint);
 }

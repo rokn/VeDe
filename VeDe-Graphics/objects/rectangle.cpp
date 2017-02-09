@@ -36,18 +36,17 @@ void gx::Rectangle::setBottomRight(const Vertex &value)
     changed();
 }
 
-QRectF gx::Rectangle::boundingBox() const
+QRectF gx::Rectangle::shapeBoundingBox() const
 {
-    QRectF baseBox = GObject::boundingBox();
     QPointF p1, p2;
     p1 = Converters::toPoint(getTopLeft());
     p2 = Converters::toPoint(getBottomRight());
     QRectF rect(p1,p2);
     fixBoxForStrokeWidth(rect);
-    return baseBox.united(rect);
+    return rect;
 }
 
-bool gx::Rectangle::containsPoint(const gx::Vertex &point) const
+bool gx::Rectangle::shapeContainsPoint(const gx::Vertex &point) const
 {
     Vertex p1 = point - m_topLeft;
     Vertex p2 = point - m_bottomRight;

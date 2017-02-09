@@ -29,7 +29,8 @@ public:
 
     const QPainterPath& drawnPath() const;
 
-    QRectF boundingBox() const;
+protected:
+    QRectF shapeBoundingBox() const;
 
 private:
     QList<Vertex> m_vertices;
