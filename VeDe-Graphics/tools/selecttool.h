@@ -17,6 +17,7 @@ private:
     QRectF m_selection;
     Vertex m_anchorPoint;
     bool m_selecting;
+    bool m_dragging;
     bool m_union;
     void selectObjects(QRectF rect);
 };

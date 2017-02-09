@@ -99,7 +99,12 @@ QRectF gx::Path::shapeBoundingBox() const
 {
     QRectF rect = m_drawnPath.boundingRect();
     fixBoxForStrokeWidth(rect);
-    return rect;
+    return getTransform().mapRect(rect);
+}
+
+bool gx::Path::shapeContainsPoint(const gx::Vertex &point) const
+{
+    return getTransform().map(m_drawnPath).contains(Converters::toPoint(point));
 }
 
 QList<gx::Vertex> gx::Path::vertices() const

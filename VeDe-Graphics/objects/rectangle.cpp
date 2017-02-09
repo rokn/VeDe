@@ -43,7 +43,7 @@ QRectF gx::Rectangle::shapeBoundingBox() const
     p2 = Converters::toPoint(getBottomRight());
     QRectF rect(p1,p2);
     fixBoxForStrokeWidth(rect);
-    return rect;
+    return getTransform().mapRect(rect);
 }
 
 bool gx::Rectangle::shapeContainsPoint(const gx::Vertex &point) const

@@ -33,7 +33,7 @@ void BaseShapeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
         painter->setClipRect(QRectF( 0.5,  0.5, canvasWidth - 1, canvasHeight - 1)); // Fix for canvas border
     }
 
-    painter->setTransform(painter->transform() * m_object->getTransform());
+    painter->setTransform(m_object->getTransform() * painter->transform());
     painter->setBrush(QBrush(gx::Converters::toQColor(m_object->getProp(gx::PROP::BACK_COLOR)->toColor())));
     QPen pen(gx::Converters::toQColor(m_object->getProp(gx::PROP::STROKE_COLOR)->toColor()));
     pen.setWidthF(m_object->getProp(gx::PROP::STROKE_WIDTH)->toFloat());

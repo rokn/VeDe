@@ -2,6 +2,7 @@
 #include "converters.h"
 #include "helpers.h"
 #include <QPointF>
+#include <QtMath>
 
 gx::Ellipse::Ellipse()
 {
@@ -42,9 +43,14 @@ QRectF gx::Ellipse::shapeBoundingBox() const
     QPointF radii = Converters::toPoint(this->radius());
     QRectF rect(center - radii, center + radii);
     fixBoxForStrokeWidth(rect);
-    return rect;
+    return getTransform().mapRect(rect);
 }
 
 bool gx::Ellipse::shapeContainsPoint(const gx::Vertex &point) const
 {
+    gx::Vertex tc = center().transformed(getTransform());
+    gx::Vertex tp = point;
+    double xCoef = qPow(tp.x() - tc.x(), 2) / qPow(radius().x(), 2);
+    double yCoef = qPow(tp.y() - tc.y(), 2) / qPow(radius().y(), 2);
+    return (xCoef + yCoef) <= 1;
 }

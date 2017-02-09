@@ -31,6 +31,7 @@ public:
 
 protected:
     QRectF shapeBoundingBox() const;
+    bool shapeContainsPoint(const gx::Vertex &point) const;
 
 private:
     QList<Vertex> m_vertices;

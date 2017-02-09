@@ -202,7 +202,9 @@ const QTransform& gx::GObject::getTransform() const
 
 void gx::GObject::setTransform(const QTransform &transform)
 {
+    preChange();
     m_transform = transform;
+    changed();
 }
 
 bool gx::GObject::isSelected() const

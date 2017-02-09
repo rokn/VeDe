@@ -4,6 +4,7 @@
 #include "commands/selectcommand.h"
 #include "color.h"
 #include <QtMath>
+#include <QDebug>
 
 gx::SelectTool::SelectTool(Canvas *canvas)
     :Tool(canvas)
@@ -24,27 +25,54 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     addState(start, EMPTY_STATE);
     addState(selectStart, STATE_DEF{
         Vertex cursorPos = getCanvas()->getCursor();
+
+        auto list = getCanvas()->getSelectedObjects();
+        foreach(auto obj, list) {
+            if(obj->containsPoint(cursorPos)) {
+                m_dragging = true;
+                break;
+            }
+        }
+
         m_anchorPoint = cursorPos;
-        m_selection = QRectF(cursorPos.x(), cursorPos.y(), 1, 1);
-        m_selecting = true;
+        if(!m_dragging) {
+            m_selection = QRectF(cursorPos.x(), cursorPos.y(), 1, 1);
+            m_selecting = true;
+        }
+
         moveToStateSilent(moveSelect);
     });
 
     addState(moveSelect, STATE_DEF{
         Vertex cursor = getCanvas()->getCursor();
-        Vertex upLeft(qMin(cursor.x(), m_anchorPoint.x()), qMin(cursor.y(), m_anchorPoint.y()));
-        Vertex downRight(qMax(cursor.x(), m_anchorPoint.x()), qMax(cursor.y(), m_anchorPoint.y()));
-        QRectF old = m_selection;
-        m_selection.setTopLeft(Converters::toPoint(upLeft));
-        m_selection.setBottomRight(Converters::toPoint(downRight));
-        getCanvas()->redraw(m_selection.united(old));
+
+        if(m_selecting) {
+            Vertex upLeft(qMin(cursor.x(), m_anchorPoint.x()), qMin(cursor.y(), m_anchorPoint.y()));
+            Vertex downRight(qMax(cursor.x(), m_anchorPoint.x()), qMax(cursor.y(), m_anchorPoint.y()));
+            QRectF old = m_selection;
+            m_selection.setTopLeft(Converters::toPoint(upLeft));
+            m_selection.setBottomRight(Converters::toPoint(downRight));
+            getCanvas()->redraw(m_selection.united(old));
+        } else if (m_dragging) {
+            auto objects = getCanvas()->getSelectedObjects();
+            foreach(auto obj, objects) {
+                QTransform t = obj->getTransform();
+                t.translate(cursor.x() - m_anchorPoint.x(), cursor.y() - m_anchorPoint.y());
+                obj->setTransform(t);
+            }
+            m_anchorPoint = cursor;
+        }
     });
 
     addState(endSelect, STATE_DEF{
+        if(m_selecting) {
+            m_selecting = false;
+            selectObjects(m_selection);
+            getCanvas()->redraw(m_selection);
+        } else if (m_dragging) {
+            m_dragging = false;
+        }
         moveToStateSilent(start);
-        m_selecting = false;
-        selectObjects(m_selection);
-        getCanvas()->redraw(m_selection);
     });
 
     addState(unionEnable, STATE_DEF{
