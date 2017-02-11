@@ -47,8 +47,9 @@ QRectF gx::Rectangle::shapeBoundingBox() const
 
 bool gx::Rectangle::shapeContainsPoint(const gx::Vertex &point) const
 {
-    Vertex p1 = point - m_topLeft;
-    Vertex p2 = point - m_bottomRight;
+//    Vertex p1 = point - m_topLeft;
+//    Vertex p2 = point - m_bottomRight;
 
-    return p1.x() > 0 && p1.y() > 0 && p2.x() < 0 && p2.y() < 0;
+//    return p1.x() > 0 && p1.y() > 0 && p2.x() < 0 && p2.y() < 0;
+    return shapeBoundingBox().contains(Converters::toPoint(point));
 }

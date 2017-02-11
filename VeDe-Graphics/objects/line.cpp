@@ -59,11 +59,13 @@ bool gx::Line::shapeContainsPoint(const gx::Vertex &point) const
 
 float gx::Line::distanceToPoint(const gx::Vertex &point) const
 {
-    float lengthSquared = (end() - start()).lengthSquared();
+    Vertex tStart = start().transformed(getTransform());
+    Vertex tEnd = end().transformed(getTransform());
+    float lengthSquared = (tEnd - tStart).lengthSquared();
 
     if(lengthSquared < 0.00001) return m_start.distance(point);
 
-    float t = qMax(0.f, qMin(1.f, (point - start()) * (end() - start()) / lengthSquared));
-    Vertex projection = start() + (end() - start()) * t;
+    float t = qMax(0.f, qMin(1.f, (point - tStart) * (tEnd - tStart) / lengthSquared));
+    Vertex projection = tStart + (tEnd - tStart) * t;
     return point.distance(projection);
 }
