@@ -22,10 +22,10 @@ class Canvas : public PropertyHolder
 {
 //    Q_OBJECT
 public:
-    Canvas(std::shared_ptr<GObject> root = nullptr, QObject* parent = 0);
+    Canvas(SharedGObject root = nullptr, QObject* parent = 0);
     virtual ~Canvas();
 
-    std::shared_ptr<GObject> root();
+    SharedGObject root();
 
     virtual Vertex getCursor() const = 0;
 
@@ -43,7 +43,7 @@ public:
     virtual void redrawGui() = 0;
     virtual void redraw(QRectF area) = 0;
 
-    void addToCurrLayer(std::shared_ptr<GObject> object);
+    void addToCurrLayer(SharedGObject object);
 
     void changeCurrTool(Tool* newTool);
 
@@ -52,7 +52,7 @@ public:
     double getZoomFactor() const;
     void setZoomFactor(double zoomFactor);
 
-    virtual void onAddObject(std::shared_ptr<GObject> object);
+    virtual void onAddObject(SharedGObject object);
 
     Tool *getCurrTool() const;
 
@@ -70,15 +70,15 @@ public:
     void lock();
     void unlock();
 
-    QList<std::shared_ptr<GObject>> getSelectedObjects();
+    QList<SharedGObject> getSelectedObjects();
     void clearSelectedObjects(bool withCommand = true);
-    void selectObject(std::shared_ptr<GObject> obj);
-    void deselectObject(std::shared_ptr<GObject> obj);
+    void selectObject(SharedGObject obj);
+    void deselectObject(SharedGObject obj);
 
 private:
-    std::shared_ptr<GObject> m_root;
+    SharedGObject m_root;
     QVector<Command*> m_commandHistory;
-    QList<std::shared_ptr<GObject>> m_selectedObjects;
+    QList<SharedGObject> m_selectedObjects;
     unsigned int m_currCommand;
     Tool* m_currTool;
     std::shared_ptr<Layer> m_currLayer;

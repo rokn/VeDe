@@ -19,7 +19,7 @@
 #include "objects/guidrawer.h"
 #include "tools/tool.h"
 
-CanvasImpl::CanvasImpl(QObject *parent, std::shared_ptr<gx::GObject> root)
+CanvasImpl::CanvasImpl(QObject *parent, gx::SharedGObject root)
     :QGraphicsScene(parent), gx::Canvas(root, nullptr)
 {
     addRect(0, 0, getWidth(),getHeight(),QPen(Qt::black, 1), QBrush(Qt::white));
@@ -50,7 +50,7 @@ gx::Vertex CanvasImpl::getCursor() const
     return m_mousePos;
 }
 
-void CanvasImpl::onAddObject(std::shared_ptr<gx::GObject> object)
+void CanvasImpl::onAddObject(gx::SharedGObject object)
 {
     //Factory
     QGraphicsItem* item;
@@ -121,7 +121,7 @@ Qt::Key CanvasImpl::transformToKey(Qt::KeyboardModifier mod)
     }
 }
 
-CanvasImpl *CanvasImpl::createCanvas(QObject *parent, std::shared_ptr<gx::GObject> root)
+CanvasImpl *CanvasImpl::createCanvas(QObject *parent, gx::SharedGObject root)
 {
     CanvasImpl* canvas = new CanvasImpl(parent, root);
 

@@ -13,8 +13,8 @@ class CanvasImpl : public QGraphicsScene, public gx::Canvas
 {
     Q_OBJECT
 public:
-    CanvasImpl(QObject* parent, std::shared_ptr<gx::GObject> root);
-    static CanvasImpl* createCanvas(QObject* parent = 0, std::shared_ptr<gx::GObject> root = 0);
+    CanvasImpl(QObject* parent, gx::SharedGObject root);
+    static CanvasImpl* createCanvas(QObject* parent = 0, gx::SharedGObject root = 0);
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -25,7 +25,7 @@ public:
     void redrawGui();
     void redraw(QRectF area);
     gx::Vertex getCursor() const;
-    void onAddObject(std::shared_ptr<gx::GObject> object);
+    void onAddObject(gx::SharedGObject object);
 
 protected:
     void drawForeground(QPainter *painter, const QRectF &rect);

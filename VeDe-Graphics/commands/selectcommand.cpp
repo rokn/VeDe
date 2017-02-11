@@ -1,24 +1,8 @@
 #include "selectcommand.h"
 
-gx::SelectCommand::SelectCommand(const QList<std::shared_ptr<gx::GObject> > &objects, bool select)
-    :SelectCommand(objects, nullptr, select)
+gx::SelectCommand::SelectCommand(bool select)
+    :m_select(select)
 {
-}
-
-gx::SelectCommand::SelectCommand(const QList<std::shared_ptr<gx::GObject> > &objects, gx::Canvas *canvas, bool select)
-    :CanvasCommand(canvas), m_objects(objects), m_select(select)
-{
-}
-
-gx::SelectCommand::SelectCommand(const std::shared_ptr<gx::GObject> &object, bool select)
-    :SelectCommand(object, nullptr, select)
-{
-}
-
-gx::SelectCommand::SelectCommand(const std::shared_ptr<gx::GObject> &object, gx::Canvas *canvas, bool select)
-    :CanvasCommand(canvas), m_select(select)
-{
-    m_objects.append(object);
 }
 
 int gx::SelectCommand::execute()

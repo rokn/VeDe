@@ -1,23 +1,7 @@
 #include "addgobjectcommand.h"
 
-gx::AddGObjectCommand::AddGObjectCommand(std::shared_ptr<GObject> object, bool add)
-    :AddGObjectCommand(object, nullptr, add)
-{
-}
-
-gx::AddGObjectCommand::AddGObjectCommand(std::shared_ptr<GObject> object, gx::Canvas *canvas, bool add)
-    :CanvasCommand(canvas), m_add(add)
-{
-    m_objects.append(object);
-}
-
-gx::AddGObjectCommand::AddGObjectCommand(const QList<std::shared_ptr<gx::GObject> > &objects, bool add)
-    :AddGObjectCommand(objects, nullptr, add)
-{
-}
-
-gx::AddGObjectCommand::AddGObjectCommand(const QList<std::shared_ptr<gx::GObject>> &objects, gx::Canvas *canvas, bool add)
-    :CanvasCommand(canvas), m_objects(objects), m_add(add)
+gx::AddGObjectCommand::AddGObjectCommand(bool add)
+    :m_add(add)
 {
 }
 

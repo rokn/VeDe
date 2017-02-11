@@ -28,7 +28,9 @@ void gx::ShapeTool::initStates(bool includeTransitions)
         if(m_shape != nullptr){
             PropertyFactory::setShapePreviewProperties(m_shape.get());
 
-            Command* command = new AddGObjectCommand(m_shape, getCanvas());
+            CanvasCommand* command = new AddGObjectCommand();
+            command->setCanvas(getCanvas());
+            command->setObject(m_shape);
             getCanvas()->executeCommand(command);
             getCanvas()->lock();
 

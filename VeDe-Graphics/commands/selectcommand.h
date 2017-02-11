@@ -9,10 +9,7 @@ namespace gx
 class SelectCommand : public CanvasCommand
 {
 public:
-    SelectCommand(const QList<std::shared_ptr<GObject>>& objects, bool select = true);
-    SelectCommand(const QList<std::shared_ptr<GObject>>& objects, Canvas* canvas, bool select = true);
-    SelectCommand(const std::shared_ptr<GObject>& object, bool select = true);
-    SelectCommand(const std::shared_ptr<GObject>& object, Canvas* canvas, bool select = true);
+    SelectCommand(bool select = true);
 
     int execute();
     int undo();

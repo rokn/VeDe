@@ -15,22 +15,21 @@
 namespace gx
 {
 class Canvas; //Forw. decl.
+class GObject; //Forw. decl.
 
+typedef std::shared_ptr<GObject> SharedGObject;
 
 class GObject : public PropertyHolder
 {
 public:
-    typedef std::shared_ptr<GObject> SharedGObject;
-
-
-    GObject(std::shared_ptr<GObject> parent = nullptr);
+    GObject(SharedGObject parent = nullptr);
     virtual ~GObject();
-    QList<std::shared_ptr<GObject> > &getChildren();
-    void addChild(GObject *child, const std::shared_ptr<GObject> &parent);
-    void addChild(std::shared_ptr<GObject> child, const std::shared_ptr<GObject> &parent);
+    QList<SharedGObject > &getChildren();
+    void addChild(GObject *child, const SharedGObject &parent);
+    void addChild(SharedGObject child, const SharedGObject &parent);
 
-    std::shared_ptr<GObject> getParent() const;
-    void setParent(std::shared_ptr<GObject> parent);
+    SharedGObject getParent() const;
+    void setParent(SharedGObject parent);
 
     GObject *findInChildren(unsigned int id);
 
@@ -75,8 +74,8 @@ protected:
     virtual bool shapeContainsPoint(const gx::Vertex &point) const;
 
 private:
-    QList<std::shared_ptr<GObject>> m_children;
-    std::shared_ptr<GObject> m_parent;
+    QList<SharedGObject> m_children;
+    SharedGObject m_parent;
     Canvas* m_canvas;
     int m_zorder;
     unsigned int m_id;

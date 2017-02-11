@@ -108,7 +108,7 @@ void gx::SelectTool::selectObjects(QRectF rect)
 {
     auto currLayerObjects = getCanvas()->getCurrLayer()->getChildren();
     QRectF redrawBox;
-    QList<std::shared_ptr<GObject>> selectedObjects;
+    QList<SharedGObject> selectedObjects;
 
     foreach (auto& obj, currLayerObjects) {
         if(rect.contains(obj->boundingBox())) {
@@ -121,7 +121,9 @@ void gx::SelectTool::selectObjects(QRectF rect)
             getCanvas()->clearSelectedObjects();
         }
 
-        Command* command = new SelectCommand(selectedObjects, getCanvas());
+        CanvasCommand* command = new SelectCommand();
+        command->setCanvas(getCanvas());
+        command->setObjects(selectedObjects);
         getCanvas()->executeCommand(command);
     }
 }

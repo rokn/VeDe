@@ -7,7 +7,9 @@ gx::Tool::ToolStateCallBack gx::CommonStates::deleteSelectedObjects(Tool* tool)
     return STATE_DEF{
         auto objects = tool->getCanvas()->getSelectedObjects();
         if(objects.size() > 0){
-            Command* removeObjects = new AddGObjectCommand(objects, tool->getCanvas(), false);
+            CanvasCommand* removeObjects = new AddGObjectCommand(false);
+            removeObjects->setCanvas(tool->getCanvas());
+            removeObjects->setObjects(objects);
             tool->getCanvas()->executeCommand(removeObjects);
         }
         tool->moveToStateSilent(tool->getLastState());
@@ -19,7 +21,9 @@ gx::Tool::ToolStateCallBack gx::CommonStates::selectAllOnCurrLayer(gx::Tool *too
     return STATE_DEF{
         auto objects = tool->getCanvas()->getCurrLayer()->getChildren();
         if(objects.size() > 0){
-            Command* selectObjects = new SelectCommand(objects, tool->getCanvas());
+            CanvasCommand* selectObjects = new SelectCommand();
+            selectObjects->setCanvas(tool->getCanvas());
+            selectObjects->setObjects(objects);
             tool->getCanvas()->executeCommand(selectObjects);
 
         }

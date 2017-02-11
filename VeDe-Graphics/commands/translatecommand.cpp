@@ -1,6 +1,11 @@
 #include "translatecommand.h"
 
-TranslateCommand::TranslateCommand()
+int gx::TranslateCommand::execute()
+{
+
+}
+
+int gx::TranslateCommand::undo()
 {
 
 }

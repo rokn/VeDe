@@ -5,11 +5,11 @@
 #include <QtMath>
 #include <memory>
 
-gx::Canvas::Canvas(std::shared_ptr<GObject> root, QObject *parent)
+gx::Canvas::Canvas(SharedGObject root, QObject *parent)
     :PropertyHolder(parent), m_root(root)
 {
     if(m_root == nullptr) {
-        m_root = std::shared_ptr<GObject>(new Layer);
+        m_root = SharedGObject(new Layer);
         m_currLayer = std::shared_ptr<Layer>(new Layer);
         m_root->addChild(m_currLayer, m_root);
         m_root->setId(m_idCount++);
@@ -42,7 +42,7 @@ void gx::Canvas::setZoomFactor(double zoomFactor)
     m_onZoomChange(m_zoomFactor);
 }
 
-void gx::Canvas::onAddObject(std::shared_ptr<gx::GObject> object){}
+void gx::Canvas::onAddObject(gx::SharedGObject object){}
 
 gx::Tool *gx::Canvas::getCurrTool() const
 {
@@ -84,7 +84,7 @@ void gx::Canvas::unlock()
     m_locked = false;
 }
 
-QList<std::shared_ptr<gx::GObject> > gx::Canvas::getSelectedObjects()
+QList<gx::SharedGObject > gx::Canvas::getSelectedObjects()
 {
     return m_selectedObjects;
 }
@@ -95,7 +95,9 @@ void gx::Canvas::clearSelectedObjects(bool withCommand)
 
     if(withCommand)
     {
-        Command* deselectCommand = new SelectCommand(m_selectedObjects, this, false);
+        CanvasCommand* deselectCommand = new SelectCommand(false);
+        deselectCommand->setCanvas(this);
+        deselectCommand->setObjects(m_selectedObjects);
         executeCommand(deselectCommand);
     }
     else
@@ -113,13 +115,13 @@ void gx::Canvas::clearSelectedObjects(bool withCommand)
     }
 }
 
-void gx::Canvas::selectObject(std::shared_ptr<gx::GObject> obj)
+void gx::Canvas::selectObject(gx::SharedGObject obj)
 {
     obj->setSelected(true);
     m_selectedObjects.append(obj);
 }
 
-void gx::Canvas::deselectObject(std::shared_ptr<gx::GObject> obj)
+void gx::Canvas::deselectObject(gx::SharedGObject obj)
 {
     obj->setSelected(false);
     m_selectedObjects.removeOne(obj);
@@ -166,7 +168,7 @@ gx::Canvas::~Canvas()
     m_root->removeAllChildren();
 }
 
-std::shared_ptr<gx::GObject> gx::Canvas::root()
+gx::SharedGObject gx::Canvas::root()
 {
     return m_root;
 }
@@ -187,7 +189,7 @@ int gx::Canvas::executeCommand(gx::Command* command)
 
 void gx::Canvas::addSilentCommand(gx::Command *command)
 {
-    if(isLocked()) return -1;
+    if(isLocked()) return;
 
     addNewCommand(command);
 }
@@ -238,7 +240,7 @@ void gx::Canvas::handleTransition(const UserEvent &transition)
     }
 }
 
-void gx::Canvas::addToCurrLayer(std::shared_ptr<gx::GObject> object)
+void gx::Canvas::addToCurrLayer(gx::SharedGObject object)
 {
     object->setId(m_idCount++);
     object->setCanvas(this);

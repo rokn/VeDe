@@ -5,7 +5,7 @@
 #include <QStack>
 #include <QDebug>
 
-gx::GObject::GObject(std::shared_ptr<gx::GObject> parent)
+gx::GObject::GObject(gx::SharedGObject parent)
 {
     if(parent != nullptr)
     {
@@ -19,29 +19,29 @@ gx::GObject::~GObject()
 {
 }
 
-void gx::GObject::addChild(gx::GObject *child, const std::shared_ptr<GObject>& parent)
+void gx::GObject::addChild(gx::GObject *child, const SharedGObject& parent)
 {
-    std::shared_ptr<gx::GObject> ch(child);
+    gx::SharedGObject ch(child);
     addChild(ch, parent);
 }
 
-QList<std::shared_ptr<gx::GObject>>& gx::GObject::getChildren()
+QList<gx::SharedGObject>& gx::GObject::getChildren()
 {
     return m_children;
 }
 
-void gx::GObject::addChild(std::shared_ptr<GObject> child, const std::shared_ptr<GObject>& parent)
+void gx::GObject::addChild(SharedGObject child, const SharedGObject& parent)
 {
     child->setParent(parent);
     this->m_children.append(child);
 }
 
-std::shared_ptr<gx::GObject> gx::GObject::getParent() const
+gx::SharedGObject gx::GObject::getParent() const
 {
     return m_parent;
 }
 
-void gx::GObject::setParent(std::shared_ptr<GObject> parent)
+void gx::GObject::setParent(SharedGObject parent)
 {
     m_parent = parent;
 }
@@ -153,7 +153,7 @@ void gx::GObject::updateProperties()
 QRectF gx::GObject::boundingBox() const
 {
     QRectF box;
-    foreach(std::shared_ptr<GObject> obj, m_children)
+    foreach(SharedGObject obj, m_children)
     {
         box = box.united(obj->boundingBox());
     }
@@ -165,7 +165,7 @@ bool gx::GObject::containsPoint(const gx::Vertex &point) const
 {
     if(shapeContainsPoint(point)) return true;
 
-    foreach(std::shared_ptr<GObject> obj, m_children)
+    foreach(SharedGObject obj, m_children)
     {
         if(obj->containsPoint(point)) {
             return true;
