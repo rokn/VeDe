@@ -195,55 +195,59 @@ bool gx::GObject::shapeContainsPoint(const gx::Vertex &point) const
     return false;
 }
 
-void gx::GObject::updateTransform()
+void gx::GObject::applyTranslation()
+{
+    m_transform = m_transform * m_translation ;
+}
+
+void gx::GObject::removeTranslation()
+{
+    m_transform = m_transform * m_translation.inverted();
+}
+
+QTransform gx::GObject::getCenterAxis() const
+{
+    QPointF center = boundingBox().center();
+    return QTransform::fromTranslate(center.x(), center.y());
+}
+
+void gx::GObject::translate(gx::Vertex translation)
 {
     preChange();
-    QRectF box = boundingBox();
-    QPointF center = box.center();
-//    QTransform transform;
-    QTransform axis = QTransform::fromTranslate(center.x(), center.y());
-//    transform = transform * m_translation;
-//    transform.translate(center.x(), center.y());
-//    transform = m_rotation * transform;
-//    transform.translate(-center.x(), -center.y());
-    m_transform = m_translation * axis.inverted() * m_rotation * axis * m_scale;// * m_translation ;
+    removeTranslation();
+    m_translation.translate(translation.x(), translation.y());
+    applyTranslation();
     changed();
 }
 
-const QTransform &gx::GObject::getScale() const
+void gx::GObject::scale(gx::Vertex scaleBy)
 {
-    return m_scale;
+    scale(scaleBy, getCenterAxis());
 }
 
-void gx::GObject::setScale(const QTransform &scale)
-{
-    m_scale = scale;
-    updateTransform();
-}
-
-const QTransform &gx::GObject::getRotation() const
-{
-    return m_rotation;
-}
-
-void gx::GObject::setRotation(const QTransform &rotation)
-{
-    m_rotation = rotation;
-    updateTransform();
-}
-
-const QTransform &gx::GObject::getTranslation() const
-{
-    return m_translation;
-}
-
-void gx::GObject::setTranslation(const QTransform &translation)
+void gx::GObject::scale(gx::Vertex scaleBy, QTransform axis)
 {
     preChange();
-    m_transform = m_transform * m_translation.inverted();
-    m_translation = translation;
-    m_transform = m_transform * m_translation ;
-//    updateTransform();
+    removeTranslation();
+    QTransform scaleMatrix = QTransform::fromScale(scaleBy.x(), scaleBy.y());
+    m_transform = m_transform * axis.inverted() * scaleMatrix * axis;
+    applyTranslation();
+    changed();
+}
+
+void gx::GObject::rotate(double angle)
+{
+    rotate(angle, getCenterAxis());
+}
+
+void gx::GObject::rotate(double angle, QTransform axis)
+{
+    preChange();
+    removeTranslation();
+    QTransform rotation;
+    rotation.rotate(angle);
+    m_transform = m_transform * axis.inverted() * rotation * axis;
+    applyTranslation();
     changed();
 }
 

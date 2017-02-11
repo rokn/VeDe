@@ -47,20 +47,9 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         Vertex cursor = getCanvas()->getCursor();
 
         if(m_selecting) {
-            Vertex upLeft(qMin(cursor.x(), m_anchorPoint.x()), qMin(cursor.y(), m_anchorPoint.y()));
-            Vertex downRight(qMax(cursor.x(), m_anchorPoint.x()), qMax(cursor.y(), m_anchorPoint.y()));
-            QRectF old = m_selection;
-            m_selection.setTopLeft(Converters::toPoint(upLeft));
-            m_selection.setBottomRight(Converters::toPoint(downRight));
-            getCanvas()->redraw(m_selection.united(old));
+            updateSelection(cursor);
         } else if (m_dragging) {
-            auto objects = getCanvas()->getSelectedObjects();
-            foreach(auto obj, objects) {
-                QTransform t = obj->getTranslation();
-                t.translate(cursor.x() - m_anchorPoint.x(), cursor.y() - m_anchorPoint.y());
-                obj->setTranslation(t);
-            }
-            m_anchorPoint = cursor;
+            updateTranslation(cursor);
         }
     });
 
@@ -85,17 +74,6 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         moveToStateSilent(getLastState());
     });
 
-    addState("Rot", STATE_DEF{
-        auto obj = getCanvas()->getSelectedObjects()[0] ;
-        QTransform transf = obj->getRotation();
-//        QPointF c = obj->boundingBox().center();
-//        transf.translate(c.x(), c.y());
-        transf.rotate(45);
-//        transf.tran(- c.x(), - c.y());
-        obj->setRotation(transf);
-        moveToStateSilent(start);
-    });
-
     addState(deleteObjects, CommonStates::deleteSelectedObjects(this));
     addState(selectAll, CommonStates::selectAllOnCurrLayer(this));
     addState(deselectAll, CommonStates::deselectAll(this));
@@ -110,7 +88,6 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_A), selectAll);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Escape), deselectAll);
     addTransition(ANY_STATE, UserEvent(MOUSE_PRESS, Qt::RightButton), deselectAll);
-    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_R), "Rot");
 
     moveToStateSilent(start);
 }
@@ -147,4 +124,25 @@ void gx::SelectTool::selectObjects(QRectF rect)
         Command* command = new SelectCommand(selectedObjects, getCanvas());
         getCanvas()->executeCommand(command);
     }
+}
+
+void gx::SelectTool::updateSelection(gx::Vertex cursor)
+{
+    Vertex upLeft(qMin(cursor.x(), m_anchorPoint.x()), qMin(cursor.y(), m_anchorPoint.y()));
+    Vertex downRight(qMax(cursor.x(), m_anchorPoint.x()), qMax(cursor.y(), m_anchorPoint.y()));
+    QRectF old = m_selection;
+    m_selection.setTopLeft(Converters::toPoint(upLeft));
+    m_selection.setBottomRight(Converters::toPoint(downRight));
+    getCanvas()->redraw(m_selection.united(old));
+}
+
+void gx::SelectTool::updateTranslation(gx::Vertex cursor)
+{
+    auto objects = getCanvas()->getSelectedObjects();
+
+    foreach(auto obj, objects) {
+        obj->translate(Vertex(cursor.x() - m_anchorPoint.x(), cursor.y() - m_anchorPoint.y()));
+    }
+
+    m_anchorPoint = cursor;
 }

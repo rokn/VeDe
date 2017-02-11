@@ -58,14 +58,11 @@ public:
 
     const QTransform& getTransform() const;
 
-    const QTransform& getTranslation() const;
-    void setTranslation(const QTransform &translation);
-
-    const QTransform& getRotation() const;
-    void setRotation(const QTransform &rotation);
-
-    const QTransform& getScale() const;
-    void setScale(const QTransform &scale);
+    void translate(Vertex translation);
+    void scale(Vertex scaleBy, QTransform axis);
+    void scale(Vertex scaleBy);
+    void rotate(double angle);
+    void rotate(double angle, QTransform axis);
 
 protected:
     void changed();
@@ -83,13 +80,13 @@ private:
     bool m_selected;
     QTransform m_transform;
     QTransform m_translation;
-    QTransform m_rotation;
-    QTransform m_scale;
     Event<const GObject*> m_onDestroy;
     Event<const GObject*> m_onPreChange;
     Event<const GObject*> m_onChange;
 
-    void updateTransform();
+    void applyTranslation();
+    void removeTranslation();
+    QTransform getCenterAxis() const;
 };
 }
 

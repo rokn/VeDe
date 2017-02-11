@@ -19,7 +19,13 @@ private:
     bool m_selecting;
     bool m_dragging;
     bool m_union;
+
     void selectObjects(QRectF rect);
+
+    void updateSelection(Vertex cursor);
+    void updateTranslation(Vertex cursor);
+    void updateRotation(Vertex cursor);
+    void updateScaling(Vertex cursor);
 };
 }
 
