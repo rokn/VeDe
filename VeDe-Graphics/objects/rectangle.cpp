@@ -4,7 +4,6 @@
 
 gx::Rectangle::Rectangle()
 {
-
 }
 
 gx::Rectangle::Rectangle(gx::Vertex upLeft, gx::Vertex downRight)

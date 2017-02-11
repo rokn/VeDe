@@ -195,16 +195,61 @@ bool gx::GObject::shapeContainsPoint(const gx::Vertex &point) const
     return false;
 }
 
+void gx::GObject::updateTransform()
+{
+    preChange();
+    QRectF box = boundingBox();
+    QPointF center = box.center();
+//    QTransform transform;
+    QTransform axis = QTransform::fromTranslate(center.x(), center.y());
+//    transform = transform * m_translation;
+//    transform.translate(center.x(), center.y());
+//    transform = m_rotation * transform;
+//    transform.translate(-center.x(), -center.y());
+    m_transform = m_translation * axis.inverted() * m_rotation * axis * m_scale;// * m_translation ;
+    changed();
+}
+
+const QTransform &gx::GObject::getScale() const
+{
+    return m_scale;
+}
+
+void gx::GObject::setScale(const QTransform &scale)
+{
+    m_scale = scale;
+    updateTransform();
+}
+
+const QTransform &gx::GObject::getRotation() const
+{
+    return m_rotation;
+}
+
+void gx::GObject::setRotation(const QTransform &rotation)
+{
+    m_rotation = rotation;
+    updateTransform();
+}
+
+const QTransform &gx::GObject::getTranslation() const
+{
+    return m_translation;
+}
+
+void gx::GObject::setTranslation(const QTransform &translation)
+{
+    preChange();
+    m_transform = m_transform * m_translation.inverted();
+    m_translation = translation;
+    m_transform = m_transform * m_translation ;
+//    updateTransform();
+    changed();
+}
+
 const QTransform& gx::GObject::getTransform() const
 {
     return m_transform;
-}
-
-void gx::GObject::setTransform(const QTransform &transform)
-{
-    preChange();
-    m_transform = transform;
-    changed();
 }
 
 bool gx::GObject::isSelected() const

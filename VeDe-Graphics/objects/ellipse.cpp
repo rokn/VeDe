@@ -6,6 +6,7 @@
 
 gx::Ellipse::Ellipse()
 {
+    QTransform t;
 }
 
 gx::Ellipse::Ellipse(Vertex center, Vertex radius)
@@ -48,9 +49,10 @@ QRectF gx::Ellipse::shapeBoundingBox() const
 
 bool gx::Ellipse::shapeContainsPoint(const gx::Vertex &point) const
 {
-    gx::Vertex tc = center().transformed(getTransform());
-    gx::Vertex tp = point;
-    double xCoef = qPow(tp.x() - tc.x(), 2) / qPow(radius().x(), 2);
-    double yCoef = qPow(tp.y() - tc.y(), 2) / qPow(radius().y(), 2);
-    return (xCoef + yCoef) <= 1;
+//    gx::Vertex tc = center().transformed(getTransform());
+//    gx::Vertex tp = point;
+//    double xCoef = qPow(tp.x() - tc.x(), 2) / qPow(radius().x(), 2);
+//    double yCoef = qPow(tp.y() - tc.y(), 2) / qPow(radius().y(), 2);
+//    return (xCoef + yCoef) <= 1;
+    return shapeBoundingBox().contains(Converters::toPoint(point));
 }

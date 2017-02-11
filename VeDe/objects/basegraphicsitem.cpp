@@ -15,6 +15,10 @@ BaseShapeItem::BaseShapeItem(std::shared_ptr<gx::Shape> object)
     m_object->onPreChange() += [this](const gx::GObject* o){
         this->prepareGeometryChange();
     };
+    m_object->onChange() += [this](const gx::GObject* o){
+//        this->setTransform(m_object->getTransform());
+        this->update();
+    };
 }
 
 QRectF BaseShapeItem::boundingRect() const

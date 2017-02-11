@@ -56,9 +56,9 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         } else if (m_dragging) {
             auto objects = getCanvas()->getSelectedObjects();
             foreach(auto obj, objects) {
-                QTransform t = obj->getTransform();
+                QTransform t = obj->getTranslation();
                 t.translate(cursor.x() - m_anchorPoint.x(), cursor.y() - m_anchorPoint.y());
-                obj->setTransform(t);
+                obj->setTranslation(t);
             }
             m_anchorPoint = cursor;
         }
@@ -85,6 +85,17 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         moveToStateSilent(getLastState());
     });
 
+    addState("Rot", STATE_DEF{
+        auto obj = getCanvas()->getSelectedObjects()[0] ;
+        QTransform transf = obj->getRotation();
+//        QPointF c = obj->boundingBox().center();
+//        transf.translate(c.x(), c.y());
+        transf.rotate(45);
+//        transf.tran(- c.x(), - c.y());
+        obj->setRotation(transf);
+        moveToStateSilent(start);
+    });
+
     addState(deleteObjects, CommonStates::deleteSelectedObjects(this));
     addState(selectAll, CommonStates::selectAllOnCurrLayer(this));
     addState(deselectAll, CommonStates::deselectAll(this));
@@ -99,6 +110,7 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_A), selectAll);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Escape), deselectAll);
     addTransition(ANY_STATE, UserEvent(MOUSE_PRESS, Qt::RightButton), deselectAll);
+    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_R), "Rot");
 
     moveToStateSilent(start);
 }

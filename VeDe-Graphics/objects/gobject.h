@@ -57,7 +57,15 @@ public:
     void setSelected(bool selected);
 
     const QTransform& getTransform() const;
-    void setTransform(const QTransform &transform);
+
+    const QTransform& getTranslation() const;
+    void setTranslation(const QTransform &translation);
+
+    const QTransform& getRotation() const;
+    void setRotation(const QTransform &rotation);
+
+    const QTransform& getScale() const;
+    void setScale(const QTransform &scale);
 
 protected:
     void changed();
@@ -74,9 +82,14 @@ private:
     unsigned int m_id;
     bool m_selected;
     QTransform m_transform;
+    QTransform m_translation;
+    QTransform m_rotation;
+    QTransform m_scale;
     Event<const GObject*> m_onDestroy;
     Event<const GObject*> m_onPreChange;
     Event<const GObject*> m_onChange;
+
+    void updateTransform();
 };
 }
 

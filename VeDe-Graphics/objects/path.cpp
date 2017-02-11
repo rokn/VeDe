@@ -97,9 +97,9 @@ const QPainterPath& gx::Path::drawnPath() const
 
 QRectF gx::Path::shapeBoundingBox() const
 {
-    QRectF rect = m_drawnPath.boundingRect();
+    QRectF rect = getTransform().map(m_drawnPath).boundingRect();
     fixBoxForStrokeWidth(rect);
-    return getTransform().mapRect(rect);
+    return rect;
 }
 
 bool gx::Path::shapeContainsPoint(const gx::Vertex &point) const
