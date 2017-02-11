@@ -10,40 +10,40 @@ class Vertex
 public:
     Vertex();
     Vertex(const Vertex& other);
-    Vertex(float x, float y);
+    Vertex(double x, double y);
 
-    float x() const;
-    void setX(float x);
+    double x() const;
+    void setX(double x);
 
-    float y() const;
-    void setY(float y);
+    double y() const;
+    void setY(double y);
 
     Vertex& operator +=(const Vertex& other);
     Vertex& operator -=(const Vertex& other);
 
     Vertex operator +(const Vertex& other) const;
     Vertex operator -(const Vertex& other) const;
-    float operator *(const Vertex& other) const;
+    double operator *(const Vertex& other) const;
 
-    Vertex& operator +=(float& scalar);
-    Vertex& operator -=(float& scalar);
-    Vertex& operator *=(float& scalar);
-    Vertex& operator /=(float& scalar);
+    Vertex& operator +=(double& scalar);
+    Vertex& operator -=(double& scalar);
+    Vertex& operator *=(double& scalar);
+    Vertex& operator /=(double& scalar);
 
-    Vertex operator +(float& scalar) const;
-    Vertex operator -(float& scalar) const;
-    Vertex operator *(float& scalar) const;
-    Vertex operator /(float& scalar) const;
+    Vertex operator +(double& scalar) const;
+    Vertex operator -(double& scalar) const;
+    Vertex operator *(double& scalar) const;
+    Vertex operator /(double& scalar) const;
 
-    float distance(const Vertex& other) const;
-    float length() const;
-    float lengthSquared() const;
+    double distance(const Vertex& other) const;
+    double length() const;
+    double lengthSquared() const;
 
     Vertex transformed(const QTransform &transform) const;
 
 private:
-    float m_x;
-    float m_y;
+    double m_x;
+    double m_y;
 };
 }
 

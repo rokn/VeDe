@@ -14,8 +14,14 @@ public:
     Canvas *getCanvas() const;
     void setCanvas(Canvas *canvas);
 
+    void setObjects(const QList<std::shared_ptr<GObject>>& objects);
+    const QList<std::shared_ptr<GObject>>& getObjects() const;
+
+    void setObject(const std::shared_ptr<GObject>>& object)
+
 protected:
     Canvas* m_canvas;
+    QList<std::shared_ptr<GObject>> m_objects;
 };
 }
 

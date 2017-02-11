@@ -7,7 +7,7 @@
 gx::ShapeTool::ShapeTool(gx::Canvas *canvas)
     :RestrictableTool(canvas)
 {
-    addProperty(PROP::STROKE_WIDTH, PROP_FLOAT)->toFloat() = 1.0f;
+    addProperty(PROP::STROKE_WIDTH, PROP_DOUBLE)->toDouble() = 1.0f;
     m_startState = "Start";
     m_placeFirstState = "Starting a shape";
     m_moveState = "Move control";

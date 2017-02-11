@@ -12,11 +12,11 @@ const int &gx::Property::toInt() const
     }
 }
 
-const float &gx::Property::toFloat() const
+const double &gx::Property::toDouble() const
 {
-    if(m_type == PROP_FLOAT)
+    if(m_type == PROP_DOUBLE)
     {
-        return m_value.f;
+        return m_value.d;
     }
     else
     {
@@ -60,11 +60,11 @@ int &gx::Property::toInt()
     }
 }
 
-float &gx::Property::toFloat()
+double &gx::Property::toDouble()
 {
-    if(m_type == PROP_FLOAT)
+    if(m_type == PROP_DOUBLE)
     {
-        return m_value.f;
+        return m_value.d;
     }
     else
     {
@@ -108,11 +108,11 @@ void gx::Property::setInt(int value)
     }
 }
 
-void gx::Property::setFloat(float value)
+void gx::Property::setDouble(double value)
 {
-    if(m_type == PROP_FLOAT)
+    if(m_type == PROP_DOUBLE)
     {
-        m_value.f = value;
+        m_value.d = value;
     }
     else
     {
@@ -164,8 +164,8 @@ gx::Property::Property(const gx::Property &other)
         case PROP_INT:
             m_value.i = other.m_value.i;
             break;
-        case PROP_FLOAT:
-            m_value.f = other.m_value.f;
+        case PROP_DOUBLE:
+            m_value.d = other.m_value.d;
             break;
         case PROP_STRING:
             m_value.s = new QString(*other.m_value.s);
@@ -197,8 +197,8 @@ void gx::Property::resetToDefault()
         case PROP_INT:
             m_value.i = 0;
             break;
-        case PROP_FLOAT:
-            m_value.f = 0.0f;
+        case PROP_DOUBLE:
+            m_value.d = 0.0f;
             break;
         case PROP_STRING:
             m_value.s = new QString;

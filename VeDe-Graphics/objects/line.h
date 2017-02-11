@@ -19,7 +19,7 @@ public:
     void setEnd(const Vertex &end);
 
 
-    float distanceToPoint(const Vertex& point) const;
+    double distanceToPoint(const Vertex& point) const;
 
 protected:
     QRectF shapeBoundingBox() const;

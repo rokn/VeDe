@@ -43,7 +43,7 @@ void gx::RectangleTool::moveControl(gx::Vertex mousePos)
 
 void gx::RectangleTool::restrictPoints(const gx::Vertex& cursor, gx::Vertex &upLeft, gx::Vertex &downRight)
 {
-    float maxDist = qMax(qAbs(upLeft.x() - downRight.x()), qAbs(upLeft.y() - downRight.y()));
+    double maxDist = qMax(qAbs(upLeft.x() - downRight.x()), qAbs(upLeft.y() - downRight.y()));
 
     if(cursor.x() < m_anchorPoint.x()) {
         upLeft.setX(m_anchorPoint.x() - maxDist);

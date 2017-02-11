@@ -20,6 +20,9 @@ class Canvas; //Forw. decl.
 class GObject : public PropertyHolder
 {
 public:
+    typedef std::shared_ptr<GObject> SharedGObject;
+
+
     GObject(std::shared_ptr<GObject> parent = nullptr);
     virtual ~GObject();
     QList<std::shared_ptr<GObject> > &getChildren();

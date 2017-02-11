@@ -28,7 +28,7 @@ void gx::Shape::setGuiElement(bool guiElement)
     if(guiElement == true)
     {
         if(getCanvas() != nullptr){
-            getCanvas()->onZoomChange() += [=](float zoom){
+            getCanvas()->onZoomChange() += [=](double zoom){
                 this->onCanvasZoomChange(zoom);
             };
 
@@ -39,18 +39,18 @@ void gx::Shape::setGuiElement(bool guiElement)
     }
 }
 
-void gx::Shape::fixBoxForStrokeWidth(QRectF &rect, float factor) const
+void gx::Shape::fixBoxForStrokeWidth(QRectF &rect, double factor) const
 {
-    float strokeWidth = getProp(PROP::STROKE_WIDTH)->toFloat() * factor;
+    double strokeWidth = getProp(PROP::STROKE_WIDTH)->toDouble() * factor;
     rect.setBottom(rect.bottom() + strokeWidth);
     rect.setTop(rect.top() - strokeWidth);
     rect.setLeft(rect.left() - strokeWidth);
     rect.setRight(rect.right() + strokeWidth);
 }
 
-void gx::Shape::onCanvasZoomChange(float zoomFactor)
+void gx::Shape::onCanvasZoomChange(double zoomFactor)
 {
     if(this->isGuiElement()) {
-        getProp(gx::PROP::STROKE_WIDTH)->toFloat() = 1.0f / zoomFactor;
+        getProp(gx::PROP::STROKE_WIDTH)->toDouble() = 1.0f / zoomFactor;
     }
 }

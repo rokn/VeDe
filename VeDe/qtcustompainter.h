@@ -10,16 +10,16 @@ class QtCustomPainter : public gx::CustomPainter
 {
 public:
     QtCustomPainter(QPainter* painter);
-    void drawLine(float x1, float y1, float x2, float y2);
-    void drawEllipse(float cX, float cY, float rX, float rY);
-    void drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY);
+    void drawLine(double x1, double y1, double x2, double y2);
+    void drawEllipse(double cX, double cY, double rX, double rY);
+    void drawRectangle(double upLeftX, double upLeftY, double downRightX, double downRightY);
     void drawPath(QList<gx::Vertex> vertices, QList<bool> controls);
     void drawPath(QPainterPath& path);
 
-    void setStrokeWidth(float width);
+    void setStrokeWidth(double width);
     void setStrokeColor(const gx::Color &color);
     void setBackColor(const gx::Color& color);
-    void setZoomFactor(float zoomFactor);
+    void setZoomFactor(double zoomFactor);
 
     void setPainter(QPainter *painter);
 

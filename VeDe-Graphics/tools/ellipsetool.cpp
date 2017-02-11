@@ -21,8 +21,8 @@ bool gx::EllipseTool::startShape(gx::Vertex mousePos)
 
 void gx::EllipseTool::moveControl(gx::Vertex mousePos)
 {
-    float rx = qAbs(mousePos.x() - m_ellipse->center().x());
-    float ry = qAbs(mousePos.y() - m_ellipse->center().y());
+    double rx = qAbs(mousePos.x() - m_ellipse->center().x());
+    double ry = qAbs(mousePos.y() - m_ellipse->center().y());
 
     if(isRestricted()) {
         rx = qMax(rx, ry);

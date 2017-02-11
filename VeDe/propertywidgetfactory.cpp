@@ -19,8 +19,8 @@ QWidget *PropertyWidgetFactory::createWidget(gx::Property *prop, QWidget *parent
             converter = new PropertyConverter(prop, editor);
             QObject::connect(editor, SIGNAL(textChanged(QString)), converter, SLOT(onTextChange(QString)));
             return editor;
-        case gx::PROP_FLOAT:
-            editor = new QLineEdit(QString::number(prop->toFloat()), parent);
+        case gx::PROP_DOUBLE:
+            editor = new QLineEdit(QString::number(prop->toDouble()), parent);
             editor->setValidator(new QDoubleValidator(editor));
             converter = new PropertyConverter(prop, editor);
             QObject::connect(editor, SIGNAL(textChanged(QString)), converter, SLOT(onTextChange(QString)));
@@ -31,7 +31,6 @@ QWidget *PropertyWidgetFactory::createWidget(gx::Property *prop, QWidget *parent
             QObject::connect(editor, SIGNAL(textChanged(QString)), converter, SLOT(onTextChange(QString)));
             return editor;
         case gx::PROP_COLOR:
-        //TODO: Implement
 //            QLineEdit* editor = new QLineEdit(QString(prop->toInt()), parent);
             colorButton = new ColorChangeButton(gx::Converters::toQColor(prop->toColor()), parent);
             converter = new PropertyConverter(prop, colorButton);

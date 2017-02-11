@@ -32,15 +32,15 @@ void BaseShapeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     if(!m_object->isGuiElement())
     {
         painter->setClipping(true);
-        float canvasWidth = m_object->getCanvas()->getWidth();
-        float canvasHeight = m_object->getCanvas()->getHeight();
+        double canvasWidth = m_object->getCanvas()->getWidth();
+        double canvasHeight = m_object->getCanvas()->getHeight();
         painter->setClipRect(QRectF( 0.5,  0.5, canvasWidth - 1, canvasHeight - 1)); // Fix for canvas border
     }
 
     painter->setTransform(m_object->getTransform() * painter->transform());
     painter->setBrush(QBrush(gx::Converters::toQColor(m_object->getProp(gx::PROP::BACK_COLOR)->toColor())));
     QPen pen(gx::Converters::toQColor(m_object->getProp(gx::PROP::STROKE_COLOR)->toColor()));
-    pen.setWidthF(m_object->getProp(gx::PROP::STROKE_WIDTH)->toFloat());
+    pen.setWidthF(m_object->getProp(gx::PROP::STROKE_WIDTH)->toDouble());
     painter->setPen(pen);
 }
 

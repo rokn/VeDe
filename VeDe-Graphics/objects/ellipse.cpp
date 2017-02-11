@@ -6,7 +6,6 @@
 
 gx::Ellipse::Ellipse()
 {
-    QTransform t;
 }
 
 gx::Ellipse::Ellipse(Vertex center, Vertex radius)

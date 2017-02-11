@@ -23,22 +23,22 @@ gx::Canvas::Canvas(std::shared_ptr<GObject> root, QObject *parent)
     m_currCommand = 0;
     m_currTool = nullptr;
     m_idCount = 0;
-    m_zoomFactor = 1.0f;
+    m_zoomFactor = 1.0;
     PropertyFactory::addCanvasProperties(this);
     getProp("Stroke Color")->toColor().setR(255);
     setWidth(800);
     setHeight(600);
 }
 
-float gx::Canvas::getZoomFactor() const
+double gx::Canvas::getZoomFactor() const
 {
     return m_zoomFactor;
 }
 
-void gx::Canvas::setZoomFactor(float zoomFactor)
+void gx::Canvas::setZoomFactor(double zoomFactor)
 {
     m_zoomFactor = zoomFactor;
-    m_zoomFactor = qMax(0.02f, m_zoomFactor);
+    m_zoomFactor = qMax(0.02, m_zoomFactor);
     m_onZoomChange(m_zoomFactor);
 }
 
@@ -49,12 +49,12 @@ gx::Tool *gx::Canvas::getCurrTool() const
     return m_currTool;
 }
 
-float gx::Canvas::getHeight() const
+double gx::Canvas::getHeight() const
 {
     return m_height;
 }
 
-void gx::Canvas::setHeight(float height)
+void gx::Canvas::setHeight(double height)
 {
     m_height = height;
 }
@@ -64,7 +64,7 @@ gx::Event<gx::Tool *>& gx::Canvas::onToolChanged()
     return m_onToolChanged;
 }
 
-gx::Event<float>& gx::Canvas::onZoomChange()
+gx::Event<double>& gx::Canvas::onZoomChange()
 {
     return m_onZoomChange;
 }
@@ -125,12 +125,28 @@ void gx::Canvas::deselectObject(std::shared_ptr<gx::GObject> obj)
     m_selectedObjects.removeOne(obj);
 }
 
-float gx::Canvas::getWidth() const
+void gx::Canvas::addNewCommand(gx::Command *command)
+{
+    if(m_currCommand != m_commandHistory.size())
+    {
+        for(auto it = m_commandHistory.begin() + m_currCommand; it != m_commandHistory.end(); ++it)
+        {
+            delete (*it);
+        }
+
+        m_commandHistory.erase(m_commandHistory.begin() + m_currCommand, m_commandHistory.end());
+    }
+
+    m_commandHistory.append(command);
+    m_currCommand++;
+}
+
+double gx::Canvas::getWidth() const
 {
     return m_width;
 }
 
-void gx::Canvas::setWidth(float width)
+void gx::Canvas::setWidth(double width)
 {
     m_width = width;
 }
@@ -162,22 +178,18 @@ int gx::Canvas::executeCommand(gx::Command* command)
 
     if(result == 0)
     {
-        if(m_currCommand != m_commandHistory.size())
-        {
-            for(auto it = m_commandHistory.begin() + m_currCommand; it != m_commandHistory.end(); ++it)
-            {
-                delete (*it);
-            }
-
-            m_commandHistory.erase(m_commandHistory.begin() + m_currCommand, m_commandHistory.end());
-        }
-
-        m_commandHistory.append(command);
-        m_currCommand++;
+        addNewCommand(command);
     }
 
     redraw();
     return result;
+}
+
+void gx::Canvas::addSilentCommand(gx::Command *command)
+{
+    if(isLocked()) return -1;
+
+    addNewCommand(command);
 }
 
 int gx::Canvas::undoCommand()

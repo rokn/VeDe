@@ -54,18 +54,18 @@ QRectF gx::Line::shapeBoundingBox() const
 
 bool gx::Line::shapeContainsPoint(const gx::Vertex &point) const
 {
-    return distanceToPoint(point) <= getProp(PROP::STROKE_WIDTH)->toFloat();
+    return distanceToPoint(point) <= getProp(PROP::STROKE_WIDTH)->toDouble();
 }
 
-float gx::Line::distanceToPoint(const gx::Vertex &point) const
+double gx::Line::distanceToPoint(const gx::Vertex &point) const
 {
     Vertex tStart = start().transformed(getTransform());
     Vertex tEnd = end().transformed(getTransform());
-    float lengthSquared = (tEnd - tStart).lengthSquared();
+    double lengthSquared = (tEnd - tStart).lengthSquared();
 
     if(lengthSquared < 0.00001) return m_start.distance(point);
 
-    float t = qMax(0.f, qMin(1.f, (point - tStart) * (tEnd - tStart) / lengthSquared));
+    double t = qMax(0., qMin(1., (point - tStart) * (tEnd - tStart) / lengthSquared));
     Vertex projection = tStart + (tEnd - tStart) * t;
     return point.distance(projection);
 }

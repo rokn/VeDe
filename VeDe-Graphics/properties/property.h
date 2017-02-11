@@ -12,7 +12,7 @@ namespace gx
 enum PropertyType
 {
     PROP_INT,
-    PROP_FLOAT,
+    PROP_DOUBLE,
     PROP_STRING,
     PROP_COLOR,
 };
@@ -26,15 +26,15 @@ public:
 
     void resetToDefault();
     const int& toInt() const;
-    const float& toFloat() const;
+    const double& toDouble() const;
     const QString& toString() const;
     const Color& toColor() const;
     int& toInt();
-    float& toFloat();
+    double& toDouble();
     QString& toString();
     Color& toColor();
     void setInt(int value);
-    void setFloat(float value);
+    void setDouble(double value);
     void setString(const QString &value);
     void setColor(const Color& value);
 //    void get s
@@ -50,7 +50,7 @@ private:
     union PropertyValue
     {
         int i;
-        float f;
+        double d;
         QString* s;
         Color* c;
     }m_value;

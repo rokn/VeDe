@@ -13,17 +13,17 @@ QtCustomPainter::QtCustomPainter(QPainter *painter)
     m_painter->setBackgroundMode(Qt::OpaqueMode);
 }
 
-void QtCustomPainter::drawLine(float x1, float y1, float x2, float y2)
+void QtCustomPainter::drawLine(double x1, double y1, double x2, double y2)
 {
     m_painter->drawLine(QPointF(x1, y1), QPointF(x2, y2));
 }
 
-void QtCustomPainter::drawEllipse(float cX, float cY, float rX, float rY)
+void QtCustomPainter::drawEllipse(double cX, double cY, double rX, double rY)
 {
     m_painter->drawEllipse(QPointF(cX, cY), rX, rY);
 }
 
-void QtCustomPainter::drawRectangle(float upLeftX, float upLeftY, float downRightX, float downRightY)
+void QtCustomPainter::drawRectangle(double upLeftX, double upLeftY, double downRightX, double downRightY)
 {
     QRectF rect(QPointF(upLeftX, upLeftY), QPointF(downRightX, downRightY));
     m_painter->drawRect(rect);
@@ -78,7 +78,7 @@ void QtCustomPainter::drawPath(QPainterPath &path)
     m_painter->drawPath(path);
 }
 
-void QtCustomPainter::setStrokeWidth(float width)
+void QtCustomPainter::setStrokeWidth(double width)
 {
     m_pen.setWidthF(width);
     onChangePen();
@@ -96,7 +96,7 @@ void QtCustomPainter::setBackColor(const gx::Color &color)
     onChangeBrush();
 }
 
-void QtCustomPainter::setZoomFactor(float zoomFactor)
+void QtCustomPainter::setZoomFactor(double zoomFactor)
 {
     m_painter->scale(zoomFactor, zoomFactor);
 }

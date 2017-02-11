@@ -18,7 +18,6 @@ public:
     int undo();
 
 private:
-    QList<std::shared_ptr<GObject>> m_objects;
     bool m_select;
 };
 }

@@ -19,8 +19,8 @@ void PropertyConverter::onTextChange(const QString &text)
         case gx::PROP_INT:
             m_prop->toInt() = text.toInt();
             break;
-        case gx::PROP_FLOAT:
-            m_prop->toFloat() = text.toFloat();
+        case gx::PROP_DOUBLE:
+            m_prop->toDouble() = text.toDouble();
             break;
         case gx::PROP_STRING:
             m_prop->toString() = text;

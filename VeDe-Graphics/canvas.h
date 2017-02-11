@@ -31,6 +31,8 @@ public:
 
     int executeCommand(Command* command);
 
+    void addSilentCommand(Command* command);
+
     int undoCommand();
 
     int redoCommand();
@@ -47,22 +49,22 @@ public:
 
     std::shared_ptr<Layer> getCurrLayer() const;
 
-    float getZoomFactor() const;
-    void setZoomFactor(float zoomFactor);
+    double getZoomFactor() const;
+    void setZoomFactor(double zoomFactor);
 
     virtual void onAddObject(std::shared_ptr<GObject> object);
 
     Tool *getCurrTool() const;
 
-    float getWidth() const;
-    void setWidth(float width);
+    double getWidth() const;
+    void setWidth(double width);
 
-    float getHeight() const;
-    void setHeight(float height);
+    double getHeight() const;
+    void setHeight(double height);
 
     Event<Tool*>& onToolChanged();
 
-    Event<float>& onZoomChange();
+    Event<double>& onZoomChange();
 
     bool isLocked() const;
     void lock();
@@ -81,12 +83,14 @@ private:
     Tool* m_currTool;
     std::shared_ptr<Layer> m_currLayer;
     unsigned int m_idCount;
-    float m_zoomFactor;
-    float m_width;
-    float m_height;
+    double m_zoomFactor;
+    double m_width;
+    double m_height;
     bool m_locked;
     Event<Tool*> m_onToolChanged;
-    Event<float> m_onZoomChange;
+    Event<double> m_onZoomChange;
+
+    void addNewCommand(Command* command);
 };
 }
 
