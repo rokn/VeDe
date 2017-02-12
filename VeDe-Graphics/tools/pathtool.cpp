@@ -23,6 +23,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     addState(finishPoint, STATE_DEF {
         if(m_path != nullptr) {
             moveToState(startNewPoint, t);
+//            }
         } else {
             moveToStateSilent(m_startState);
         }
@@ -33,11 +34,6 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
             Vertex point = getCanvas()->getCursor();
             m_path->addControlPoint(point);
             moveToStateSilent(moveControlPoint);
-//            if(qAbs(point.x() - m_startPoint.x()) < 3 && qAbs(point.y() - m_startPoint.y()) < 3 ) {
-//                m_path->addMove(-1);
-//                moveToState(finished, t);
-//            } else {
-//            }
         } else {
             moveToStateSilent(m_startState);
         }
@@ -81,6 +77,11 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
     addState(setNewPoint, STATE_DEF {
         if(m_path != nullptr) {
+            Vertex point = getCanvas()->getCursor();
+            if(point.distance(m_startPoint) < getCanvas()->mapValueToZoom(5) ) {
+                m_path->closePath();
+                moveToState(removeNewPoint, t);
+            }
         } else {
             moveToStateSilent(m_startState);
         }

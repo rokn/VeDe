@@ -42,6 +42,7 @@ public:
     double lengthSquared() const;
 
     Vertex transformed(const QTransform &transform) const;
+    Vertex normalized() const;
 
 private:
     double m_x;

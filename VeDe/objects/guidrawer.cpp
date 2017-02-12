@@ -30,15 +30,18 @@ void GUIDrawer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
         if(selectedObjects.size() > 0)
         {
+            QRectF unitedBox;
             painter->setBrush(QBrush(Qt::transparent));
             QPen selectPen(Qt::black);
             selectPen.setStyle(Qt::DashLine);
-            selectPen.setWidthF(1 / m_canvas->getZoomFactor());
+            selectPen.setWidthF(m_canvas->mapValueToZoom(1.0));
             painter->setPen(selectPen);
 
             foreach(auto& obj, selectedObjects) {
                 painter->drawRect(obj->boundingBox());
+                unitedBox = unitedBox.united(obj->boundingBox());
             }
+            painter->drawRect(unitedBox);
 
         }
     }

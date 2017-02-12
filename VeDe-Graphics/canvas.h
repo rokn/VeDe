@@ -55,6 +55,8 @@ public:
     double getZoomFactor() const;
     void setZoomFactor(double zoomFactor);
 
+    double mapValueToZoom(double value) const;
+
     virtual void onAddObject(SharedGObject object);
 
     Tool *getCurrTool() const;
@@ -73,6 +75,7 @@ public:
     void unlock();
 
     QList<SharedGObject> getSelectedObjects();
+    QRectF getSelectedObjectsBox();
     void clearSelectedObjects(bool withCommand = true);
     void selectObject(SharedGObject obj);
     void deselectObject(SharedGObject obj);

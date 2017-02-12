@@ -31,6 +31,13 @@ gx::SelectTool::SelectTool(Canvas *canvas)
         Vertex cursorPos = getCanvas()->getCursor();
         m_anchorPoint = cursorPos;
 
+        if(getCanvas()->isKeyPressed(Qt::Key_Shift) && getCanvas()->isKeyPressed(Qt::Key_R)){
+            m_rotating = true;
+            m_useRotAxis = true;
+            m_rotationAxis = Converters::toVertex(getCanvas()->getSelectedObjectsBox().center());
+            m_oldAngleSet = false;
+        }
+
         auto list = getCanvas()->getSelectedObjects();
         foreach(auto obj, list) {
             if(obj->containsPoint(cursorPos)) {
@@ -51,6 +58,7 @@ gx::SelectTool::SelectTool(Canvas *canvas)
             m_selection = QRectF(cursorPos.x(), cursorPos.y(), 1, 1);
             m_selecting = true;
         }
+        //TODO: OPTIMIZE!!
 
         moveToStateSilent(moveSelect);
     });
@@ -113,13 +121,13 @@ void gx::SelectTool::drawGui(CustomPainter &painter) const
     {
         painter.setStrokeColor(Color(0,0,0));
         painter.setBackColor(Color(0,0,0,0));
-        painter.setStrokeWidth(1.0f / getCanvas()->getZoomFactor());
+        painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
         painter.drawRectangle(m_selection.topLeft().x(), m_selection.topLeft().y(),
                                m_selection.bottomRight().x(), m_selection.bottomRight().y());
     } else if (m_rotating) {
         painter.setStrokeColor(Color(0,255,0));
         painter.setBackColor(Color(0,0,0,0));
-        painter.setStrokeWidth(1.0f / getCanvas()->getZoomFactor());
+        painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
         painter.drawLine(m_anchorPoint, m_oldPosition);
     }
 }
@@ -161,21 +169,25 @@ void gx::SelectTool::updateSelection(gx::Vertex cursor)
 void gx::SelectTool::updateTranslation(gx::Vertex cursor)
 {
     auto objects = getCanvas()->getSelectedObjects();
+    QRectF redrawRect;
 
     foreach(auto obj, objects) {
+        redrawRect = redrawRect.united(obj->boundingBox());
         obj->translate(Vertex(cursor.x() - m_anchorPoint.x(), cursor.y() - m_anchorPoint.y()));
+        redrawRect = redrawRect.united(obj->boundingBox());
     }
 
     m_anchorPoint = cursor;
+    getCanvas()->redraw(redrawRect);
 }
 
 void gx::SelectTool::updateRotation(gx::Vertex cursor)
 {
-    double currAngle = qRadiansToDegrees(qAtan2(cursor.y(), cursor.x()));
+    Vertex normCursor = (cursor - m_anchorPoint).normalized();
+    double currAngle = qRadiansToDegrees(qAtan2(normCursor.y(), normCursor.x()));
 
     if(m_oldAngleSet) {
         auto objects = getCanvas()->getSelectedObjects();
-        qInfo() << currAngle;
         if (m_useRotAxis) {
             foreach(auto obj, objects) {
                 obj->rotate(currAngle - m_oldAngle, QTransform::fromTranslate(m_rotationAxis.x(), m_rotationAxis.y()));
@@ -213,4 +225,5 @@ void gx::SelectTool::endTranslation()
 void gx::SelectTool::endRotation()
 {
     m_rotating = false;
+    getCanvas()->redraw();
 }

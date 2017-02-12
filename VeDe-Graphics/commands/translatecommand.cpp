@@ -22,11 +22,11 @@ void gx::TranslateCommand::applyTranslation(gx::Vertex translation)
     QRectF redrawRect;
     foreach(auto& obj, m_objects)
     {
-        redrawRect.united(obj->boundingBox());
+        redrawRect = redrawRect.united(obj->boundingBox());
 
         obj->translate(translation);
 
-        redrawRect.united(obj->boundingBox());
+        redrawRect = redrawRect.united(obj->boundingBox());
     }
 
     getCanvas()->redraw(redrawRect);

@@ -15,7 +15,7 @@ int gx::SelectCommand::execute()
         else
             getCanvas()->deselectObject(obj);
 
-        redrawRect.united(obj->boundingBox());
+        redrawRect = redrawRect.united(obj->boundingBox());
     }
 
     getCanvas()->redraw(redrawRect);
@@ -32,7 +32,7 @@ int gx::SelectCommand::undo()
         else
             getCanvas()->selectObject(obj);
 
-        redrawRect.united(obj->boundingBox());
+        redrawRect = redrawRect.united(obj->boundingBox());
     }
 
     getCanvas()->redraw(redrawRect);

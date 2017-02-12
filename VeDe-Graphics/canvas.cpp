@@ -42,6 +42,11 @@ void gx::Canvas::setZoomFactor(double zoomFactor)
     m_onZoomChange(m_zoomFactor);
 }
 
+double gx::Canvas::mapValueToZoom(double value) const
+{
+    return value * (1 / getZoomFactor());
+}
+
 void gx::Canvas::onAddObject(gx::SharedGObject object){}
 
 gx::Tool *gx::Canvas::getCurrTool() const
@@ -89,6 +94,16 @@ QList<gx::SharedGObject > gx::Canvas::getSelectedObjects()
     return m_selectedObjects;
 }
 
+QRectF gx::Canvas::getSelectedObjectsBox()
+{
+    QRectF box;
+    foreach(auto& obj, m_selectedObjects)
+    {
+        box = box.united(obj->boundingBox());
+    }
+    return box;
+}
+
 void gx::Canvas::clearSelectedObjects(bool withCommand)
 {
     if(m_selectedObjects.size() <= 0) return;
@@ -107,7 +122,7 @@ void gx::Canvas::clearSelectedObjects(bool withCommand)
         foreach(auto& obj, m_selectedObjects)
         {
             deselectObject(obj);
-            redrawRect.united(obj->boundingBox());
+            redrawRect = redrawRect.united(obj->boundingBox());
         }
 
         redraw(redrawRect);

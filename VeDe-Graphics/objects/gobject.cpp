@@ -228,10 +228,8 @@ void gx::GObject::scale(gx::Vertex scaleBy)
 void gx::GObject::scale(gx::Vertex scaleBy, QTransform axis)
 {
     preChange();
-    removeTranslation();
     QTransform scaleMatrix = QTransform::fromScale(scaleBy.x(), scaleBy.y());
     m_transform = m_transform * axis.inverted() * scaleMatrix * axis;
-    applyTranslation();
     changed();
 }
 
@@ -243,11 +241,9 @@ void gx::GObject::rotate(double angle)
 void gx::GObject::rotate(double angle, QTransform axis)
 {
     preChange();
-    removeTranslation();
     QTransform rotation;
     rotation.rotate(angle);
     m_transform = m_transform * axis.inverted() * rotation * axis;
-    applyTranslation();
     changed();
 }
 

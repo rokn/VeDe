@@ -51,6 +51,6 @@ void gx::Shape::fixBoxForStrokeWidth(QRectF &rect, double factor) const
 void gx::Shape::onCanvasZoomChange(double zoomFactor)
 {
     if(this->isGuiElement()) {
-        getProp(gx::PROP::STROKE_WIDTH)->toDouble() = 1.0f / zoomFactor;
+        getProp(gx::PROP::STROKE_WIDTH)->toDouble() = getCanvas()->mapValueToZoom(1.0);
     }
 }

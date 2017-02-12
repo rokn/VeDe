@@ -153,6 +153,9 @@ void gx::Path::constructPath()
     }
 
     if(m_closed) {
+        if(hasControl1) {
+            m_drawnPath.cubicTo(control1, Converters::toPoint(m_vertices[0]), Converters::toPoint(m_vertices[0])); //TODO: Use start CP
+        }
         m_drawnPath.closeSubpath();
     }
 }

@@ -139,3 +139,9 @@ gx::Vertex gx::Vertex::transformed(const QTransform& transform) const
     QPointF transfPoint = transform.map(Converters::toPoint(*this));
     return Converters::toVertex(transfPoint);
 }
+
+gx::Vertex gx::Vertex::normalized() const
+{
+    double len = this->length();
+    return *this / len;
+}
