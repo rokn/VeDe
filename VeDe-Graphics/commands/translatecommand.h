@@ -10,10 +10,15 @@ namespace gx
 class TranslateCommand : public CanvasCommand
 {
 public:
+    TranslateCommand(Vertex translation);
+
     int execute();
     int undo();
 
 private:
+    Vertex m_translation;
+
+    void applyTranslation(Vertex translation);
 };
 }
 

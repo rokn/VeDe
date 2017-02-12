@@ -5,6 +5,7 @@
 #include "objects/gobject.h"
 #include <QGraphicsScene>
 #include <QMap>
+#include <QSet>
 #include <QGraphicsItem>
 
 //class CanvasWidget;
@@ -25,6 +26,7 @@ public:
     void redrawGui();
     void redraw(QRectF area);
     gx::Vertex getCursor() const;
+    bool isKeyPressed(Qt::Key key) const;
     void onAddObject(gx::SharedGObject object);
 
 protected:
@@ -33,6 +35,7 @@ protected:
 private:
     gx::Vertex m_mousePos;
     QMap<Qt::KeyboardModifier, bool> m_modifierKeys;
+    QSet<Qt::Key> m_keys;
 
     void initModifierKeys();
     Qt::KeyboardModifier transformToMod(Qt::Key key);

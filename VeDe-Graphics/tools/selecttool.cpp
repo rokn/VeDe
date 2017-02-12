@@ -2,6 +2,7 @@
 #include "commonstates.h"
 #include "converters.h"
 #include "commands/selectcommand.h"
+#include "commands/translatecommand.h"
 #include "color.h"
 #include <QtMath>
 #include <QDebug>
@@ -11,6 +12,8 @@ gx::SelectTool::SelectTool(Canvas *canvas)
 {
     setName("Select Tool");
     QString start = "Select items";
+    QString rotatePreStart = "Start rotation";
+    QString rotateStart = "Starting rotation";
     QString selectStart = "Started selection";
     QString moveSelect = "Move selection";
     QString endSelect = "Ending selection";
@@ -23,19 +26,28 @@ gx::SelectTool::SelectTool(Canvas *canvas)
     m_union = false;
 
     addState(start, EMPTY_STATE);
+
     addState(selectStart, STATE_DEF{
         Vertex cursorPos = getCanvas()->getCursor();
+        m_anchorPoint = cursorPos;
 
         auto list = getCanvas()->getSelectedObjects();
         foreach(auto obj, list) {
             if(obj->containsPoint(cursorPos)) {
-                m_dragging = true;
-                break;
+                if(getCanvas()->isKeyPressed(Qt::Key_R)){
+                    m_rotating = true;
+                    m_useRotAxis = false;
+                    m_oldAngleSet = false;
+                    break;
+                } else {
+                    m_translating = true;
+                    m_startTranslation = cursorPos;
+                    break;
+                }
             }
         }
 
-        m_anchorPoint = cursorPos;
-        if(!m_dragging) {
+        if(!m_translating && !m_rotating) {
             m_selection = QRectF(cursorPos.x(), cursorPos.y(), 1, 1);
             m_selecting = true;
         }
@@ -48,19 +60,22 @@ gx::SelectTool::SelectTool(Canvas *canvas)
 
         if(m_selecting) {
             updateSelection(cursor);
-        } else if (m_dragging) {
+        } else if (m_translating) {
             updateTranslation(cursor);
+        } else if (m_rotating) {
+            updateRotation(cursor);
         }
     });
 
     addState(endSelect, STATE_DEF{
         if(m_selecting) {
-            m_selecting = false;
-            selectObjects(m_selection);
-            getCanvas()->redraw(m_selection);
-        } else if (m_dragging) {
-            m_dragging = false;
+            endSelection();
+        } else if (m_translating) {
+            endTranslation();
+        } else if (m_rotating) {
+            endRotation();
         }
+
         moveToStateSilent(start);
     });
 
@@ -101,6 +116,11 @@ void gx::SelectTool::drawGui(CustomPainter &painter) const
         painter.setStrokeWidth(1.0f / getCanvas()->getZoomFactor());
         painter.drawRectangle(m_selection.topLeft().x(), m_selection.topLeft().y(),
                                m_selection.bottomRight().x(), m_selection.bottomRight().y());
+    } else if (m_rotating) {
+        painter.setStrokeColor(Color(0,255,0));
+        painter.setBackColor(Color(0,0,0,0));
+        painter.setStrokeWidth(1.0f / getCanvas()->getZoomFactor());
+        painter.drawLine(m_anchorPoint, m_oldPosition);
     }
 }
 
@@ -147,4 +167,50 @@ void gx::SelectTool::updateTranslation(gx::Vertex cursor)
     }
 
     m_anchorPoint = cursor;
+}
+
+void gx::SelectTool::updateRotation(gx::Vertex cursor)
+{
+    double currAngle = qRadiansToDegrees(qAtan2(cursor.y(), cursor.x()));
+
+    if(m_oldAngleSet) {
+        auto objects = getCanvas()->getSelectedObjects();
+        qInfo() << currAngle;
+        if (m_useRotAxis) {
+            foreach(auto obj, objects) {
+                obj->rotate(currAngle - m_oldAngle, QTransform::fromTranslate(m_rotationAxis.x(), m_rotationAxis.y()));
+            }
+        } else {
+            foreach(auto obj, objects) {
+                obj->rotate(currAngle - m_oldAngle);
+            }
+        }
+    } else {
+        m_oldAngleSet = true;
+    }
+
+    m_oldAngle = currAngle;
+    m_oldPosition = cursor;
+    getCanvas()->redraw();//TODO: optimize
+}
+
+void gx::SelectTool::endSelection()
+{
+    m_selecting = false;
+    selectObjects(m_selection);
+    getCanvas()->redraw(m_selection);
+}
+
+void gx::SelectTool::endTranslation()
+{
+    m_translating = false;
+    CanvasCommand *translateCommand = new TranslateCommand(getCanvas()->getCursor() - m_startTranslation);
+    translateCommand->setCanvas(getCanvas());
+    translateCommand->setObjects(getCanvas()->getSelectedObjects());
+    getCanvas()->addSilentCommand(translateCommand);
+}
+
+void gx::SelectTool::endRotation()
+{
+    m_rotating = false;
 }

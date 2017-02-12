@@ -6,6 +6,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QGuiApplication>
+#include <QApplication>
 
 
 #include "objects/ellipsegraphicsitem.h"
@@ -48,6 +49,11 @@ void CanvasImpl::redrawGui()
 gx::Vertex CanvasImpl::getCursor() const
 {
     return m_mousePos;
+}
+
+bool CanvasImpl::isKeyPressed(Qt::Key key) const
+{
+    return m_keys.contains(key);
 }
 
 void CanvasImpl::onAddObject(gx::SharedGObject object)
@@ -164,6 +170,7 @@ void CanvasImpl::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void CanvasImpl::keyPressEvent(QKeyEvent *event)
 {
     Qt::Key key = (Qt::Key)event->key();
+    m_keys << key;
 
     if(m_modifierKeys.contains(transformToMod(key))) {
         m_modifierKeys[transformToMod(key)] = true;
@@ -176,6 +183,7 @@ void CanvasImpl::keyPressEvent(QKeyEvent *event)
 void CanvasImpl::keyReleaseEvent(QKeyEvent *event)
 {
     Qt::Key key = (Qt::Key)event->key();
+    m_keys.remove(key);
 
     foreach (auto& mKey, m_modifierKeys.keys()) {
         bool pressed = QGuiApplication::queryKeyboardModifiers().testFlag(mKey);

@@ -35,6 +35,8 @@ public:
     Vertex operator *(double& scalar) const;
     Vertex operator /(double& scalar) const;
 
+    Vertex operator -() const;
+
     double distance(const Vertex& other) const;
     double length() const;
     double lengthSquared() const;

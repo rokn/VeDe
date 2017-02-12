@@ -114,6 +114,11 @@ gx::Vertex gx::Vertex::operator /(double &scalar) const
     return Vertex(m_x / scalar, m_y / scalar);
 }
 
+gx::Vertex gx::Vertex::operator -() const
+{
+    return Vertex(-m_x, -m_y);
+}
+
 double gx::Vertex::distance(const gx::Vertex &other) const
 {
     return qSqrt(qPow(other.x() - m_x, 2) + qPow(other.y() - m_y, 2));

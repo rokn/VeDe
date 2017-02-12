@@ -12,6 +12,7 @@
 #include <QList>
 #include <QEvent>
 #include <QRectF>
+#include <Qt>
 
 namespace gx
 {
@@ -28,6 +29,8 @@ public:
     SharedGObject root();
 
     virtual Vertex getCursor() const = 0;
+
+    virtual bool isKeyPressed(Qt::Key key) const = 0;
 
     int executeCommand(Command* command);
 
@@ -61,7 +64,6 @@ public:
 
     double getHeight() const;
     void setHeight(double height);
-
     Event<Tool*>& onToolChanged();
 
     Event<double>& onZoomChange();
