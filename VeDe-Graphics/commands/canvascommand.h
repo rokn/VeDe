@@ -19,9 +19,15 @@ public:
 
     void setObject(const SharedGObject& object);
 
+    int execute();
+    int undo();
+
 protected:
     Canvas* m_canvas;
     QList<SharedGObject> m_objects;
+
+    virtual int executeOnObject(SharedGObject obj, QRectF& redrawRect, bool reverse = false) = 0;
+
 };
 }
 

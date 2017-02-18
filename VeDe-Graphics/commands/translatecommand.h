@@ -12,13 +12,11 @@ class TranslateCommand : public CanvasCommand
 public:
     TranslateCommand(Vertex translation);
 
-    int execute();
-    int undo();
+protected:
+    int executeOnObject(SharedGObject obj, QRectF& redrawRect, bool reverse = false);
 
 private:
     Vertex m_translation;
-
-    void applyTranslation(Vertex translation);
 };
 }
 

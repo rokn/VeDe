@@ -25,15 +25,15 @@ public:
     Vertex operator -(const Vertex& other) const;
     double operator *(const Vertex& other) const;
 
-    Vertex& operator +=(double& scalar);
-    Vertex& operator -=(double& scalar);
-    Vertex& operator *=(double& scalar);
-    Vertex& operator /=(double& scalar);
+    Vertex& operator +=(double scalar);
+    Vertex& operator -=(double scalar);
+    Vertex& operator *=(double scalar);
+    Vertex& operator /=(double scalar);
 
-    Vertex operator +(double& scalar) const;
-    Vertex operator -(double& scalar) const;
-    Vertex operator *(double& scalar) const;
-    Vertex operator /(double& scalar) const;
+    Vertex operator +(double scalar) const;
+    Vertex operator -(double scalar) const;
+    Vertex operator *(double scalar) const;
+    Vertex operator /(double scalar) const;
 
     Vertex operator -() const;
 
@@ -48,6 +48,8 @@ private:
     double m_x;
     double m_y;
 };
+
+Vertex operator/(double scalar, const Vertex& v);
 }
 
 #endif // VERTEX_H

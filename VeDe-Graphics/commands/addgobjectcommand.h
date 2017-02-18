@@ -12,8 +12,8 @@ class AddGObjectCommand : public CanvasCommand
 public:
     AddGObjectCommand(bool add = true);
 
-    int execute();
-    int undo();
+protected:
+    int executeOnObject(SharedGObject obj, QRectF& redrawRect, bool reverse = false);
 
 private:
     bool m_add;

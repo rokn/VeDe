@@ -66,6 +66,7 @@ public:
     void rotate(double angle);
     void rotate(double angle, QTransform axis);
 
+    void clearAllEvents();
 protected:
     void changed();
     void preChange();
@@ -89,6 +90,7 @@ private:
     void applyTranslation();
     void removeTranslation();
     QTransform getCenterAxis() const;
+
 };
 }
 

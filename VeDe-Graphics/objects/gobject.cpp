@@ -111,7 +111,7 @@ void gx::GObject::removeChild(unsigned int id)
     {
         if((*childIt)->getId() == id) {
             (*childIt)->m_onDestroy((*childIt).get());
-            (*childIt)->m_onDestroy.clearCallbacks();
+            (*childIt)->clearAllEvents();
             if((*childIt)->isSelected()){
                 getCanvas()->deselectObject(*childIt);
             }
@@ -245,6 +245,13 @@ void gx::GObject::rotate(double angle, QTransform axis)
     rotation.rotate(angle);
     m_transform = m_transform * axis.inverted() * rotation * axis;
     changed();
+}
+
+void gx::GObject::clearAllEvents()
+{
+    m_onDestroy.clearCallbacks();
+    m_onPreChange.clearCallbacks();
+    m_onChange.clearCallbacks();
 }
 
 const QTransform& gx::GObject::getTransform() const

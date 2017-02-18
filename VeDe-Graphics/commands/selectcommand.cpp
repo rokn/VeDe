@@ -5,36 +5,13 @@ gx::SelectCommand::SelectCommand(bool select)
 {
 }
 
-int gx::SelectCommand::execute()
+int gx::SelectCommand::executeOnObject(gx::SharedGObject obj, QRectF &redrawRect, bool reverse)
 {
-    QRectF redrawRect;
-    foreach(auto& obj, m_objects)
-    {
-        if(m_select)
-            getCanvas()->selectObject(obj);
-        else
-            getCanvas()->deselectObject(obj);
+    if(m_select != reverse)
+        getCanvas()->selectObject(obj);
+    else
+        getCanvas()->deselectObject(obj);
 
-        redrawRect = redrawRect.united(obj->boundingBox());
-    }
-
-    getCanvas()->redraw(redrawRect);
-    return 0;
-}
-
-int gx::SelectCommand::undo()
-{
-    QRectF redrawRect;
-    foreach(auto& obj, m_objects)
-    {
-        if(m_select)
-            getCanvas()->deselectObject(obj);
-        else
-            getCanvas()->selectObject(obj);
-
-        redrawRect = redrawRect.united(obj->boundingBox());
-    }
-
-    getCanvas()->redraw(redrawRect);
+    redrawRect = redrawRect.united(obj->boundingBox());
     return 0;
 }

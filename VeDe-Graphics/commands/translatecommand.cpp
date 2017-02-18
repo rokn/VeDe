@@ -5,29 +5,13 @@ gx::TranslateCommand::TranslateCommand(gx::Vertex translation)
 {
 }
 
-int gx::TranslateCommand::execute()
+int gx::TranslateCommand::executeOnObject(gx::SharedGObject obj, QRectF &redrawRect, bool reverse)
 {
-    applyTranslation(m_translation);
+    auto translation = (reverse) ? -m_translation : m_translation;
+
+    redrawRect = redrawRect.united(obj->boundingBox());
+    obj->translate(translation);
+    redrawRect = redrawRect.united(obj->boundingBox());
+
     return 0;
-}
-
-int gx::TranslateCommand::undo()
-{
-    applyTranslation(-m_translation);
-    return 0;
-}
-
-void gx::TranslateCommand::applyTranslation(gx::Vertex translation)
-{
-    QRectF redrawRect;
-    foreach(auto& obj, m_objects)
-    {
-        redrawRect = redrawRect.united(obj->boundingBox());
-
-        obj->translate(translation);
-
-        redrawRect = redrawRect.united(obj->boundingBox());
-    }
-
-    getCanvas()->redraw(redrawRect);
 }

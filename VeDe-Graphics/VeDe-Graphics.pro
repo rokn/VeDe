@@ -40,11 +40,13 @@ SOURCES += \
     tools/pathtool.cpp \
     converters.cpp \
     helpers.cpp \
-    tools/selecttool.cpp \
     tools/userevent.cpp \
     commands/selectcommand.cpp \
     tools/commonstates.cpp \
-    commands/translatecommand.cpp
+    commands/translatecommand.cpp \
+    commands/rotatecommand.cpp \
+    commands/scalecommand.cpp \
+    tools/manipulatetool.cpp
 
 HEADERS += \
     vertex.h \
@@ -77,12 +79,14 @@ HEADERS += \
     helpers.h \
     event.h \
     common.h \
-    tools/selecttool.h \
     tools/userevent.h \
     tools/usereventtype.h \
     commands/selectcommand.h \
     tools/commonstates.h \
-    commands/translatecommand.h
+    commands/translatecommand.h \
+    commands/rotatecommand.h \
+    commands/scalecommand.h \
+    tools/manipulatetool.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

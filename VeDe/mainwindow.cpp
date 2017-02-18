@@ -4,7 +4,7 @@
 #include "tools/ellipsetool.h"
 #include "tools/rectangletool.h"
 #include "tools/pathtool.h"
-#include "tools/selecttool.h"
+#include "tools/manipulatetool.h"
 #include "toolaction.h"
 
 #include <QActionGroup>
@@ -64,7 +64,7 @@ void MainWindow::setupTools()
     actions.append(ellipseAction);
     actions.append(new ToolAction(new gx::RectangleTool(m_canvas), group));
     actions.append(new ToolAction(new gx::PathTool(m_canvas), group));
-    actions.append(new ToolAction(new gx::SelectTool(m_canvas), group));
+    actions.append(new ToolAction(new gx::ManipulateTool(m_canvas), group));
 
     QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas, this);
 

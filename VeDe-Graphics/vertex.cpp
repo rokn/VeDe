@@ -66,50 +66,50 @@ double gx::Vertex::operator *(const gx::Vertex &other) const
     return m_x * other.x() + m_y * other.y();
 }
 
-gx::Vertex &gx::Vertex::operator +=(double &scalar)
+gx::Vertex &gx::Vertex::operator +=(double scalar)
 {
     this->m_x += scalar;
     this->m_y += scalar;
     return *this;
 }
 
-gx::Vertex &gx::Vertex::operator -=(double &scalar)
+gx::Vertex &gx::Vertex::operator -=(double scalar)
 {
     this->m_x -= scalar;
     this->m_y -= scalar;
     return *this;
 }
 
-gx::Vertex &gx::Vertex::operator *=(double &scalar)
+gx::Vertex &gx::Vertex::operator *=(double scalar)
 {
     this->m_x *= scalar;
     this->m_y *= scalar;
     return *this;
 }
 
-gx::Vertex &gx::Vertex::operator /=(double &scalar)
+gx::Vertex &gx::Vertex::operator /=(double scalar)
 {
     this->m_x /= scalar;
     this->m_y /= scalar;
     return *this;
 }
 
-gx::Vertex gx::Vertex::operator +(double &scalar) const
+gx::Vertex gx::Vertex::operator +(double scalar) const
 {
     return Vertex(m_x + scalar, m_y + scalar);
 }
 
-gx::Vertex gx::Vertex::operator -(double &scalar) const
+gx::Vertex gx::Vertex::operator -(double scalar) const
 {
     return Vertex(m_x - scalar, m_y - scalar);
 }
 
-gx::Vertex gx::Vertex::operator *(double &scalar) const
+gx::Vertex gx::Vertex::operator *(double scalar) const
 {
     return Vertex(m_x * scalar, m_y * scalar);
 }
 
-gx::Vertex gx::Vertex::operator /(double &scalar) const
+gx::Vertex gx::Vertex::operator /(double scalar) const
 {
     return Vertex(m_x / scalar, m_y / scalar);
 }
@@ -144,4 +144,9 @@ gx::Vertex gx::Vertex::normalized() const
 {
     double len = this->length();
     return *this / len;
+}
+
+gx::Vertex operator/(double scalar, const gx::Vertex& v)
+{
+    return gx::Vertex(scalar / v.x(), scalar / v.y());
 }

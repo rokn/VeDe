@@ -36,6 +36,8 @@ QWidget *PropertyWidgetFactory::createWidget(gx::Property *prop, QWidget *parent
             converter = new PropertyConverter(prop, colorButton);
             QObject::connect(colorButton, SIGNAL(colorChanged(QColor)), converter, SLOT(onColorChange(QColor)));
             return colorButton;
+
+        default: return nullptr;
     }
 }
 
