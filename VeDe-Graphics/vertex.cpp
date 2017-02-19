@@ -146,6 +146,11 @@ gx::Vertex gx::Vertex::normalized() const
     return *this / len;
 }
 
+gx::Vertex gx::Vertex::absolute() const
+{
+    return gx::Vertex(qAbs(m_x), qAbs(m_y));
+}
+
 gx::Vertex operator/(double scalar, const gx::Vertex& v)
 {
     return gx::Vertex(scalar / v.x(), scalar / v.y());

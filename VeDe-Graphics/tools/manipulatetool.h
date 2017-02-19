@@ -95,9 +95,10 @@ private:
 
     private:
         Vertex m_startPosition;
-        Vertex m_scaleAxis;
+        QRectF m_startBox;
+//        Vertex m_scaleAxis;
         Vertex m_oldPosition;
-        bool m_useRotAxis;
+//        bool m_useRotAxis;
     };
 };
 }

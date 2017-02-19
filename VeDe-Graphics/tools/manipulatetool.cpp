@@ -4,6 +4,7 @@
 #include "commands/selectcommand.h"
 #include "commands/translatecommand.h"
 #include "commands/rotatecommand.h"
+#include "commands/scalecommand.h"
 #include "color.h"
 #include <QtMath>
 #include <QDebug>
@@ -44,6 +45,7 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
                  newMode = new RotationMode;
                  break;
             case Qt::Key_R:
+                 newMode = new ScaleMode;
                  break;
             default:break;
          }
@@ -241,7 +243,6 @@ void gx::ManipulateTool::RotationMode::startManipulation(gx::Vertex cursor)
         m_useRotAxis = false;
     }
 
-//    m_oldAngleSet = false;
     m_oldAngle = 0.0;
     m_totalRotation = 0.0;
     m_startPosition = cursor;
@@ -252,15 +253,13 @@ void gx::ManipulateTool::RotationMode::updateManipulation(gx::Vertex cursor, gx:
     Vertex normCursor = (cursor - m_startPosition).normalized();
     double currAngle = qRadiansToDegrees(qAtan2(normCursor.y(), normCursor.x()));
 
-//    if(m_oldAngleSet) {
-        double rotation = currAngle - m_oldAngle;
+    double rotation = currAngle - m_oldAngle;
 
-        if (m_useRotAxis) {
-            obj->rotate(rotation, QTransform::fromTranslate(m_rotationAxis.x(), m_rotationAxis.y()));
-        } else {
-            obj->rotate(rotation);
-        }
-//    }
+    if (m_useRotAxis) {
+        obj->rotate(rotation, QTransform::fromTranslate(m_rotationAxis.x(), m_rotationAxis.y()));
+    } else {
+        obj->rotate(rotation);
+    }
 }
 
 void gx::ManipulateTool::RotationMode::postUpdate(gx::Vertex cursor)
@@ -268,11 +267,7 @@ void gx::ManipulateTool::RotationMode::postUpdate(gx::Vertex cursor)
     Vertex normCursor = (cursor - m_startPosition).normalized();
     double currAngle = qRadiansToDegrees(qAtan2(normCursor.y(), normCursor.x()));
 
-//    if(m_oldAngleSet) {
-        m_totalRotation += currAngle - m_oldAngle;
-//    } else {
-//        m_oldAngleSet = true;
-//    }
+    m_totalRotation += currAngle - m_oldAngle;
 
     m_oldAngle = currAngle;
     m_oldPosition = cursor;
@@ -299,7 +294,7 @@ void gx::ManipulateTool::RotationMode::drawGui(gx::CustomPainter &painter) const
     painter.setBackColor(Color(0,0,0,0));
     painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
 
-    painter.setStrokeColor(Color(0,0,0));
+    painter.setStrokeColor(Color(0,0,255));
     double radius = getCanvas()->mapValueToZoom(50.0);
     painter.drawEllipse(m_startPosition, Vertex(radius, radius));
     painter.drawLine(m_startPosition, Vertex(m_startPosition.x() + radius, m_startPosition.y()));
@@ -307,4 +302,51 @@ void gx::ManipulateTool::RotationMode::drawGui(gx::CustomPainter &painter) const
     painter.setStrokeColor(Color(0,255,0));
     Vertex endPoint = (m_oldPosition - m_startPosition).normalized() * radius;
     painter.drawLine(m_startPosition, m_startPosition + endPoint);
+}
+
+void gx::ManipulateTool::ScaleMode::startManipulation(gx::Vertex cursor)
+{
+    m_startPosition = cursor;
+    m_oldPosition = cursor;
+    m_startBox = getCanvas()->getSelectedObjectsBox();
+}
+
+void gx::ManipulateTool::ScaleMode::updateManipulation(gx::Vertex cursor, gx::SharedGObject obj)
+{
+    QRectF box = getCanvas()->getSelectedObjectsBox();
+    Vertex diffOld = (m_oldPosition - m_startPosition).absolute();
+    Vertex diffNew = (cursor - m_startPosition).absolute();
+    Vertex scale;
+    scale.setX(diffNew.x() - diffOld.x());
+    scale.setY(diffNew.y() - diffOld.y());
+    double widthScale = (box.width() + scale.x()) / box.width();
+    double heightScale = (box.height() + scale.y()) / box.height();
+
+    obj->scale(Vertex(widthScale, heightScale));
+}
+
+void gx::ManipulateTool::ScaleMode::postUpdate(gx::Vertex cursor)
+{
+    m_oldPosition = cursor;
+    getCanvas()->redraw();
+}
+
+gx::CanvasCommand *gx::ManipulateTool::ScaleMode::endManipulation()
+{
+    Vertex diff = m_oldPosition - m_startPosition;
+    double widthScale = (m_startBox.width() + diff.x()) / m_startBox.width();
+    double heightScale = (m_startBox.height() + diff.y()) / m_startBox.height();
+    getCanvas()->redraw();
+    return new ScaleCommand(Vertex(widthScale, heightScale));
+}
+
+void gx::ManipulateTool::ScaleMode::drawGui(gx::CustomPainter &painter) const
+{
+    painter.setBackColor(Color(0,0,0,0));
+    painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
+
+    painter.setStrokeColor(Color(0,255,0));
+    painter.drawLine(m_startPosition, Vertex(m_startPosition.x(), m_oldPosition.y()));
+    painter.setStrokeColor(Color(0,0,255));
+    painter.drawLine(m_startPosition, Vertex(m_oldPosition.x(), m_startPosition.y()));
 }

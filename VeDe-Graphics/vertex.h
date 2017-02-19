@@ -43,13 +43,14 @@ public:
 
     Vertex transformed(const QTransform &transform) const;
     Vertex normalized() const;
+    Vertex absolute() const;
 
 private:
     double m_x;
     double m_y;
 };
 
-Vertex operator/(double scalar, const Vertex& v);
+gx::Vertex operator/(double scalar, const gx::Vertex& v);
 }
 
 #endif // VERTEX_H

@@ -14,7 +14,7 @@ gx::ScaleCommand::ScaleCommand(gx::Vertex scale, gx::Vertex axis)
 int gx::ScaleCommand::executeOnObject(gx::SharedGObject obj, QRectF &redrawRect, bool reverse)
 {
     redrawRect = redrawRect.united(obj->boundingBox());
-    Vertex scale = (reverse) ? (1.0/m_scale) : m_scale;
+    Vertex scale = (reverse) ? Vertex(1/m_scale.x(), 1/m_scale.y()) : m_scale;
 
     if (m_useAxis) {
         obj->scale(scale, QTransform::fromTranslate(m_axis.x(), m_axis.y()));
