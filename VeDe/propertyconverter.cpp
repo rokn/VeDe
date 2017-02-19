@@ -25,6 +25,7 @@ void PropertyConverter::onTextChange(const QString &text)
         case gx::PROP_STRING:
             m_prop->toString() = text;
             break;
+        default:break;
     }
 }
 

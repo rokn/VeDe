@@ -13,235 +13,129 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
 {
     setName("Manipulate Tool");
     QString start = "Select items";
-    QString selectStart = "Started selection";
-    QString moveSelect = "Move selection";
-    QString endSelect = "Ending selection";
+    QString changeMode = "Changiong mode";
+    QString modeStart = "Starting mode";
+    QString modeUpdate = "Update manipulation";
+    QString endMode = "Ending mode";
     QString unionEnable = "Union enable";
     QString unionDisable = "Union disable";
     QString deleteObjects = "Delete objects";
     QString selectAll = "Select all";
     QString deselectAll = "Deselect all";
-    m_selecting = false;
-    m_union = false;
-    m_totalRotation = 0.0;
+
+//    m_union = false;
+    m_inManipulation = false;
+
+    m_currMode = new SelectionMode();
+    m_currMode->setCanvas(getCanvas());
 
     addState(start, EMPTY_STATE);
 
-    addState(selectStart, STATE_DEF{
-        Vertex cursorPos = getCanvas()->getCursor();
-        m_anchorPoint = cursorPos;
-
-        if(getCanvas()->isKeyPressed(Qt::Key_Shift) && getCanvas()->isKeyPressed(Qt::Key_R)){
-            m_rotating = true;
-            m_useRotAxis = true;
-            m_rotationAxis = Converters::toVertex(getCanvas()->getSelectedObjectsBox().center());
-            m_oldAngleSet = false;
-        }
-
-        auto list = getCanvas()->getSelectedObjects();
-        foreach(auto obj, list) {
-            if(obj->containsPoint(cursorPos)) {
-                if(getCanvas()->isKeyPressed(Qt::Key_R)){
-                    m_rotating = true;
-                    m_useRotAxis = false;
-                    m_oldAngleSet = false;
-                    break;
-                } else {
-                    m_translating = true;
-                    m_startTranslation = cursorPos;
-                    break;
-                }
-            }
-        }
-
-        if(!m_translating && !m_rotating) {
-            m_selection = QRectF(cursorPos.x(), cursorPos.y(), 1, 1);
-            m_selecting = true;
-        }
-
-        moveToStateSilent(moveSelect);
+    addState(changeMode, STATE_DEF{
+         ManipulateMode *newMode = nullptr;
+         switch(t.key()) {
+            case Qt::Key_Q:
+                 newMode = new SelectionMode;
+                 break;
+            case Qt::Key_W:
+                 newMode = new TranslationMode;
+                 break;
+            case Qt::Key_E:
+                 newMode = new RotationMode;
+                 break;
+            case Qt::Key_R:
+                 break;
+            default:break;
+         }
+         if(newMode != nullptr) {
+             delete m_currMode;
+             m_currMode = newMode;
+             m_currMode->setCanvas(getCanvas());
+         }
+         moveToStateSilent(getLastState());
     });
 
-    addState(moveSelect, STATE_DEF{
+    addState(modeStart, STATE_DEF{
         Vertex cursor = getCanvas()->getCursor();
 
-        if(m_selecting) {
-            updateSelection(cursor);
-        } else if (m_translating) {
-            updateTranslation(cursor);
-        } else if (m_rotating) {
-            updateRotation(cursor);
-        }
+        m_inManipulation = true;
+        m_currMode->startManipulation(cursor);
+
+        moveToStateSilent(modeUpdate);
     });
 
-    addState(endSelect, STATE_DEF{
-        if(m_selecting) {
-            endSelection();
-        } else if (m_translating) {
-            endTranslation();
-        } else if (m_rotating) {
-            endRotation();
-        }
+    addState(modeUpdate, STATE_DEF{
+        Vertex cursor = getCanvas()->getCursor();
 
-        moveToStateSilent(start);
-    });
-
-    addState(unionEnable, STATE_DEF{
-        m_union = true;
-        moveToStateSilent(getLastState());
-    });
-
-    addState(unionDisable, STATE_DEF{
-        m_union = false;
-        moveToStateSilent(getLastState());
-    });
-
-    addState("Scal", STATE_DEF{
         auto objects = getCanvas()->getSelectedObjects();
         QRectF redrawRect;
 
         foreach(auto obj, objects) {
             redrawRect = redrawRect.united(obj->boundingBox());
-            obj->scale(Vertex(1.1, 1.), QTransform::fromTranslate(obj->boundingBox().x() + obj->boundingBox().width(), obj->boundingBox().center().y()));
+            m_currMode->updateManipulation(cursor, obj);
             redrawRect = redrawRect.united(obj->boundingBox());
         }
-
         getCanvas()->redraw(redrawRect);
+
+        m_currMode->postUpdate(cursor);
+    });
+
+    addState(endMode, STATE_DEF{
+        auto command = m_currMode->endManipulation();
+        if(command != nullptr) {
+            command->setCanvas(getCanvas());
+            command->setObjects(getCanvas()->getSelectedObjects());
+            getCanvas()->addSilentCommand(command);
+        }
+        m_inManipulation = false;
+
+        moveToStateSilent(start);
+    });
+
+    addState(unionEnable, STATE_DEF{
+//        m_union = true;
         moveToStateSilent(getLastState());
     });
+
+    addState(unionDisable, STATE_DEF{
+//        m_union = false;
+        moveToStateSilent(getLastState());
+    });
+
+//            obj->scale(Vertex(1.1, 1.), QTransform::fromTranslate(obj->boundingBox().x() + obj->boundingBox().width(), obj->boundingBox().center().y()));
 
     addState(deleteObjects, CommonStates::deleteSelectedObjects(this));
     addState(selectAll, CommonStates::selectAllOnCurrLayer(this));
     addState(deselectAll, CommonStates::deselectAll(this));
 
-    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), selectStart);
-    addTransition(moveSelect, UserEvent(MOUSE_MOVE), moveSelect);
-    addTransition(moveSelect, UserEvent(MOUSE_RELEASE, Qt::LeftButton), endSelect);
+    addTransition(start, UserEvent(MOUSE_PRESS, Qt::LeftButton), modeStart);
+    addTransition(modeUpdate, UserEvent(MOUSE_MOVE), modeUpdate);
+    addTransition(modeUpdate, UserEvent(MOUSE_RELEASE, Qt::LeftButton), endMode);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Shift), unionEnable);
     addTransition(ANY_STATE, UserEvent(KEY_RELEASE, Qt::Key_Shift), unionDisable);
 
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Delete), deleteObjects);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_A), selectAll);
     addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_Escape), deselectAll);
-    addTransition(ANY_STATE, UserEvent(MOUSE_PRESS, Qt::RightButton), deselectAll);
-    addTransition(ANY_STATE, UserEvent(KEY_PRESS, Qt::Key_S), "Scal");
+
+    addTransition(start, UserEvent(KEY_PRESS, Qt::Key_Q), changeMode);
+    addTransition(start, UserEvent(KEY_PRESS, Qt::Key_W), changeMode);
+    addTransition(start, UserEvent(KEY_PRESS, Qt::Key_E), changeMode);
+    addTransition(start, UserEvent(KEY_PRESS, Qt::Key_R), changeMode);
 
     moveToStateSilent(start);
 }
 
+gx::ManipulateTool::~ManipulateTool()
+{
+    delete m_currMode;
+}
+
 void gx::ManipulateTool::drawGui(CustomPainter &painter) const
 {
-    if(m_selecting)
-    {
-        painter.setStrokeColor(Color(0,0,0));
-        painter.setBackColor(Color(0,0,0,0));
-        painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
-        painter.drawRectangle(m_selection.topLeft().x(), m_selection.topLeft().y(),
-                               m_selection.bottomRight().x(), m_selection.bottomRight().y());
-    } else if (m_rotating) {
-        painter.setStrokeColor(Color(0,255,0));
-        painter.setBackColor(Color(0,0,0,0));
-        painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
-        painter.drawLine(m_anchorPoint, m_oldPosition);
+    if (m_inManipulation) {
+        m_currMode->drawGui(painter);
     }
-}
-
-void gx::ManipulateTool::selectObjects(QRectF rect)
-{
-    auto currLayerObjects = getCanvas()->getCurrLayer()->getChildren();
-    QRectF redrawBox;
-    QList<SharedGObject> selectedObjects;
-
-    foreach (auto& obj, currLayerObjects) {
-        if(rect.contains(obj->boundingBox())) {
-            selectedObjects.append(obj);
-        }
-    }
-
-    if(selectedObjects.size() > 0){
-        if(!m_union){
-            getCanvas()->clearSelectedObjects();
-        }
-
-        CanvasCommand* command = new SelectCommand();
-        command->setCanvas(getCanvas());
-        command->setObjects(selectedObjects);
-        getCanvas()->executeCommand(command);
-    }
-}
-
-void gx::ManipulateTool::updateSelection(gx::Vertex cursor)
-{
-    Vertex upLeft(qMin(cursor.x(), m_anchorPoint.x()), qMin(cursor.y(), m_anchorPoint.y()));
-    Vertex downRight(qMax(cursor.x(), m_anchorPoint.x()), qMax(cursor.y(), m_anchorPoint.y()));
-    QRectF old = m_selection;
-    m_selection.setTopLeft(Converters::toPoint(upLeft));
-    m_selection.setBottomRight(Converters::toPoint(downRight));
-    getCanvas()->redraw(m_selection.united(old));
-}
-
-void gx::ManipulateTool::updateTranslation(gx::Vertex cursor)
-{
-}
-
-void gx::ManipulateTool::updateRotation(gx::Vertex cursor)
-{
-    Vertex normCursor = (cursor - m_anchorPoint).normalized();
-    double currAngle = qRadiansToDegrees(qAtan2(normCursor.y(), normCursor.x()));
-
-    if(m_oldAngleSet) {
-        auto objects = getCanvas()->getSelectedObjects();
-        double rotation = currAngle - m_oldAngle;
-        if (m_useRotAxis) {
-            foreach(auto obj, objects) {
-                obj->rotate(rotation, QTransform::fromTranslate(m_rotationAxis.x(), m_rotationAxis.y()));
-            }
-        } else {
-            foreach(auto obj, objects) {
-                obj->rotate(rotation);
-            }
-        }
-
-        m_totalRotation += rotation;
-    } else {
-        m_oldAngleSet = true;
-    }
-
-    m_oldAngle = currAngle;
-    m_oldPosition = cursor;
-    getCanvas()->redraw();//TODO: optimize
-}
-
-void gx::ManipulateTool::endSelection()
-{
-    m_selecting = false;
-    selectObjects(m_selection);
-    getCanvas()->redraw(m_selection);
-}
-
-void gx::ManipulateTool::endTranslation()
-{
-    m_translating = false;
-    CanvasCommand *translateCommand = new TranslateCommand(getCanvas()->getCursor() - m_startTranslation);
-    translateCommand->setCanvas(getCanvas());
-    translateCommand->setObjects(getCanvas()->getSelectedObjects());
-    getCanvas()->addSilentCommand(translateCommand);
-}
-
-void gx::ManipulateTool::endRotation()
-{
-    m_rotating = false;
-    CanvasCommand *rotateCommand;
-    if(m_useRotAxis) {
-         rotateCommand = new RotateCommand(m_totalRotation, m_rotationAxis);
-    } else {
-        rotateCommand = new RotateCommand(m_totalRotation);
-    }
-    rotateCommand->setCanvas(getCanvas());
-    rotateCommand->setObjects(getCanvas()->getSelectedObjects());
-    getCanvas()->addSilentCommand(rotateCommand);
-    getCanvas()->redraw();
-    m_totalRotation = 0.0;
 }
 
 
@@ -251,22 +145,166 @@ void gx::ManipulateTool::TranslationMode::startManipulation(gx::Vertex cursor)
     m_lastPosition = cursor;
 }
 
-void gx::ManipulateTool::TranslationMode::updateManipulation(gx::Vertex cursor)
+void gx::ManipulateTool::TranslationMode::updateManipulation(gx::Vertex cursor, SharedGObject obj)
 {
-    auto objects = getCanvas()->getSelectedObjects();
-    QRectF redrawRect;
-
-    foreach(auto obj, objects) {
-        redrawRect = redrawRect.united(obj->boundingBox());
-        obj->translate(Vertex(cursor.x() - m_anchorPoint.x(), cursor.y() - m_anchorPoint.y()));
-        redrawRect = redrawRect.united(obj->boundingBox());
-    }
-
-    m_anchorPoint = cursor;
-    getCanvas()->redraw(redrawRect);
+    obj->translate(cursor - m_lastPosition);
 }
 
-Qt::Key gx::ManipulateTool::ManipulateMode::getEnterKey() const
+void gx::ManipulateTool::TranslationMode::postUpdate(gx::Vertex cursor)
 {
-    return m_enterKey
+    m_lastPosition = cursor;
+}
+
+gx::CanvasCommand *gx::ManipulateTool::TranslationMode::endManipulation()
+{
+    return new TranslateCommand(m_lastPosition - m_startPosition);
+}
+
+void gx::ManipulateTool::ManipulateMode::drawGui(gx::CustomPainter &painter) const{}
+
+gx::Canvas *gx::ManipulateTool::ManipulateMode::getCanvas()
+{
+    return m_canvas;
+}
+
+gx::Canvas *gx::ManipulateTool::ManipulateMode::getCanvas() const
+{
+    return m_canvas;
+}
+
+void gx::ManipulateTool::ManipulateMode::setCanvas(gx::Canvas *canvas)
+{
+    m_canvas = canvas;
+}
+
+void gx::ManipulateTool::SelectionMode::startManipulation(gx::Vertex cursor)
+{
+    m_anchorPoint = cursor;
+}
+
+void gx::ManipulateTool::SelectionMode::updateManipulation(gx::Vertex cursor, gx::SharedGObject obj)
+{
+}
+
+void gx::ManipulateTool::SelectionMode::postUpdate(gx::Vertex cursor)
+{
+    Vertex upLeft(qMin(cursor.x(), m_anchorPoint.x()), qMin(cursor.y(), m_anchorPoint.y()));
+    Vertex downRight(qMax(cursor.x(), m_anchorPoint.x()), qMax(cursor.y(), m_anchorPoint.y()));
+    QRectF old = m_selection;
+    m_selection.setTopLeft(Converters::toPoint(upLeft));
+    m_selection.setBottomRight(Converters::toPoint(downRight));
+    getCanvas()->redraw(m_selection.united(old)); //TODO: must redraw think
+}
+
+gx::CanvasCommand *gx::ManipulateTool::SelectionMode::endManipulation()
+{
+    auto currLayerObjects = getCanvas()->getCurrLayer()->getChildren();
+    QList<SharedGObject> selectedObjects;
+
+    foreach (auto& obj, currLayerObjects) {
+        if(m_selection.contains(obj->boundingBox())) {
+            selectedObjects.append(obj);
+        }
+    }
+
+    if(selectedObjects.size() > 0){
+        if(!getCanvas()->isKeyPressed(Qt::Key_Shift)) {
+            getCanvas()->clearSelectedObjects();
+        }
+
+        CanvasCommand* command = new SelectCommand();
+        command->setCanvas(getCanvas());
+        command->setObjects(selectedObjects);
+        getCanvas()->executeCommand(command);
+    }
+
+    getCanvas()->redraw(m_selection);
+
+    return nullptr;
+}
+
+void gx::ManipulateTool::SelectionMode::drawGui(gx::CustomPainter &painter) const
+{
+    painter.setStrokeColor(Color(0,0,0));
+    painter.setBackColor(Color(0,0,0,0));
+    painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
+    painter.drawRectangle(m_selection.topLeft().x(), m_selection.topLeft().y(),
+                           m_selection.bottomRight().x(), m_selection.bottomRight().y());
+}
+
+void gx::ManipulateTool::RotationMode::startManipulation(gx::Vertex cursor)
+{
+    if (getCanvas()->isKeyPressed(Qt::Key_Shift)) {
+        m_useRotAxis = true;
+        m_rotationAxis = Converters::toVertex(getCanvas()->getSelectedObjectsBox().center());
+    } else {
+        m_useRotAxis = false;
+    }
+
+//    m_oldAngleSet = false;
+    m_oldAngle = 0.0;
+    m_totalRotation = 0.0;
+    m_startPosition = cursor;
+}
+
+void gx::ManipulateTool::RotationMode::updateManipulation(gx::Vertex cursor, gx::SharedGObject obj) //TODO: Find a way to not calculate every time(maybe preUpdate())
+{
+    Vertex normCursor = (cursor - m_startPosition).normalized();
+    double currAngle = qRadiansToDegrees(qAtan2(normCursor.y(), normCursor.x()));
+
+//    if(m_oldAngleSet) {
+        double rotation = currAngle - m_oldAngle;
+
+        if (m_useRotAxis) {
+            obj->rotate(rotation, QTransform::fromTranslate(m_rotationAxis.x(), m_rotationAxis.y()));
+        } else {
+            obj->rotate(rotation);
+        }
+//    }
+}
+
+void gx::ManipulateTool::RotationMode::postUpdate(gx::Vertex cursor)
+{
+    Vertex normCursor = (cursor - m_startPosition).normalized();
+    double currAngle = qRadiansToDegrees(qAtan2(normCursor.y(), normCursor.x()));
+
+//    if(m_oldAngleSet) {
+        m_totalRotation += currAngle - m_oldAngle;
+//    } else {
+//        m_oldAngleSet = true;
+//    }
+
+    m_oldAngle = currAngle;
+    m_oldPosition = cursor;
+    getCanvas()->redraw();//TODO: optimize
+}
+
+gx::CanvasCommand *gx::ManipulateTool::RotationMode::endManipulation()
+{
+    CanvasCommand *rotateCommand;
+
+    if(m_useRotAxis) {
+         rotateCommand = new RotateCommand(m_totalRotation, m_rotationAxis);
+    } else {
+        rotateCommand = new RotateCommand(m_totalRotation);
+    }
+
+    getCanvas()->redraw();//TODO: optimize
+
+    return rotateCommand;
+}
+
+void gx::ManipulateTool::RotationMode::drawGui(gx::CustomPainter &painter) const
+{
+    painter.setBackColor(Color(0,0,0,0));
+    painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
+
+    painter.setStrokeColor(Color(0,0,0));
+    double radius = getCanvas()->mapValueToZoom(50.0);
+    painter.drawEllipse(m_startPosition, Vertex(radius, radius));
+    painter.drawLine(m_startPosition, Vertex(m_startPosition.x() + radius, m_startPosition.y()));
+
+    painter.setStrokeColor(Color(0,255,0));
+    Vertex endPoint = (m_oldPosition - m_startPosition).normalized() * radius;
+    painter.drawLine(m_startPosition, m_startPosition + endPoint);
 }
