@@ -21,6 +21,7 @@ gx::Tool::ToolStateCallBack gx::CommonStates::selectAllOnCurrLayer(gx::Tool *too
     return STATE_DEF{
         auto objects = tool->getCanvas()->getCurrLayer()->getChildren();
         if(objects.size() > 0){
+            tool->getCanvas()->clearSelectedObjects();
             CanvasCommand* selectObjects = new SelectCommand();
             selectObjects->setCanvas(tool->getCanvas());
             selectObjects->setObjects(objects);
