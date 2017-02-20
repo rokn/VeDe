@@ -183,7 +183,6 @@ void CanvasImpl::keyPressEvent(QKeyEvent *event)
 void CanvasImpl::keyReleaseEvent(QKeyEvent *event)
 {
     Qt::Key key = (Qt::Key)event->key();
-    m_keys.remove(key);
 
     foreach (auto& mKey, m_modifierKeys.keys()) {
         bool pressed = QGuiApplication::queryKeyboardModifiers().testFlag(mKey);
@@ -194,6 +193,8 @@ void CanvasImpl::keyReleaseEvent(QKeyEvent *event)
             break;
         }
     }
+
+    m_keys.remove(key);
 
     gx::UserEvent transition(gx::KEY_RELEASE, key);
     handleTransition(transition);

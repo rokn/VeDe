@@ -104,8 +104,6 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
         moveToStateSilent(getLastState());
     });
 
-//            obj->scale(Vertex(1.1, 1.), QTransform::fromTranslate(obj->boundingBox().x() + obj->boundingBox().width(), obj->boundingBox().center().y()));
-
     addState(deleteObjects, CommonStates::deleteSelectedObjects(this));
     addState(selectAll, CommonStates::selectAllOnCurrLayer(this));
     addState(deselectAll, CommonStates::deselectAll(this));
@@ -347,6 +345,7 @@ void gx::ManipulateTool::ScaleMode::drawGui(gx::CustomPainter &painter) const
 
     painter.setStrokeColor(Color(0,255,0));
     painter.drawLine(m_startPosition, Vertex(m_startPosition.x(), m_oldPosition.y()));
+
     painter.setStrokeColor(Color(0,0,255));
     painter.drawLine(m_startPosition, Vertex(m_oldPosition.x(), m_startPosition.y()));
 }
