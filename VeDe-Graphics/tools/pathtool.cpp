@@ -112,9 +112,10 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
 
 bool gx::PathTool::startShape(gx::Vertex mousePos)
 {
-    m_path = std::make_shared<Path>();
+    auto path = std::make_shared<Path>();
+    m_path = path.get();
     m_startPoint = getCanvas()->getCursor();
     m_path->addPoint(m_startPoint);
-    setShape(m_path);
+    setShape(path);
     return false;
 }

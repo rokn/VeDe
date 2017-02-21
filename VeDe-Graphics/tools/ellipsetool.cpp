@@ -12,10 +12,11 @@ gx::EllipseTool::EllipseTool(gx::Canvas *canvas)
 
 bool gx::EllipseTool::startShape(gx::Vertex mousePos)
 {
-    m_ellipse = std::make_shared<Ellipse>();
+    auto ellipse = std::make_shared<Ellipse>();
+    m_ellipse = ellipse.get();
     m_ellipse->setCenter(getCanvas()->getCursor());
     m_ellipse->setRadius(Vertex(0,0));
-    setShape(m_ellipse);
+    setShape(ellipse);
     return true;
 }
 

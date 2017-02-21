@@ -13,10 +13,11 @@ gx::RectangleTool::RectangleTool(gx::Canvas *canvas)
 bool gx::RectangleTool::startShape(gx::Vertex mousePos)
 {
     m_anchorPoint = mousePos;
-    m_rect = std::make_shared<Rectangle>();
+    auto rect = std::make_shared<Rectangle>();
+    m_rect = rect.get();
     m_rect->setTopLeft(m_anchorPoint);
     m_rect->setBottomRight(m_anchorPoint);
-    setShape(m_rect);
+    setShape(rect);
     return true;
 }
 

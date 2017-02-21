@@ -16,7 +16,7 @@ protected:
     void moveControl(Vertex mousePos);
 
 private:
-    std::shared_ptr<Rectangle> m_rect;
+    Rectangle* m_rect;
     Vertex m_anchorPoint;
 
     void restrictPoints(const Vertex &cursor, Vertex& upLeft, Vertex& downRight);

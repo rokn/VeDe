@@ -17,7 +17,7 @@ protected:
     void moveControl(Vertex mousePos);
 
 private:
-    std::shared_ptr<Ellipse> m_ellipse;
+    Ellipse* m_ellipse;
 };
 }
 

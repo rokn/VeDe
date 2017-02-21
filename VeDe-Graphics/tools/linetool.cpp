@@ -12,11 +12,12 @@ gx::LineTool::LineTool(gx::Canvas *canvas)
 
 bool gx::LineTool::startShape(gx::Vertex mousePos)
 {
-    m_line = std::make_shared<Line>();
+    auto line = std::make_shared<Line>();
+    m_line = line.get();
     m_line->setStart(mousePos);
     mousePos.setX(mousePos.x()+0.0001f);//Disable buggy division by zero
     m_line->setEnd(mousePos);
-    setShape(m_line);
+    setShape(line);
     return true;
 }
 

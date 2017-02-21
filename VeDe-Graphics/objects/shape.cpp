@@ -11,7 +11,9 @@ gx::Shape::Shape()
 
 gx::Shape::~Shape()
 {
-    getCanvas()->onZoomChange() -= m_canvasZoomHandlerId;
+    if(getCanvas() != nullptr) {
+        getCanvas()->onZoomChange() -= m_canvasZoomHandlerId;
+    }
 }
 
 bool gx::Shape::isGuiElement() const

@@ -17,7 +17,7 @@ protected:
     bool startShape(Vertex mousePos);
 
 private:
-    std::shared_ptr<Path> m_path;
+    Path* m_path;
     Vertex m_startPoint;
 
 //    void restrictPos(const Vertex &p1, Vertex& p2);

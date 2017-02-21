@@ -312,8 +312,8 @@ void gx::ManipulateTool::ScaleMode::startManipulation(gx::Vertex cursor)
 void gx::ManipulateTool::ScaleMode::updateManipulation(gx::Vertex cursor, gx::SharedGObject obj)
 {
     QRectF box = getCanvas()->getSelectedObjectsBox();
-    Vertex diffOld = (m_oldPosition - m_startPosition).absolute();
-    Vertex diffNew = (cursor - m_startPosition).absolute();
+    Vertex diffOld = (m_oldPosition - m_startPosition);
+    Vertex diffNew = (cursor - m_startPosition);
     Vertex scale;
     scale.setX(diffNew.x() - diffOld.x());
     scale.setY(diffNew.y() - diffOld.y());

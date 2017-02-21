@@ -17,7 +17,7 @@ protected:
     void moveControl(Vertex mousePos);
 
 private:
-    std::shared_ptr<Line> m_line;
+    Line* m_line;
 
     void restrictPos(const Vertex &p1, Vertex& p2);
 };
