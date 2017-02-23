@@ -76,7 +76,9 @@ protected:
 
     virtual QRectF shapeBoundingBox() const;
     virtual bool shapeContainsPoint(const gx::Vertex &point) const;
-    virtual void shapeGetControlPoints(QList<ControlPoint*>& points);
+    virtual void updateControlPoints();
+    void addControlPoint(ControlPoint* point);
+    void clearControlPoints();
 
 private:
     QList<SharedGObject> m_children;
@@ -87,6 +89,7 @@ private:
     bool m_selected;
     QTransform m_transform;
     QTransform m_translation;
+    QList<ControlPoint*> m_controlPoints;
     Event<const GObject*> m_onDestroy;
     Event<const GObject*> m_onPreChange;
     Event<const GObject*> m_onChange;

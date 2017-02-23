@@ -33,6 +33,8 @@ protected:
     QRectF shapeBoundingBox() const;
     bool shapeContainsPoint(const gx::Vertex &point) const;
 
+    void updateControlPoints();
+
 private:
     QList<Vertex> m_vertices;
     QList<bool> m_controls;

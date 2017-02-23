@@ -57,6 +57,7 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
              m_currMode = newMode;
              m_currMode->setCanvas(getCanvas());
              m_currMode->init();
+             getCanvas()->redraw();
          }
          moveToStateSilent(getLastState());
     });
@@ -384,6 +385,7 @@ void gx::ManipulateTool::ControlPointMode::startManipulation(gx::Vertex cursor)
             obj->setSelected(true);
             m_selectedPoint = obj;
             m_selected = true;
+            getCanvas()->redraw();
             break;
         }
     }

@@ -13,6 +13,12 @@ gx::GObject::GObject(gx::SharedGObject parent)
     }
     m_canvas = nullptr;
     m_selected = false;
+
+    onChange() += [this](const GObject *o){
+        clearControlPoints();
+        updateControlPoints();
+    };
+    updateControlPoints();
 }
 
 gx::GObject::~GObject()
@@ -195,7 +201,23 @@ bool gx::GObject::shapeContainsPoint(const gx::Vertex &point) const
     return false;
 }
 
-void gx::GObject::shapeGetControlPoints(QList<ControlPoint *> &points){}
+void gx::GObject::updateControlPoints()
+{
+}
+
+void gx::GObject::addControlPoint(gx::ControlPoint *point)
+{
+    m_controlPoints.append(point);
+}
+
+void gx::GObject::clearControlPoints()
+{
+    foreach(auto point, m_controlPoints) {
+        delete point;
+    }
+
+    m_controlPoints.clear();
+}
 
 void gx::GObject::applyTranslation()
 {
@@ -262,10 +284,10 @@ QList<gx::ControlPoint *> gx::GObject::getControlPoints()
 
     foreach(SharedGObject obj, m_children)
     {
-        obj->shapeGetControlPoints(allPoints);
+        allPoints.append(getControlPoints());
     }
 
-    shapeGetControlPoints(allPoints);
+    allPoints.append(m_controlPoints);
     return allPoints;
 }
 

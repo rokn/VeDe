@@ -22,6 +22,7 @@ public:
 protected:
     QRectF shapeBoundingBox() const;
     bool shapeContainsPoint(const gx::Vertex &point) const;
+    void updateControlPoints();
 
 private:
     Vertex m_topLeft;

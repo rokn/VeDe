@@ -57,6 +57,23 @@ bool gx::Line::shapeContainsPoint(const gx::Vertex &point) const
     return distanceToPoint(point) <= getProp(PROP::STROKE_WIDTH)->toDouble();
 }
 
+void gx::Line::updateControlPoints()
+{
+    ControlPoint *forStart = new ControlPoint(m_start);
+    ControlPoint *forEnd = new ControlPoint(m_end);
+
+    forStart->onMove() += [this](Vertex m) {
+        m_start += m;
+    };
+
+    forEnd->onMove() += [this](Vertex m) {
+        m_end += m;
+    };
+
+    addControlPoint(forStart);
+    addControlPoint(forEnd);
+}
+
 double gx::Line::distanceToPoint(const gx::Vertex &point) const
 {
     Vertex tStart = start().transformed(getTransform());

@@ -46,7 +46,7 @@ void gx::ControlPoint::setPosition(const Vertex &position)
 
 double gx::ControlPoint::getDistanceThreshold()
 {
-    return 5;
+    return 5.5;
 }
 
 bool gx::ControlPoint::getVertical() const

@@ -107,6 +107,19 @@ bool gx::Path::shapeContainsPoint(const gx::Vertex &point) const
     return getTransform().map(m_drawnPath).contains(Converters::toPoint(point));
 }
 
+void gx::Path::updateControlPoints()
+{
+    for(int i = 0; i < m_vertices.size(); i++) {
+        ControlPoint *forVertex = new ControlPoint(m_vertices[i]);
+        forVertex->onMove() += [this, i] (Vertex m) {
+            m_vertices.replace(i, m_vertices[i] + m);
+            constructPath();
+        };
+
+        GObject::addControlPoint(forVertex);
+    }
+}
+
 QList<gx::Vertex> gx::Path::vertices() const
 {
     return m_vertices;
