@@ -46,7 +46,8 @@ SOURCES += \
     commands/translatecommand.cpp \
     commands/rotatecommand.cpp \
     commands/scalecommand.cpp \
-    tools/manipulatetool.cpp
+    tools/manipulatetool.cpp \
+    objects/controlpoint.cpp
 
 HEADERS += \
     vertex.h \
@@ -86,7 +87,8 @@ HEADERS += \
     commands/translatecommand.h \
     commands/rotatecommand.h \
     commands/scalecommand.h \
-    tools/manipulatetool.h
+    tools/manipulatetool.h \
+    objects/controlpoint.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

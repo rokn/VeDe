@@ -47,12 +47,16 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
             case Qt::Key_R:
                  newMode = new ScaleMode;
                  break;
+            case Qt::Key_T:
+                 newMode = new ControlPointMode;
+                 break;
             default:break;
          }
          if(newMode != nullptr) {
              delete m_currMode;
              m_currMode = newMode;
              m_currMode->setCanvas(getCanvas());
+             m_currMode->init();
          }
          moveToStateSilent(getLastState());
     });
@@ -122,6 +126,7 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
     addTransition(start, UserEvent(KEY_PRESS, Qt::Key_W), changeMode);
     addTransition(start, UserEvent(KEY_PRESS, Qt::Key_E), changeMode);
     addTransition(start, UserEvent(KEY_PRESS, Qt::Key_R), changeMode);
+    addTransition(start, UserEvent(KEY_PRESS, Qt::Key_T), changeMode);
 
     moveToStateSilent(start);
 }
@@ -133,7 +138,7 @@ gx::ManipulateTool::~ManipulateTool()
 
 void gx::ManipulateTool::drawGui(CustomPainter &painter) const
 {
-    if (m_inManipulation) {
+    if (m_inManipulation || m_currMode->getDrawAlways()) {
         m_currMode->drawGui(painter);
     }
 }
@@ -175,6 +180,16 @@ gx::Canvas *gx::ManipulateTool::ManipulateMode::getCanvas() const
 void gx::ManipulateTool::ManipulateMode::setCanvas(gx::Canvas *canvas)
 {
     m_canvas = canvas;
+}
+
+bool gx::ManipulateTool::ManipulateMode::getDrawAlways() const
+{
+    return m_drawAlways;
+}
+
+void gx::ManipulateTool::ManipulateMode::setDrawAlways(bool drawAlways)
+{
+    m_drawAlways = drawAlways;
 }
 
 void gx::ManipulateTool::SelectionMode::startManipulation(gx::Vertex cursor)
@@ -348,4 +363,80 @@ void gx::ManipulateTool::ScaleMode::drawGui(gx::CustomPainter &painter) const
 
     painter.setStrokeColor(Color(0,0,255));
     painter.drawLine(m_startPosition, Vertex(m_oldPosition.x(), m_startPosition.y()));
+}
+
+gx::ManipulateTool::ControlPointMode::ControlPointMode()
+{
+}
+
+void gx::ManipulateTool::ControlPointMode::init()
+{
+    m_points = getSelectedObjectsControlPoints();
+    m_selectedPoint = nullptr;
+    setDrawAlways(true);
+    getCanvas()->redraw();
+}
+
+void gx::ManipulateTool::ControlPointMode::startManipulation(gx::Vertex cursor)
+{
+    for(auto& obj:m_points) {
+        if(obj->position().distance(cursor) <= getCanvas()->mapValueToZoom(ControlPoint::getDistanceThreshold())) {
+            obj->setSelected(true);
+            m_selectedPoint = obj;
+            m_selected = true;
+            break;
+        }
+    }
+}
+
+void gx::ManipulateTool::ControlPointMode::updateManipulation(gx::Vertex cursor, gx::SharedGObject obj)
+{
+}
+
+void gx::ManipulateTool::ControlPointMode::postUpdate(gx::Vertex cursor)
+{
+    if(m_selected) {
+        m_selectedPoint->setPosition(cursor);
+    }
+    getCanvas()->redraw();
+}
+
+gx::CanvasCommand *gx::ManipulateTool::ControlPointMode::endManipulation()
+{
+    if(m_selected) {
+        m_selectedPoint->setSelected(false);
+        m_selected = false;
+        getCanvas()->redraw();
+    }
+    return nullptr;
+}
+
+void gx::ManipulateTool::ControlPointMode::drawGui(gx::CustomPainter &painter) const
+{
+    painter.setStrokeWidth(getCanvas()->mapValueToZoom(1.0));
+    painter.setStrokeColor(Color(0,255,0));
+
+    for(auto obj:getCanvas()->getSelectedObjects()) {
+        for(auto point:m_points) {
+            double radius = getCanvas()->mapValueToZoom(ControlPoint::getDistanceThreshold());
+            if(point->selected()) {
+                painter.setBackColor(Color(255,0,0));
+            } else {
+                painter.setBackColor(Color(0,0,255));
+            }
+//            painter.setTransform(obj->getTransform());
+            painter.drawEllipse(point->position(), Vertex(radius, radius));
+        }
+    }
+}
+
+QList<gx::ControlPoint*> gx::ManipulateTool::ControlPointMode::getSelectedObjectsControlPoints() const
+{
+    QList <ControlPoint*> points;
+
+    for(auto obj:getCanvas()->getSelectedObjects()) {
+        points.append(obj->getControlPoints());
+    }
+
+    return points;
 }

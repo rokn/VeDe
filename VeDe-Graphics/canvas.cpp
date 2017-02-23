@@ -273,4 +273,5 @@ void gx::Canvas::changeCurrTool(gx::Tool *newTool)
     m_currTool = newTool;
     m_currTool->setActive(true);
     m_onToolChanged(m_currTool);
+    redraw();
 }

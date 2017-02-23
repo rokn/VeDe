@@ -15,6 +15,7 @@ public:
     bool isGuiElement() const;
     void setGuiElement(bool guiElement);
 
+
 protected:
     void fixBoxForStrokeWidth(QRectF& rect, double factor=0.5f) const;
 private:

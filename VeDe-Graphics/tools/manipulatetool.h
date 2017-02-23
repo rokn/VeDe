@@ -2,6 +2,7 @@
 #define MANIPULATETOOL_H
 
 #include "tool.h"
+#include "objects/controlpoint.h"
 #include "commands/canvascommand.h"
 #include <QRectF>
 
@@ -23,7 +24,9 @@ private:
     class ManipulateMode
     {
     public:
+        ManipulateMode():m_drawAlways(false){}
         virtual ~ManipulateMode(){}
+        virtual void init(){}
         virtual void startManipulation(Vertex cursor) = 0;
         virtual void updateManipulation(Vertex cursor, SharedGObject obj) = 0;
         virtual void postUpdate(Vertex cursor) = 0;
@@ -33,8 +36,12 @@ private:
         Canvas* getCanvas() const;
         void setCanvas(Canvas* canvas);
 
+        bool getDrawAlways() const;
+        void setDrawAlways(bool drawAlways);
+
     protected:
         Canvas* m_canvas;
+        bool m_drawAlways;
     };
 
 
@@ -99,6 +106,29 @@ private:
 //        Vertex m_scaleAxis;
         Vertex m_oldPosition;
 //        bool m_useRotAxis;
+    };
+
+    class ControlPointMode : public ManipulateMode
+    {
+    public:
+        ControlPointMode();
+        void init();
+        void startManipulation(Vertex cursor);
+        void updateManipulation(Vertex cursor, SharedGObject obj);
+        void postUpdate(Vertex cursor);
+        CanvasCommand* endManipulation();
+        void drawGui(CustomPainter& painter) const;
+
+    private:
+        ControlPoint* m_selectedPoint;
+        QList<ControlPoint*> m_points;
+        bool m_selected;
+//        QRectF m_startBox;
+//        Vertex m_scaleAxis;
+//        Vertex m_oldPosition;
+//        bool m_useRotAxis;
+
+       QList<ControlPoint*> getSelectedObjectsControlPoints() const;
     };
 };
 }

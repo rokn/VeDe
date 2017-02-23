@@ -20,6 +20,7 @@ public:
     void setStrokeColor(const gx::Color &color);
     void setBackColor(const gx::Color& color);
     void setZoomFactor(double zoomFactor);
+    void setTransform(QTransform transform);
 
     void setPainter(QPainter *painter);
 

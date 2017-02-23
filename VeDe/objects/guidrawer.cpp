@@ -25,7 +25,6 @@ void GUIDrawer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     if(m_canvas != nullptr)
     {
-        m_canvas->getCurrTool()->drawGui(customPainter);
         auto selectedObjects = m_canvas->getSelectedObjects();
 
         if(selectedObjects.size() > 0)
@@ -42,7 +41,8 @@ void GUIDrawer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                 unitedBox = unitedBox.united(obj->boundingBox());
             }
             painter->drawRect(unitedBox);
-
         }
+
+        m_canvas->getCurrTool()->drawGui(customPainter);
     }
 }

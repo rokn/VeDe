@@ -27,6 +27,7 @@ public:
     virtual void setStrokeColor(const Color& color) = 0;
     virtual void setBackColor(const Color& color) = 0;
     virtual void setZoomFactor(double zoomFactor) = 0;
+    virtual void setTransform(QTransform transform) = 0;
 };
 }
 

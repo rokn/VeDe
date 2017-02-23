@@ -1,16 +1,18 @@
 #ifndef GOBJECT_H
 #define GOBJECT_H
 
-#include <QMap>
-#include <QString>
-#include <QDebug>
+#include "controlpoint.h"
 #include "custompainter.h"
 #include "event.h"
 #include "properties/propertyholder.h"
-#include <memory>
-#include <functional>
+#include <QDebug>
+#include <QList>
+#include <QMap>
 #include <QRectF>
+#include <QString>
 #include <QTransform>
+#include <functional>
+#include <memory>
 
 namespace gx
 {
@@ -67,12 +69,14 @@ public:
     void rotate(double angle, QTransform axis);
 
     void clearAllEvents();
+    QList<ControlPoint*> getControlPoints();
 protected:
     void changed();
     void preChange();
 
     virtual QRectF shapeBoundingBox() const;
     virtual bool shapeContainsPoint(const gx::Vertex &point) const;
+    virtual void shapeGetControlPoints(QList<ControlPoint*>& points);
 
 private:
     QList<SharedGObject> m_children;

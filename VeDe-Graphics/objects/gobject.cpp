@@ -195,6 +195,8 @@ bool gx::GObject::shapeContainsPoint(const gx::Vertex &point) const
     return false;
 }
 
+void gx::GObject::shapeGetControlPoints(QList<ControlPoint *> &points){}
+
 void gx::GObject::applyTranslation()
 {
     m_transform = m_transform * m_translation ;
@@ -252,6 +254,19 @@ void gx::GObject::clearAllEvents()
     m_onDestroy.clearCallbacks();
     m_onPreChange.clearCallbacks();
     m_onChange.clearCallbacks();
+}
+
+QList<gx::ControlPoint *> gx::GObject::getControlPoints()
+{
+    QList<ControlPoint*> allPoints;
+
+    foreach(SharedGObject obj, m_children)
+    {
+        obj->shapeGetControlPoints(allPoints);
+    }
+
+    shapeGetControlPoints(allPoints);
+    return allPoints;
 }
 
 const QTransform& gx::GObject::getTransform() const

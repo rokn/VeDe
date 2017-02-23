@@ -101,6 +101,11 @@ void QtCustomPainter::setZoomFactor(double zoomFactor)
     m_painter->scale(zoomFactor, zoomFactor);
 }
 
+void QtCustomPainter::setTransform(QTransform transform)
+{
+    m_painter->setTransform(transform);
+}
+
 void QtCustomPainter::onChangePen()
 {
     m_painter->setPen(m_pen);
