@@ -58,10 +58,8 @@ void MainWindow::setupTools()
     m_toolsBar->setFloatable(false);
     QActionGroup *group = new QActionGroup(this);
     QList<ToolAction*> actions;
-    gx::Tool* ellipse = new gx::EllipseTool(m_canvas);
-    ToolAction* ellipseAction = new ToolAction(ellipse, group);
     actions.append(new ToolAction(new gx::LineTool(m_canvas), group));
-    actions.append(ellipseAction);
+    actions.append(new ToolAction(new gx::EllipseTool(m_canvas), group));
     actions.append(new ToolAction(new gx::RectangleTool(m_canvas), group));
     actions.append(new ToolAction(new gx::PathTool(m_canvas), group));
     actions.append(new ToolAction(new gx::ManipulateTool(m_canvas), group));

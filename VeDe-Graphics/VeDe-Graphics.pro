@@ -9,9 +9,12 @@
 TARGET = VeDe-Graphics
 TEMPLATE = lib
 CONFIG += staticlib
-QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
-QMAKE_CXXFLAGS_WARN_ON += -Wno-sign-compare
-QMAKE_CXXFLAGS_WARN_ON += -Wno-return-local-addr
+
+unix {
+    QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
+    QMAKE_CXXFLAGS_WARN_ON += -Wno-sign-compare
+    QMAKE_CXXFLAGS_WARN_ON += -Wno-return-local-addr
+}
 
 SOURCES += \
     vertex.cpp \
