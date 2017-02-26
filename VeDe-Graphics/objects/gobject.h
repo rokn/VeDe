@@ -27,11 +27,11 @@ public:
     GObject(SharedGObject parent = nullptr);
     virtual ~GObject();
     QList<SharedGObject > &getChildren();
-    void addChild(GObject *child, const SharedGObject &parent);
-    void addChild(SharedGObject child, const SharedGObject &parent);
+    void addChild(GObject *child);
+    void addChild(SharedGObject child);
 
-    SharedGObject getParent() const;
-    void setParent(SharedGObject parent);
+    GObject* getParent() const;
+    void setParent(GObject* parent);
 
     GObject *findInChildren(unsigned int id);
 
@@ -82,7 +82,7 @@ protected:
 
 private:
     QList<SharedGObject> m_children;
-    SharedGObject m_parent;
+    GObject* m_parent;
     Canvas* m_canvas;
     int m_zorder;
     unsigned int m_id;
