@@ -141,7 +141,6 @@ CanvasImpl *CanvasImpl::createCanvas(QObject *parent, gx::SharedGObject root)
 
 void CanvasImpl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-//    grabMouse();
     m_mousePos.setX(event->scenePos().x());
     m_mousePos.setY(event->scenePos().y());
     gx::UserEvent transition(gx::MOUSE_MOVE, event->button());
@@ -151,7 +150,6 @@ void CanvasImpl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void CanvasImpl::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-//    setFocus(Qt::OtherFocusReason);
     m_mousePos.setX(event->scenePos().x());
     m_mousePos.setY(event->scenePos().y());
     gx::UserEvent transition(gx::MOUSE_PRESS, event->button());

@@ -39,7 +39,7 @@ QList<gx::SharedGObject>& gx::GObject::getChildren()
 void gx::GObject::addChild(SharedGObject child, const SharedGObject& parent)
 {
     child->setParent(parent);
-    this->m_children.append(child);
+    parent->m_children.append(child);
 }
 
 gx::SharedGObject gx::GObject::getParent() const

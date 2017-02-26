@@ -37,7 +37,6 @@ public:
     void setDouble(double value);
     void setString(const QString &value);
     void setColor(const Color& value);
-//    void get s
 
     QString name() const;
     void setName(const QString &name);

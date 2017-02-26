@@ -11,8 +11,6 @@ class ShapeTool : public RestrictableTool
 public:
     ShapeTool(Canvas* canvas);
 
-
-
 protected:
     void initStates(bool includeTransitions = true);
     void setShape(const std::shared_ptr<Shape> &shape);

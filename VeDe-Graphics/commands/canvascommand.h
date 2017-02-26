@@ -28,6 +28,9 @@ protected:
 
     virtual int executeOnObject(SharedGObject obj, QRectF& redrawRect, bool reverse = false) = 0;
 
+private:
+    void applyCommand(bool reverse);
+
 };
 }
 

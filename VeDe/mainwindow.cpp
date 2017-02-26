@@ -58,24 +58,13 @@ void MainWindow::setupTools()
     m_toolsBar->setFloatable(false);
     QActionGroup *group = new QActionGroup(this);
     QList<ToolAction*> actions;
+    gx::Tool* ellipse = new gx::EllipseTool(m_canvas);
+    ToolAction* ellipseAction = new ToolAction(ellipse, group);
     actions.append(new ToolAction(new gx::LineTool(m_canvas), group));
-    actions.append(new ToolAction(new gx::EllipseTool(m_canvas), group));
+    actions.append(ellipseAction);
     actions.append(new ToolAction(new gx::RectangleTool(m_canvas), group));
     actions.append(new ToolAction(new gx::PathTool(m_canvas), group));
     actions.append(new ToolAction(new gx::ManipulateTool(m_canvas), group));
-
-    QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas, this);
-
-    QAction *undoAction = new QAction("Undo", this);
-    undoAction->setShortcut(QKeySequence(QKeySequence::Undo));
-    connect(undoAction, SIGNAL(triggered(bool)), this, SLOT(onUndo(bool)));
-    this->addAction(undoAction);
-
-    QAction *redoAction = new QAction("Redo", this);
-    redoAction->setShortcut(QKeySequence(QKeySequence::Redo));
-    connect(redoAction, SIGNAL(triggered(bool)), this, SLOT(onRedo(bool)));
-    this->addAction(redoAction);
-
 
     foreach(ToolAction* action, actions)
     {
@@ -87,5 +76,18 @@ void MainWindow::setupTools()
     ellipseAction->trigger();
 
     this->addToolBar(m_toolsBar);
+
+    QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas, this);
     this->addToolBar(currToolToolBar);
+
+    QAction *undoAction = new QAction("Undo", this);
+    undoAction->setShortcut(QKeySequence(QKeySequence::Undo));
+    connect(undoAction, SIGNAL(triggered(bool)), this, SLOT(onUndo(bool)));
+    this->addAction(undoAction);
+
+    QAction *redoAction = new QAction("Redo", this);
+    redoAction->setShortcut(QKeySequence(QKeySequence::Redo));
+    connect(redoAction, SIGNAL(triggered(bool)), this, SLOT(onRedo(bool)));
+    this->addAction(redoAction);
+
 }

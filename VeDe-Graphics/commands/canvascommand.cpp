@@ -33,26 +33,21 @@ void gx::CanvasCommand::setObject(const gx::SharedGObject &object)
 
 int gx::CanvasCommand::execute()
 {
-    QRectF redrawRect;
-    int status = 0;
-    foreach(auto& obj, m_objects)
-    {
-        status = executeOnObject(obj, redrawRect);
-
-        if(status != 0) break;
-    }
-
-    getCanvas()->redraw(redrawRect);
-    return status;
+    applyCommand(false);
 }
 
 int gx::CanvasCommand::undo()
+{
+    applyCommand(true);
+}
+
+void gx::CanvasCommand::applyCommand(bool reverse)
 {
     QRectF redrawRect;
     int status = 0;
     foreach(auto& obj, m_objects)
     {
-        status = executeOnObject(obj, redrawRect, true);
+        status = executeOnObject(obj, redrawRect, reverse);
 
         if(status != 0) break;
     }
