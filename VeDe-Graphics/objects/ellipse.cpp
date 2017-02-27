@@ -63,7 +63,7 @@ QRectF gx::Ellipse::shapeBoundingBox() const
     QPointF radii = Converters::toPoint(this->radius());
     QRectF rect(center - radii, center + radii);
     fixBoxForStrokeWidth(rect);
-    return getTransform().mapRect(rect); // TODO: Fix when rotating
+    return getTransform().mapRect(rect);
 }
 
 bool gx::Ellipse::shapeContainsPoint(const gx::Vertex &point) const
