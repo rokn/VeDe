@@ -1,4 +1,5 @@
 #include "pathtool.h"
+#include "objects/controlpoint.h"
 #include "properties/propertyfactory.h"
 #include "commands/addgobjectcommand.h" // TODO: remove
 #include "commands/selectcommand.h" // TODO: remove
@@ -78,7 +79,7 @@ gx::PathTool::PathTool(gx::Canvas *canvas)
     addState(setNewPoint, STATE_DEF {
         if(m_path != nullptr) {
             Vertex point = getCanvas()->getCursor();
-            if(point.distance(m_startPoint) < getCanvas()->mapValueToZoom(5) ) {
+            if(point.distance(m_startPoint) < getCanvas()->mapValueToZoom(ControlPoint::getDistanceThreshold()) ) {
                 m_path->closePath();
                 moveToState(removeNewPoint, t);
             }

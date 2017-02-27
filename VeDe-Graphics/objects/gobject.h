@@ -76,6 +76,7 @@ protected:
 
     virtual QRectF shapeBoundingBox() const;
     virtual bool shapeContainsPoint(const gx::Vertex &point) const;
+
     virtual void updateControlPoints();
     void addControlPoint(ControlPoint* point);
     void clearControlPoints();

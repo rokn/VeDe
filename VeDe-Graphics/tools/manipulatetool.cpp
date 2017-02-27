@@ -14,7 +14,7 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
 {
     setName("Manipulate Tool");
     QString start = "Select items";
-    QString changeMode = "Changiong mode";
+    QString changeMode = "Changing mode";
     QString modeStart = "Starting mode";
     QString modeUpdate = "Update manipulation";
     QString endMode = "Ending mode";
@@ -59,7 +59,7 @@ gx::ManipulateTool::ManipulateTool(Canvas *canvas)
              m_currMode->init();
              getCanvas()->redraw();
          }
-         moveToStateSilent(getLastState());
+         moveToStateSilent(start);
     });
 
     addState(modeStart, STATE_DEF{

@@ -23,7 +23,7 @@ class Canvas : public PropertyHolder
 {
 //    Q_OBJECT
 public:
-    Canvas(SharedGObject root = nullptr, QObject* parent = 0);
+    Canvas(SharedGObject root = nullptr);
     virtual ~Canvas();
 
     SharedGObject root();

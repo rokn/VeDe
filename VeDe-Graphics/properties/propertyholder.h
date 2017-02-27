@@ -11,7 +11,7 @@ namespace gx
 class PropertyHolder
 {
 public:
-    PropertyHolder(QObject* parent = 0);
+    PropertyHolder();
     virtual ~PropertyHolder();
     Property* addProperty(const QString& name, PropertyType propType);
     Property* getProp(const QString& name) const;

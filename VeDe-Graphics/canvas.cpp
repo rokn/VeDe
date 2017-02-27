@@ -5,19 +5,17 @@
 #include <QtMath>
 #include <memory>
 
-gx::Canvas::Canvas(SharedGObject root, QObject *parent)
-    :PropertyHolder(parent), m_root(root)
+gx::Canvas::Canvas(SharedGObject root)
+    :m_root(root)
 {
     if(m_root == nullptr) {
         m_root = SharedGObject(new Layer);
         m_currLayer = std::shared_ptr<Layer>(new Layer);
-        m_root->addChild(m_currLayer, m_root);
+        m_root->addChild(m_currLayer);
         m_root->setId(m_idCount++);
         m_root->setCanvas(this);
         m_currLayer->setId(m_idCount++);
         m_currLayer->setCanvas(this);
-    } else {
-        //Find layer from root
     }
 
     m_currCommand = 0;
@@ -259,7 +257,7 @@ void gx::Canvas::addToCurrLayer(gx::SharedGObject object)
 {
     object->setId(m_idCount++);
     object->setCanvas(this);
-    m_currLayer->addChild(object, m_currLayer);
+    m_currLayer->addChild(object);
     onAddObject(object);
 }
 
