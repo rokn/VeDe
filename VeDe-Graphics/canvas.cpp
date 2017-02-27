@@ -11,7 +11,7 @@ gx::Canvas::Canvas(SharedGObject root)
     if(m_root == nullptr) {
         m_root = SharedGObject(new Layer);
         m_currLayer = std::shared_ptr<Layer>(new Layer);
-        m_root->addChild(m_currLayer);
+        m_root->addChild(m_currLayer, m_root);
         m_root->setId(m_idCount++);
         m_root->setCanvas(this);
         m_currLayer->setId(m_idCount++);
@@ -257,7 +257,7 @@ void gx::Canvas::addToCurrLayer(gx::SharedGObject object)
 {
     object->setId(m_idCount++);
     object->setCanvas(this);
-    m_currLayer->addChild(object);
+    m_currLayer->addChild(object, m_currLayer);
     onAddObject(object);
 }
 

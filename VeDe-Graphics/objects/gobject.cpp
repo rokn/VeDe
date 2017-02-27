@@ -9,7 +9,7 @@ gx::GObject::GObject(gx::SharedGObject parent)
 {
     if(parent != nullptr)
     {
-        parent->addChild(this);
+        parent->addChild(this, nullptr);
     }
     m_canvas = nullptr;
     m_selected = false;
@@ -25,10 +25,10 @@ gx::GObject::~GObject()
 {
 }
 
-void gx::GObject::addChild(gx::GObject *child)
+void gx::GObject::addChild(gx::GObject *child, SharedGObject parent)
 {
     gx::SharedGObject ch(child);
-    addChild(ch);
+    addChild(ch, parent);
 }
 
 QList<gx::SharedGObject>& gx::GObject::getChildren()
@@ -36,18 +36,18 @@ QList<gx::SharedGObject>& gx::GObject::getChildren()
     return m_children;
 }
 
-void gx::GObject::addChild(SharedGObject child)
+void gx::GObject::addChild(SharedGObject child, SharedGObject parent)
 {
-    child->setParent(this);
-    this->m_children.append(child);
+    child->setParent(parent);
+    parent->m_children.append(child);
 }
 
-gx::GObject *gx::GObject::getParent() const
+gx::SharedGObject gx::GObject::getParent() const
 {
     return m_parent;
 }
 
-void gx::GObject::setParent(GObject *parent)
+void gx::GObject::setParent(SharedGObject parent)
 {
     m_parent = parent;
 }
