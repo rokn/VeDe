@@ -41,7 +41,7 @@ int gx::CanvasCommand::undo()
     applyCommand(true);
 }
 
-void gx::CanvasCommand::applyCommand(bool reverse)
+int gx::CanvasCommand::applyCommand(bool reverse)
 {
     QRectF redrawRect;
     int status = 0;

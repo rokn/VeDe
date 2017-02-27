@@ -21,7 +21,7 @@
 #include "tools/tool.h"
 
 CanvasImpl::CanvasImpl(QObject *parent, gx::SharedGObject root)
-    :QGraphicsScene(parent), gx::Canvas(root, nullptr)
+    :QGraphicsScene(parent), gx::Canvas(root)
 {
     addRect(0, 0, getWidth(),getHeight(),QPen(Qt::black, 1), QBrush(Qt::white));
     GUIDrawer *guiDrawer = new GUIDrawer();

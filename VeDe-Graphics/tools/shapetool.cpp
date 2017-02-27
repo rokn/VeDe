@@ -61,7 +61,7 @@ void gx::ShapeTool::initStates(bool includeTransitions)
             getCanvas()->unlock();
 
             getCanvas()->clearSelectedObjects(false);
-            getCanvas()->selectObjecttrue(m_shape);
+            getCanvas()->selectObject(m_shape);
 
             m_shape.reset();
         }
