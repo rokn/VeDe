@@ -190,6 +190,11 @@ gx::SharedGObject gx::Canvas::root()
     return m_root;
 }
 
+gx::SharedGObject gx::Canvas::root() const
+{
+    return m_root;
+}
+
 int gx::Canvas::executeCommand(gx::Command* command)
 {
     if(isLocked()) return -1;

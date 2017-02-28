@@ -6,15 +6,6 @@
 
 namespace GObjectMapper
 {
-    enum GObjectType {
-        Layer,
-        Line,
-        Ellipse,
-        Rectangle,
-        Path
-    };
-
-    GObjectType getObjectType(gx::SharedGObject object);
     QGraphicsItem* mapToGraphicsItem(gx::SharedGObject object);
 }
 

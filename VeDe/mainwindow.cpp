@@ -14,8 +14,12 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QInputDialog>
+#include <QFileDialog>
+#include <QDir>
 
 #include "currtooltoolbar.h"
+
+#include "canvasmanagersvg.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -69,6 +73,7 @@ void MainWindow::newFile()
 
     delete m_toolsBar;
     delete m_currToolToolbar;
+    m_currFileName = nullptr;
 
 
     m_canvas = CanvasImpl::createCanvas(this, width, height);
@@ -84,12 +89,27 @@ void MainWindow::openFile()
 
 void MainWindow::save()
 {
-
+    if(m_currFileName == nullptr) {
+        saveAs();
+    } else {
+        gx::CanvasManagerSVG manager;
+        manager.saveCanvas(m_currFileName->toStdString(), m_canvas);
+    }
 }
 
 void MainWindow::saveAs()
 {
-
+    QString filename = QFileDialog::getSaveFileName(this,
+                                 tr("Save File"),
+                                 QDir::currentPath(),
+                                 "SVG (*.svg)");
+    if(!filename.endsWith(".svg")) {
+        filename.append(".svg");
+    }
+    gx::CanvasManagerSVG manager;
+    if(manager.saveCanvas(filename.toStdString(), m_canvas)) {
+        m_currFileName = new QString(filename);
+    }
 }
 
 void MainWindow::exit()
@@ -172,7 +192,7 @@ void MainWindow::setupActions()
     m_saveAction->setShortcut(QKeySequence(QKeySequence::Save));
     connect(m_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
-    m_saveAsAction = new QAction(tr("Save &As"), this);
+    m_saveAsAction = new QAction(tr("Save As"), this);
     m_saveAsAction->setShortcut(QKeySequence(QKeySequence::SaveAs));
     connect(m_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 

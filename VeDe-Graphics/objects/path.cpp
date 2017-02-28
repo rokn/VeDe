@@ -85,6 +85,11 @@ void gx::Path::closePath()
     m_closed = true;
 }
 
+bool gx::Path::isClosed() const
+{
+    return m_closed;
+}
+
 QList<bool> gx::Path::controls() const
 {
     return m_controls;

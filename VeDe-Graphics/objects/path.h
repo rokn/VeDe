@@ -22,6 +22,7 @@ public:
     void changeLastControl(Vertex control);
     void removeLastControl();
     void closePath();
+    bool isClosed() const;
 
     QList<Vertex> vertices() const;
 

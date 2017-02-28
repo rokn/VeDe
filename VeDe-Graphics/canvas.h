@@ -27,6 +27,7 @@ public:
     virtual ~Canvas();
 
     SharedGObject root();
+    SharedGObject root() const;
 
     virtual Vertex getCursor() const = 0;
 

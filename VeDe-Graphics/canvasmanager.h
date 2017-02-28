@@ -9,8 +9,8 @@ namespace gx
 class CanvasManager
 {
 public:
-    virtual bool saveCanvas(QString filename, const Canvas* canvas) = 0;
-    virtual Canvas* loadCanvas(QString filename) = 0;
+    virtual bool saveCanvas(std::string filename, const Canvas* canvas) = 0;
+    virtual Canvas* loadCanvas(std::string filename) = 0;
 };
 }
 

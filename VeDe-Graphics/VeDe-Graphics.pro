@@ -52,7 +52,8 @@ SOURCES += \
     tools/manipulatetool.cpp \
     objects/controlpoint.cpp \
     canvasmanager.cpp \
-    canvasmanagersvg.cpp
+    canvasmanagersvg.cpp \
+    gobjecttypes.cpp
 
 HEADERS += \
     vertex.h \
@@ -95,7 +96,8 @@ HEADERS += \
     tools/manipulatetool.h \
     objects/controlpoint.h \
     canvasmanager.h \
-    canvasmanagersvg.h
+    canvasmanagersvg.h \
+    gobjecttypes.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
