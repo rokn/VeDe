@@ -15,6 +15,7 @@ public:
     ~Workspace();
 
     void wheelEvent(QWheelEvent *event);
+    void setCanvas(CanvasImpl* canvas);
 
 private:
     CanvasImpl* m_canvas;

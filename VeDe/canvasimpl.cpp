@@ -7,27 +7,22 @@
 #include <QKeyEvent>
 #include <QGuiApplication>
 #include <QApplication>
-
-
-#include "objects/ellipsegraphicsitem.h"
-#include "objects/rectgraphicsitem.h"
-#include "objects/linegraphicsitem.h"
-#include "objects/pathgraphicsitem.h"
-#include "objects/ellipse.h"
-#include "objects/line.h"
-#include "objects/rectangle.h"
-#include "objects/path.h"
-#include "objects/guidrawer.h"
 #include "tools/tool.h"
+#include "gobjectmapper.h"
 
-CanvasImpl::CanvasImpl(QObject *parent, gx::SharedGObject root)
-    :QGraphicsScene(parent), gx::Canvas(root)
+CanvasImpl::CanvasImpl(QObject *parent, double width, double height, gx::SharedGObject root)
+    :QGraphicsScene(parent), gx::Canvas(root, width, height)
 {
-    addRect(0, 0, getWidth(),getHeight(),QPen(Qt::black, 1), QBrush(Qt::white));
-    GUIDrawer *guiDrawer = new GUIDrawer();
-    guiDrawer->setCanvas(this);
+    m_guiDrawer = new GUIDrawer();
+    m_guiDrawer->setCanvas(this);
 
-    addItem(guiDrawer);
+    addItem(m_guiDrawer);
+}
+
+CanvasImpl::~CanvasImpl()
+{
+//    removeItem(m_guiDrawer);
+//    delete m_guiDrawer;
 }
 
 void CanvasImpl::redraw(QRectF area)
@@ -42,7 +37,6 @@ void CanvasImpl::redraw()
 
 void CanvasImpl::redrawGui()
 {
-//    invalidate(0,0,getWidth(),getHeight(),ForegroundLayer);
     this->update(sceneRect());
 }
 
@@ -58,37 +52,17 @@ bool CanvasImpl::isKeyPressed(Qt::Key key) const
 
 void CanvasImpl::onAddObject(gx::SharedGObject object)
 {
-    //Factory
-    QGraphicsItem* item;
-    if(std::dynamic_pointer_cast<gx::Ellipse>(object) != nullptr) {
-        item = new EllipseGraphicsItem(std::dynamic_pointer_cast<gx::Ellipse>(object));
-    }
-    else if(std::dynamic_pointer_cast<gx::Rectangle>(object) != nullptr) {
-        item = new RectGraphicsItem(std::dynamic_pointer_cast<gx::Rectangle>(object));
-    }
-    else if(std::dynamic_pointer_cast<gx::Line>(object) != nullptr) {
-        item = new LineGraphicsItem(std::dynamic_pointer_cast<gx::Line>(object));
-    }
-    else if(std::dynamic_pointer_cast<gx::Path>(object) != nullptr) {
-        item = new PathGraphicsItem(std::dynamic_pointer_cast<gx::Path>(object));
-    }
+    QGraphicsItem* item = GObjectMapper::mapToGraphicsItem(object);
 
-    addItem(item);
+    if(item != nullptr) {
+        addItem(item);
 
-    object->onDestroy() += [=](const gx::GObject* o)
-    {
-        this->removeItem(item);
-        delete item;
-    };
-}
-
-void CanvasImpl::drawForeground(QPainter *painter, const QRectF &rect)
-{
-//    if(getCurrTool() != nullptr)
-//    {
-//        QtCustomPainter customPainter(painter);
-//        getCurrTool()->drawGui(&customPainter);
-//    }
+        object->onDestroy() += [=](const gx::GObject* o)
+        {
+            this->removeItem(item);
+            delete item;
+        };
+    }
 }
 
 void CanvasImpl::initModifierKeys()
@@ -127,14 +101,11 @@ Qt::Key CanvasImpl::transformToKey(Qt::KeyboardModifier mod)
     }
 }
 
-CanvasImpl *CanvasImpl::createCanvas(QObject *parent, gx::SharedGObject root)
+CanvasImpl *CanvasImpl::createCanvas(QObject *parent, double width, double height, gx::SharedGObject root)
 {
-    CanvasImpl* canvas = new CanvasImpl(parent, root);
+    CanvasImpl* canvas = new CanvasImpl(parent, width, height, root);
 
     canvas->initModifierKeys();
-//    canvas->setFlag(QGraphicsItem::ItemIsFocusable);
-//    canvas->setFlag(QGraphicsItem::ItemIsSelectable);
-//    canvas->setFocus(Qt::OtherFocusReason);
 
     return canvas;
 }

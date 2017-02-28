@@ -328,11 +328,7 @@ void gx::ManipulateTool::ScaleMode::startManipulation(gx::Vertex cursor)
 void gx::ManipulateTool::ScaleMode::updateManipulation(gx::Vertex cursor, gx::SharedGObject obj)
 {
     QRectF box = getCanvas()->getSelectedObjectsBox();
-    Vertex diffOld = (m_oldPosition - m_startPosition);
-    Vertex diffNew = (cursor - m_startPosition);
-    Vertex scale;
-    scale.setX(diffNew.x() - diffOld.x());
-    scale.setY(diffNew.y() - diffOld.y());
+    Vertex scale = cursor - m_oldPosition;
     double widthScale = (box.width() + scale.x()) / box.width();
     double heightScale = (box.height() + scale.y()) / box.height();
 
@@ -426,8 +422,7 @@ void gx::ManipulateTool::ControlPointMode::drawGui(gx::CustomPainter &painter) c
             } else {
                 painter.setBackColor(Color(0,0,255));
             }
-//            painter.setTransform(obj->getTransform());
-            painter.drawEllipse(point->position(), Vertex(radius, radius));
+            painter.drawEllipse(point->position().transformed(obj->getTransform()), Vertex(radius, radius));
         }
     }
 }

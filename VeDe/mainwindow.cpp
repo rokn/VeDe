@@ -10,13 +10,12 @@
 #include <QActionGroup>
 #include <QGraphicsView>
 #include <QLabel>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QApplication>
+#include <QInputDialog>
 
 #include "currtooltoolbar.h"
-#include "workspace.h"
-#include "propertywidgetfactory.h"
-
-    // PLACEHOLDER CODE
-#include "properties/propertynames.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -26,30 +25,100 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    if(m_currFileName != nullptr) {
+        delete m_currFileName;
+    }
 }
 
-void MainWindow::onUndo(bool checked)
+void MainWindow::onUndo()
 {
     m_canvas->undoCommand();
 }
 
-void MainWindow::onRedo(bool checked)
+void MainWindow::onRedo()
 {
     m_canvas->redoCommand();
 }
 
+void MainWindow::newFile()
+{
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,
+                  "Creating new canvas",
+                  "All unsaved changes will be lost.",
+                  QMessageBox::Ok|QMessageBox::Cancel);
+
+    if (reply != QMessageBox::Ok) {
+        return;
+    }
+
+    bool ok;
+
+    double width = QInputDialog::getDouble(this, "Create new canvas", "Width of the canvas", 0, 0, 10000, 1, &ok);
+    if (!ok) return;
+
+    double height = QInputDialog::getDouble(this, "Create new canvas", "Height of the canvas", 0, 0, 10000, 1, &ok);
+    if (!ok) return;
+
+    gx::Tool* currTool = nullptr;
+
+    if(m_canvas != nullptr) {
+        currTool = m_canvas->getCurrTool();
+        delete m_canvas;
+    }
+
+    delete m_toolsBar;
+    delete m_currToolToolbar;
+
+
+    m_canvas = CanvasImpl::createCanvas(this, width, height);
+    m_canvas->changeCurrTool(currTool);
+    m_workspace->setCanvas(m_canvas);
+    setupTools();
+}
+
+void MainWindow::openFile()
+{
+
+}
+
+void MainWindow::save()
+{
+
+}
+
+void MainWindow::saveAs()
+{
+
+}
+
+void MainWindow::exit()
+{
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,
+                  "Exitting...",
+                  "Do you really want to exit VeDe? All unsaved changes will be lost.",
+                  QMessageBox::Yes|QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        QApplication::quit();
+    }
+}
+
 void MainWindow::setup()
 {
+    m_currFileName = nullptr;
     setupCanvas();
     setupTools();
+    setupActions();
+    setupMenus();
 }
 
 void MainWindow::setupCanvas()
 {
-    m_canvas = CanvasImpl::createCanvas(this);
-    //TODO: Placeholder
-    Workspace* workspace = new Workspace(m_canvas, this);
-    setCentralWidget(workspace);
+    m_canvas = CanvasImpl::createCanvas(this, 800, 600);
+    m_workspace = new Workspace(m_canvas, this);
+    setCentralWidget(m_workspace);
 }
 
 void MainWindow::setupTools()
@@ -72,22 +141,56 @@ void MainWindow::setupTools()
         m_toolsBar->addAction(action);
     }
 
-    ellipseAction->setChecked(true);
-    ellipseAction->trigger();
-
     this->addToolBar(m_toolsBar);
 
-    QToolBar* currToolToolBar = new CurrToolToolbar(m_canvas, this);
-    this->addToolBar(currToolToolBar);
+    m_currToolToolbar = new CurrToolToolbar(m_canvas, this);
+    this->addToolBar(m_currToolToolbar);
 
-    QAction *undoAction = new QAction("Undo", this);
-    undoAction->setShortcut(QKeySequence(QKeySequence::Undo));
-    connect(undoAction, SIGNAL(triggered(bool)), this, SLOT(onUndo(bool)));
-    this->addAction(undoAction);
+    ellipseAction->setChecked(true);
+    ellipseAction->trigger();
+}
 
-    QAction *redoAction = new QAction("Redo", this);
-    redoAction->setShortcut(QKeySequence(QKeySequence::Redo));
-    connect(redoAction, SIGNAL(triggered(bool)), this, SLOT(onRedo(bool)));
-    this->addAction(redoAction);
+void MainWindow::setupActions()
+{
+    m_undoAction = new QAction(tr("&Undo"), this);
+    m_undoAction->setShortcut(QKeySequence(QKeySequence::Undo));
+    connect(m_undoAction, SIGNAL(triggered()), this, SLOT(onUndo()));
 
+    m_redoAction = new QAction(tr("&Redo"), this);
+    m_redoAction->setShortcut(QKeySequence(QKeySequence::Redo));
+    connect(m_redoAction, SIGNAL(triggered()), this, SLOT(onRedo()));
+
+    m_newAction = new QAction(tr("&New"), this);
+    m_newAction->setShortcut(QKeySequence(QKeySequence::New));
+    connect(m_newAction, SIGNAL(triggered()), this, SLOT(newFile()));
+
+    m_openAction = new QAction(tr("&Open"), this);
+    m_openAction->setShortcut(QKeySequence(QKeySequence::Open));
+    connect(m_openAction, SIGNAL(triggered()), this, SLOT(openFile()));
+
+    m_saveAction = new QAction(tr("&Save"), this);
+    m_saveAction->setShortcut(QKeySequence(QKeySequence::Save));
+    connect(m_saveAction, SIGNAL(triggered()), this, SLOT(save()));
+
+    m_saveAsAction = new QAction(tr("Save &As"), this);
+    m_saveAsAction->setShortcut(QKeySequence(QKeySequence::SaveAs));
+    connect(m_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
+
+    m_exitAction = new QAction(tr("&Exit"), this);
+    m_exitAction->setShortcut(QKeySequence(QKeySequence::Quit));
+    connect(m_exitAction, SIGNAL(triggered()), this, SLOT(exit()));
+}
+
+void MainWindow::setupMenus()
+{
+    auto fileMenu =  menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(m_newAction);
+    fileMenu->addAction(m_saveAction);
+    fileMenu->addAction(m_saveAsAction);
+    fileMenu->addSeparator();
+    fileMenu->addAction(m_exitAction);
+
+    auto editMenu =  menuBar()->addMenu(tr("&Edit"));
+    editMenu->addAction(m_undoAction);
+    editMenu->addAction(m_redoAction);
 }

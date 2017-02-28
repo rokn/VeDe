@@ -21,6 +21,7 @@ public:
     void setBackColor(const gx::Color& color);
     void setZoomFactor(double zoomFactor);
     void setTransform(QTransform transform);
+    void resetTransform();
 
     void setPainter(QPainter *painter);
 
@@ -31,6 +32,7 @@ private:
     QPainter* m_painter;
     QPen m_pen;
     QBrush m_brush;
+    QTransform m_oldTransform;
 };
 
 #endif // QTCUSTOMPAINTER_H

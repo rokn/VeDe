@@ -1,7 +1,7 @@
 #ifndef PATHGRAPHICSITEM_H
 #define PATHGRAPHICSITEM_H
 
-#include "basegraphicsitem.h"
+#include "baseshapeitem.h"
 #include "objects/path.h"
 
 class PathGraphicsItem : public BaseShapeItem

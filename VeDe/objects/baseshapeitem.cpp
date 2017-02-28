@@ -1,4 +1,4 @@
-#include "basegraphicsitem.h"
+#include "baseshapeitem.h"
 #include "converters.h"
 #include "objects/gobject.h"
 #include "canvas.h"
@@ -28,13 +28,10 @@ QRectF BaseShapeItem::boundingRect() const
 
 void BaseShapeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-
     if(!m_object->isGuiElement())
     {
         painter->setClipping(true);
-        double canvasWidth = m_object->getCanvas()->getWidth();
-        double canvasHeight = m_object->getCanvas()->getHeight();
-        painter->setClipRect(QRectF( 0.5,  0.5, canvasWidth - 1, canvasHeight - 1)); // Fix for canvas border
+        painter->setClipRect(m_object->getCanvas()->getBoundaries());
     }
 
     painter->setTransform(m_object->getTransform() * painter->transform());

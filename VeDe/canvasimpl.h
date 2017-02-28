@@ -3,6 +3,7 @@
 
 #include "canvas.h"
 #include "objects/gobject.h"
+#include "objects/guidrawer.h"
 #include <QGraphicsScene>
 #include <QMap>
 #include <QSet>
@@ -14,8 +15,9 @@ class CanvasImpl : public QGraphicsScene, public gx::Canvas
 {
     Q_OBJECT
 public:
-    CanvasImpl(QObject* parent, gx::SharedGObject root);
-    static CanvasImpl* createCanvas(QObject* parent = 0, gx::SharedGObject root = 0);
+    CanvasImpl(QObject* parent, double width = 800.0, double height = 600.0, gx::SharedGObject root = nullptr);
+    ~CanvasImpl();
+    static CanvasImpl* createCanvas(QObject* parent = 0, double width = 800.0, double height = 600.0, gx::SharedGObject root = nullptr);
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -29,9 +31,6 @@ public:
     bool isKeyPressed(Qt::Key key) const;
     void onAddObject(gx::SharedGObject object);
 
-protected:
-    void drawForeground(QPainter *painter, const QRectF &rect);
-
 private:
     gx::Vertex m_mousePos;
     QMap<Qt::KeyboardModifier, bool> m_modifierKeys;
@@ -40,6 +39,8 @@ private:
     void initModifierKeys();
     Qt::KeyboardModifier transformToMod(Qt::Key key);
     Qt::Key transformToKey(Qt::KeyboardModifier mod);
+
+    GUIDrawer* m_guiDrawer;
 };
 
 #endif // CANVASIMPL_H

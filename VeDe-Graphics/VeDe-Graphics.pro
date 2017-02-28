@@ -50,7 +50,9 @@ SOURCES += \
     commands/rotatecommand.cpp \
     commands/scalecommand.cpp \
     tools/manipulatetool.cpp \
-    objects/controlpoint.cpp
+    objects/controlpoint.cpp \
+    canvasmanager.cpp \
+    canvasmanagersvg.cpp
 
 HEADERS += \
     vertex.h \
@@ -91,7 +93,9 @@ HEADERS += \
     commands/rotatecommand.h \
     commands/scalecommand.h \
     tools/manipulatetool.h \
-    objects/controlpoint.h
+    objects/controlpoint.h \
+    canvasmanager.h \
+    canvasmanagersvg.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

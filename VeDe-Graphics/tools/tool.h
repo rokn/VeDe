@@ -38,6 +38,7 @@ public:
     void handleEvent(const UserEvent& transition);
     Canvas *getCanvas();
     const Canvas *getCanvas() const;
+    void setCanvas(Canvas *canvas);
     QString getCurrStateName() const;
     QVector<QString> getAllStateNames() const;
     void moveToState(const QString &stateName, UserEvent transition);

@@ -1,7 +1,7 @@
 #ifndef RECTGRAPHICSITEM_H
 #define RECTGRAPHICSITEM_H
 
-#include "objects/basegraphicsitem.h"
+#include "objects/baseshapeitem.h"
 #include "objects/rectangle.h"
 
 class RectGraphicsItem : public BaseShapeItem

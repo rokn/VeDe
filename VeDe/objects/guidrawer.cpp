@@ -25,6 +25,12 @@ void GUIDrawer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     if(m_canvas != nullptr)
     {
+        QPen borderPen(Qt::black);
+        borderPen.setWidthF(m_canvas->mapValueToZoom(1.0));
+        painter->setBrush(Qt::transparent);
+        painter->setPen(borderPen);
+        painter->drawRect(0, 0, m_canvas->getWidth(), m_canvas->getHeight());
+
         auto selectedObjects = m_canvas->getSelectedObjects();
 
         if(selectedObjects.size() > 0)

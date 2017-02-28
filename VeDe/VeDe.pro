@@ -30,12 +30,13 @@ SOURCES += main.cpp\
     currtooltoolbar.cpp \
     colorchangebutton.cpp \
     propertywidgetfactory.cpp \
-    objects/basegraphicsitem.cpp \
     objects/ellipsegraphicsitem.cpp \
     objects/linegraphicsitem.cpp \
     objects/rectgraphicsitem.cpp \
     objects/pathgraphicsitem.cpp \
-    objects/guidrawer.cpp
+    objects/guidrawer.cpp \
+    gobjectmapper.cpp \
+    objects/baseshapeitem.cpp
 
 HEADERS  += mainwindow.h \
     qtcustompainter.h \
@@ -46,12 +47,13 @@ HEADERS  += mainwindow.h \
     currtooltoolbar.h \
     colorchangebutton.h \
     propertywidgetfactory.h \
-    objects/basegraphicsitem.h \
     objects/ellipsegraphicsitem.h \
     objects/rectgraphicsitem.h \
     objects/linegraphicsitem.h \
     objects/pathgraphicsitem.h \
-    objects/guidrawer.h
+    objects/guidrawer.h \
+    gobjectmapper.h \
+    objects/baseshapeitem.h
 
 FORMS    +=
 

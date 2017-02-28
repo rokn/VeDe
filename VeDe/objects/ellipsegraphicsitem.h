@@ -1,7 +1,7 @@
 #ifndef ELLIPSEGRAPHICSITEM_H
 #define ELLIPSEGRAPHICSITEM_H
 
-#include "objects/basegraphicsitem.h"
+#include "objects/baseshapeitem.h"
 #include "objects/ellipse.h"
 
 class EllipseGraphicsItem : public BaseShapeItem

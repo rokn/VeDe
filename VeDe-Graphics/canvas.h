@@ -23,7 +23,7 @@ class Canvas : public PropertyHolder
 {
 //    Q_OBJECT
 public:
-    Canvas(SharedGObject root = nullptr);
+    Canvas(SharedGObject root = nullptr, double width = 800.0, double height = 600.0);
     virtual ~Canvas();
 
     SharedGObject root();
@@ -79,6 +79,8 @@ public:
     void clearSelectedObjects(bool withCommand = true);
     void selectObject(SharedGObject obj);
     void deselectObject(SharedGObject obj);
+
+    QRectF getBoundaries() const;
 
 private:
     SharedGObject m_root;

@@ -5,8 +5,8 @@
 #include <QtMath>
 #include <memory>
 
-gx::Canvas::Canvas(SharedGObject root)
-    :m_root(root)
+gx::Canvas::Canvas(SharedGObject root, double width, double height)
+    :m_root(root), m_width(width), m_height(height)
 {
     if(m_root == nullptr) {
         m_root = SharedGObject(new Layer);
@@ -20,12 +20,11 @@ gx::Canvas::Canvas(SharedGObject root)
 
     m_currCommand = 0;
     m_currTool = nullptr;
+    m_locked = false;
     m_idCount = 0;
     m_zoomFactor = 1.0;
     PropertyFactory::addCanvasProperties(this);
     getProp("Stroke Color")->toColor().setR(255);
-    setWidth(800);
-    setHeight(600);
 }
 
 double gx::Canvas::getZoomFactor() const
@@ -138,6 +137,11 @@ void gx::Canvas::deselectObject(gx::SharedGObject obj)
 {
     obj->setSelected(false);
     m_selectedObjects.removeOne(obj);
+}
+
+QRectF gx::Canvas::getBoundaries() const
+{
+    return QRectF(0, 0, m_width, m_height);
 }
 
 void gx::Canvas::addNewCommand(gx::Command *command)
@@ -270,6 +274,7 @@ void gx::Canvas::changeCurrTool(gx::Tool *newTool)
 
     m_currTool = newTool;
     m_currTool->setActive(true);
+    m_currTool->setCanvas(this);
     m_onToolChanged(m_currTool);
     redraw();
 }

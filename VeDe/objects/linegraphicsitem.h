@@ -1,7 +1,7 @@
 #ifndef LINEGRAPHICSITEM_H
 #define LINEGRAPHICSITEM_H
 
-#include "objects/basegraphicsitem.h"
+#include "objects/baseshapeitem.h"
 #include "objects/line.h"
 
 class LineGraphicsItem : public BaseShapeItem
